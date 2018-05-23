@@ -1,0 +1,15 @@
+
+*.mat
+*.fig
+*.CDF
+*.dat
+*.txt
+*.png
+*.pdf
+*.idx3-ubyte
+*.idx1-ubyte
+*.mexmaci64
+*.mexw32
+*.mexw64
+*.c
+*.asv

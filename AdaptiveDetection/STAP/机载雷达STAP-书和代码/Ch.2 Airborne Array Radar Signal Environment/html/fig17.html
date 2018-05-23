@@ -1,0 +1,313 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Figure 17. Clutter Eigenspectra for Different Levels of ICM.</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-04-25"><meta name="DC.source" content="fig17.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>Figure 17. Clutter Eigenspectra for Different Levels of ICM.</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">Radar System Operational Parameters</a></li><li><a href="#3">Platform Parameters</a></li><li><a href="#4">Thermal Noise Power Computations.</a></li><li><a href="#5">Clutter Patch Geometry Parameters.</a></li><li><a href="#6">Calculate the Voltage Element Pattern</a></li><li><a href="#7">Calculate the Array Factor (AF) (Voltage)</a></li><li><a href="#8">Calculate the Full Array Transmit Power Gain:</a></li><li><a href="#9">Calculate the Element Receive Power Gain</a></li><li><a href="#10">Clutter Patch RCS Calculation</a></li><li><a href="#11">Calculate the Clutter to Noise Ration (CNR) for each clutter patch</a></li><li><a href="#12">Platform Velocity for beta parameter value:</a></li><li><a href="#13">Calculate Spatial and Doppler Frequencies.</a></li><li><a href="#14">Calculate and Plot the Clutter Eigenspectrum for Different Levels of ICM.</a></li></ul></div><pre>Coded by Ilias Konsoulas, 16 Dec. 2014.
+Code provided for educational purposes only. All rights reserved.</pre><pre class="codeinput">clc; clear; close <span class="string">all</span>;
+</pre><h2>Radar System Operational Parameters<a name="2"></a></h2><pre class="codeinput">fo = 450e6;                   <span class="comment">% Operating Frequency in Hz.</span>
+Pt = 200e3;                   <span class="comment">% Peak Transmit Power 200 kW.</span>
+Gt = 22;                      <span class="comment">% Transmit Gain in dB.</span>
+Gr = 10;                      <span class="comment">% Column Receive Gain in dB.</span>
+B  = 4*1e6;                   <span class="comment">% Receiver Instantaneous Bandwidth in Hz.</span>
+Ls = 4;                       <span class="comment">% System Losses in dB.</span>
+fr = 300;                     <span class="comment">% PRF in Hz.</span>
+Tr = 1/fr;                    <span class="comment">% PRI in sec.</span>
+M = 18;                       <span class="comment">% Number of Pulses per CPI.</span>
+Tp = 200*1e-6;                <span class="comment">% Pulse Width in sec.</span>
+N = 18;                       <span class="comment">% Number of Array Antenna Elements</span>
+Gel = 4;                      <span class="comment">% Element Gain in dB.</span>
+be = -30;                     <span class="comment">% Element Backlobe Level in db.</span>
+Nc = 361;                     <span class="comment">% Number of clutter patches uniformly distributed in azimuth.</span>
+c = 299792458;                <span class="comment">% Speed of Light in m/sec.</span>
+lambda = c/fo;                <span class="comment">% Operating wavelength in meters.</span>
+d = lambda/2;                 <span class="comment">% Interelement Spacing</span>
+
+<span class="comment">% Azimuth angle in degrees:</span>
+phi = -180:180;
+Lphi = length(phi);
+f = zeros(1,Lphi);
+AF = zeros(1,Lphi);           <span class="comment">% Array Factor pre-allocation.</span>
+</pre><h2>Platform Parameters<a name="3"></a></h2><pre class="codeinput">beta = 1;                     <span class="comment">% beta parameter.</span>
+ha = 9e3;                     <span class="comment">% Platform altitude in meters.</span>
+Rcik = 13e4;                  <span class="comment">% (clutter) range of interest in meters.</span>
+</pre><h2>Thermal Noise Power Computations.<a name="4"></a></h2><pre class="codeinput">k = 1.3806488*1e-23;          <span class="comment">% Boltzmann Constant in J/K.</span>
+To = 290;                     <span class="comment">% Standard room Temperature in Kelvin.</span>
+F = 3;                        <span class="comment">% Receiver Noise Figure in dB;</span>
+Te = To*(10^(F/10) - 1);      <span class="comment">% Effective Receiver Temperature in Kelvin.</span>
+Nn = k*Te;                    <span class="comment">% Receiver Noise PSD in Watts/Hz.</span>
+Pn = Nn*B;                    <span class="comment">% Receiver Noise Power in Watts.</span>
+sigma2 = 1;                   <span class="comment">% Normalized Noise Power.</span>
+</pre><h2>Clutter Patch Geometry Parameters.<a name="5"></a></h2><pre class="codeinput">dphi = 2*pi/Nc;               <span class="comment">% Azimuth angle increment in rad.</span>
+dR = c/2/B;                   <span class="comment">% Radar Range Resolution in meters.</span>
+Re = 6370000;                 <span class="comment">% Earth Radius in meters.</span>
+ae = 4/3*Re;                  <span class="comment">% Effective Earth Radius in meters.</span>
+psi = asin(ha/Rcik);          <span class="comment">% Grazing angle at the clutter patch in rad (flat earth model).</span>
+theta = psi;                  <span class="comment">% Elevation (look-down angle). Flat earth assumption.</span>
+gamma = 10^(-3/10);           <span class="comment">% Terrain-dependent reflectivity factor.</span>
+phia = 0;                     <span class="comment">% Velocity Misalignment angle in degrees.</span>
+
+sigma_icm = [0 0.01 0.05 0.1 0.5]; <span class="comment">% Intrinsic Clutter Motion Standard Deviations vector in meters/sec.</span>
+kc = 4*pi*sigma_icm/lambda;
+
+colors = [0 0 1; 0 1 0; 1 0 0 ; 1 1 0; 0 1 1; 1 0 1;];
+</pre><h2>Calculate the Voltage Element Pattern<a name="6"></a></h2><pre class="codeinput"><span class="keyword">for</span> i =1:Lphi
+    <span class="keyword">if</span> abs(phi(i))&lt;=90
+        f(i) = cos(phi(i)*pi/180);
+    <span class="keyword">else</span>
+        f(i) = 10^(be/10)*cos(phi(i)*pi/180);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>Calculate the Array Factor (AF) (Voltage)<a name="7"></a></h2><pre class="codeinput">steering_angle = 0; <span class="comment">% Angle of beam steering in degrees.</span>
+<span class="keyword">for</span> k=1:Lphi
+    AF(k) = sum(exp(-1i*2*pi/lambda*d*(0:N-1)*(sin(phi(k)*pi/180) <span class="keyword">...</span>
+                  - sin(steering_angle*pi/180))).*cos(phi(k)*pi/180));
+<span class="keyword">end</span>
+</pre><h2>Calculate the Full Array Transmit Power Gain:<a name="8"></a></h2><pre class="codeinput">Gtgain = 10^(Gt/10)*abs(AF).^2;
+</pre><h2>Calculate the Element Receive Power Gain<a name="9"></a></h2><pre class="codeinput">grgain = 10^(Gel/10)*10^(Gr/10)*abs(f).^2;
+</pre><h2>Clutter Patch RCS Calculation<a name="10"></a></h2><pre class="codeinput">PatchArea = Rcik*dphi*dR*sec(psi);
+sigma0 = gamma*sin(psi);
+sigma = sigma0*PatchArea;
+</pre><h2>Calculate the Clutter to Noise Ration (CNR) for each clutter patch<a name="11"></a></h2><pre class="codeinput">ksi = Pt*Gtgain.*grgain*lambda^2*sigma/((4*pi)^3*Pn*10^(Ls/10)*Rcik^4);
+</pre><h2>Platform Velocity for beta parameter value:<a name="12"></a></h2><pre class="codeinput">va = beta*d*fr/2;
+Ita = d/lambda*cos(theta);
+</pre><h2>Calculate Spatial and Doppler Frequencies.<a name="13"></a></h2><p>Spatial frequency of the k-th clutter patch.</p><pre class="codeinput">fsp = Ita*sin(phi*pi/180);
+<span class="comment">% Normalized Doppler Frequency:</span>
+omegac = beta*Ita*sin(phi*pi/180 + phia*pi/180);
+
+Gammac = zeros(M,Nc);
+</pre><h2>Calculate and Plot the Clutter Eigenspectrum for Different Levels of ICM.<a name="14"></a></h2><pre class="codeinput">figure(<span class="string">'NumberTitle'</span>, <span class="string">'off'</span>,<span class="string">'Name'</span>,<span class="string">'Figure 17. Clutter Eigenspectra for Different Levels of ICM'</span>, <span class="keyword">...</span>
+       <span class="string">'Position'</span>,[1 1 750 600]);
+
+<span class="keyword">for</span> i=1:length(sigma_icm)
+
+    <span class="comment">% Steering Vector Pre-allocation:</span>
+    a = zeros(N,Nc);
+    b = zeros(M,Nc);
+    Rc = zeros(M*N,M*N);
+
+    <span class="comment">% Temporal autocorrelation of the fluctuations is also Gaussian.</span>
+    gammac = exp(-(kc(i)^2*Tr^2*(0:M-1).^2)/2);                                           <span class="comment">% Eq. (91)</span>
+    Gammac = toeplitz(gammac);                                                            <span class="comment">% Eq. (94)</span>
+
+    <span class="keyword">for</span> k=1:Nc
+        a(:,k) = exp(1i*2*pi*fsp(k)*(0:N-1));    <span class="comment">% Spatial Steering Vector.</span>
+        b(:,k) = exp(1i*2*pi*omegac(k)*(0:M-1)); <span class="comment">% Temporal Steering Vector</span>
+        Rc = Rc + ksi(k)*kron(Gammac.*(b(:,k)*b(:,k)'),a(:,k)*a(:,k)');                   <span class="comment">% Eq. (95)</span>
+    <span class="keyword">end</span>
+
+    plot(10*log10(sort(abs(eig(Rc)),<span class="string">'descend'</span>)),<span class="string">'--s'</span>,<span class="string">'LineWidth'</span>,1,<span class="string">'Color'</span>, colors(i,:), <span class="keyword">...</span>
+         <span class="string">'MarkerEdgeColor'</span>,<span class="string">'k'</span>,<span class="string">'MarkerFaceColor'</span>,colors(i,:), <span class="string">'MarkerSize'</span>,5);
+    hold <span class="string">on</span>;
+
+<span class="keyword">end</span>
+
+<span class="comment">% Plot the Clutter Eigenspectra.</span>
+ylim([-70 80]); xlim([0 120]);
+grid <span class="string">on</span>;
+legend(<span class="string">'\sigma_v = 0     m/sec'</span>, <span class="string">'\sigma_v = 0.01 m/sec'</span>, <span class="string">'\sigma_v = 0.05 m/sec'</span>, <span class="keyword">...</span>
+       <span class="string">'\sigma_v = 0.1   m/sec'</span>, <span class="string">'\sigma_v = 0.5   m/sec'</span>);
+ylabel(<span class="string">'Relative Power (dB)'</span>); xlabel(<span class="string">'Eigenvalue Number'</span>);
+</pre><img vspace="5" hspace="5" src="fig17_01.png" alt=""> <p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+%% Figure 17. Clutter Eigenspectra for Different Levels of ICM.
+
+%%
+%  Coded by Ilias Konsoulas, 16 Dec. 2014.
+%  Code provided for educational purposes only. All rights reserved.
+
+clc; clear; close all;
+
+%% Radar System Operational Parameters
+fo = 450e6;                   % Operating Frequency in Hz.
+Pt = 200e3;                   % Peak Transmit Power 200 kW.
+Gt = 22;                      % Transmit Gain in dB.
+Gr = 10;                      % Column Receive Gain in dB.
+B  = 4*1e6;                   % Receiver Instantaneous Bandwidth in Hz.
+Ls = 4;                       % System Losses in dB.
+fr = 300;                     % PRF in Hz.
+Tr = 1/fr;                    % PRI in sec.
+M = 18;                       % Number of Pulses per CPI.
+Tp = 200*1e-6;                % Pulse Width in sec.
+N = 18;                       % Number of Array Antenna Elements
+Gel = 4;                      % Element Gain in dB.
+be = -30;                     % Element Backlobe Level in db.
+Nc = 361;                     % Number of clutter patches uniformly distributed in azimuth.
+c = 299792458;                % Speed of Light in m/sec.
+lambda = c/fo;                % Operating wavelength in meters.
+d = lambda/2;                 % Interelement Spacing
+
+% Azimuth angle in degrees:
+phi = -180:180;
+Lphi = length(phi);
+f = zeros(1,Lphi);
+AF = zeros(1,Lphi);           % Array Factor pre-allocation.
+
+%% Platform Parameters
+beta = 1;                     % beta parameter.
+ha = 9e3;                     % Platform altitude in meters.
+Rcik = 13e4;                  % (clutter) range of interest in meters.
+
+%% Thermal Noise Power Computations.
+k = 1.3806488*1e-23;          % Boltzmann Constant in J/K.
+To = 290;                     % Standard room Temperature in Kelvin.
+F = 3;                        % Receiver Noise Figure in dB;
+Te = To*(10^(F/10) - 1);      % Effective Receiver Temperature in Kelvin.
+Nn = k*Te;                    % Receiver Noise PSD in Watts/Hz.
+Pn = Nn*B;                    % Receiver Noise Power in Watts.
+sigma2 = 1;                   % Normalized Noise Power.
+
+%% Clutter Patch Geometry Parameters.
+dphi = 2*pi/Nc;               % Azimuth angle increment in rad.
+dR = c/2/B;                   % Radar Range Resolution in meters.
+Re = 6370000;                 % Earth Radius in meters.
+ae = 4/3*Re;                  % Effective Earth Radius in meters.
+psi = asin(ha/Rcik);          % Grazing angle at the clutter patch in rad (flat earth model).
+theta = psi;                  % Elevation (look-down angle). Flat earth assumption.
+gamma = 10^(-3/10);           % Terrain-dependent reflectivity factor.
+phia = 0;                     % Velocity Misalignment angle in degrees.
+
+sigma_icm = [0 0.01 0.05 0.1 0.5]; % Intrinsic Clutter Motion Standard Deviations vector in meters/sec.
+kc = 4*pi*sigma_icm/lambda;
+
+colors = [0 0 1; 0 1 0; 1 0 0 ; 1 1 0; 0 1 1; 1 0 1;];
+
+%% Calculate the Voltage Element Pattern
+for i =1:Lphi
+    if abs(phi(i))<=90
+        f(i) = cos(phi(i)*pi/180);
+    else
+        f(i) = 10^(be/10)*cos(phi(i)*pi/180);
+    end
+end
+
+%% Calculate the Array Factor (AF) (Voltage)
+steering_angle = 0; % Angle of beam steering in degrees.
+for k=1:Lphi
+    AF(k) = sum(exp(-1i*2*pi/lambda*d*(0:N-1)*(sin(phi(k)*pi/180) ...
+                  - sin(steering_angle*pi/180))).*cos(phi(k)*pi/180));
+end
+
+%% Calculate the Full Array Transmit Power Gain:
+Gtgain = 10^(Gt/10)*abs(AF).^2;
+
+%% Calculate the Element Receive Power Gain
+grgain = 10^(Gel/10)*10^(Gr/10)*abs(f).^2;
+
+%% Clutter Patch RCS Calculation
+PatchArea = Rcik*dphi*dR*sec(psi);
+sigma0 = gamma*sin(psi);
+sigma = sigma0*PatchArea;
+
+%% Calculate the Clutter to Noise Ration (CNR) for each clutter patch
+ksi = Pt*Gtgain.*grgain*lambda^2*sigma/((4*pi)^3*Pn*10^(Ls/10)*Rcik^4);
+
+%% Platform Velocity for beta parameter value:
+va = beta*d*fr/2;
+Ita = d/lambda*cos(theta);
+
+%% Calculate Spatial and Doppler Frequencies.
+% Spatial frequency of the k-th clutter patch.
+fsp = Ita*sin(phi*pi/180);
+% Normalized Doppler Frequency:
+omegac = beta*Ita*sin(phi*pi/180 + phia*pi/180);
+
+Gammac = zeros(M,Nc);
+
+%% Calculate and Plot the Clutter Eigenspectrum for Different Levels of ICM.
+figure('NumberTitle', 'off','Name','Figure 17. Clutter Eigenspectra for Different Levels of ICM', ...
+       'Position',[1 1 750 600]);
+
+for i=1:length(sigma_icm)
+    
+    % Steering Vector Pre-allocation:
+    a = zeros(N,Nc);
+    b = zeros(M,Nc);
+    Rc = zeros(M*N,M*N);
+    
+    % Temporal autocorrelation of the fluctuations is also Gaussian.
+    gammac = exp(-(kc(i)^2*Tr^2*(0:M-1).^2)/2);                                           % Eq. (91)
+    Gammac = toeplitz(gammac);                                                            % Eq. (94)
+    
+    for k=1:Nc
+        a(:,k) = exp(1i*2*pi*fsp(k)*(0:N-1));    % Spatial Steering Vector.
+        b(:,k) = exp(1i*2*pi*omegac(k)*(0:M-1)); % Temporal Steering Vector
+        Rc = Rc + ksi(k)*kron(Gammac.*(b(:,k)*b(:,k)'),a(:,k)*a(:,k)');                   % Eq. (95)
+    end
+    
+    plot(10*log10(sort(abs(eig(Rc)),'descend')),'REPLACE_WITH_DASH_DASHs','LineWidth',1,'Color', colors(i,:), ...
+         'MarkerEdgeColor','k','MarkerFaceColor',colors(i,:), 'MarkerSize',5);
+    hold on;
+    
+end
+
+% Plot the Clutter Eigenspectra.
+ylim([-70 80]); xlim([0 120]);
+grid on;
+legend('\sigma_v = 0     m/sec', '\sigma_v = 0.01 m/sec', '\sigma_v = 0.05 m/sec', ...
+       '\sigma_v = 0.1   m/sec', '\sigma_v = 0.5   m/sec');
+ylabel('Relative Power (dB)'); xlabel('Eigenvalue Number');
+
+
+##### SOURCE END #####
+--></body></html>

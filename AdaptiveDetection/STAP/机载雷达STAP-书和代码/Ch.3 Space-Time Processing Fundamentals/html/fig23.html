@@ -1,0 +1,475 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Figure 23. Example Scenario: Optimum fully adaptive STAP.</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-04-25"><meta name="DC.source" content="fig23.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>Figure 23. Example Scenario: Optimum fully adaptive STAP.</h1><!--introduction--><p>(a) Adapted pattern. (b) Principal cuts at target azimuth and Doppler.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">Radar System Operational Parameters</a></li><li><a href="#3">Thermal Noise Power Computations</a></li><li><a href="#4">Clutter Patch Geometry computations</a></li><li><a href="#5">Clutter-to-Noise Ratio (CNR) Calculation</a></li><li><a href="#6">Clutter Covariance Matrix Computations</a></li><li><a href="#7">Jamming Covariance Matrix Calculation</a></li><li><a href="#8">Total Interference Covariance Matrix</a></li><li><a href="#9">Target Space-Time Steering Vector</a></li><li><a href="#10">Optimum, Fully Adaptive STAP Solution</a></li><li><a href="#11">Adapted Patterns</a></li><li><a href="#12">Normalization:</a></li><li><a href="#13">Cropping Extreme Values</a></li><li><a href="#14">Plot the Adapted Pattern</a></li><li><a href="#15">Plot the Principal Cuts</a></li></ul></div><p>Coded by Ilias Konsoulas, 16 Dec. 2014. Code provided for educational purposes only. All rights reserved.</p><pre class="codeinput">clc; clear; close <span class="string">all</span>;
+</pre><h2>Radar System Operational Parameters<a name="2"></a></h2><pre class="codeinput">fo = 450e6;                   <span class="comment">% Operating Frequency in Hz</span>
+Pt = 200e3;                   <span class="comment">% Peak Transmit Power 200 kW</span>
+Gt = 22;                      <span class="comment">% Transmit Gain in dB</span>
+Gr = 10;                      <span class="comment">% Column Receive Gain in dB</span>
+B  = 4e6;                     <span class="comment">% Receiver Instantaneous Bandwidth in Hz</span>
+Ls = 4;                       <span class="comment">% System Losses in dB</span>
+fr = 300;                     <span class="comment">% PRF in Hz</span>
+Tr = 1/fr;                    <span class="comment">% PRI in sec.</span>
+M = 18;                       <span class="comment">% Number of Pulses per CPI.</span>
+Tp = 200e-6;                  <span class="comment">% Pulse Width in sec.</span>
+N = 18;                       <span class="comment">% Number of Array Antenna Elements</span>
+Gel = 4;                      <span class="comment">% Element Gain in dB</span>
+be = -30;                     <span class="comment">% Element Backlobe Level in db</span>
+Nc = 360;                     <span class="comment">% Number of clutter patches uniformly distributed in azimuth.</span>
+c   = 299792458;              <span class="comment">% Speed of Light in m/sec.</span>
+lambda = c/fo;                <span class="comment">% Operating wavelength in meters.</span>
+d = lambda/2;                 <span class="comment">% Interelement Spacing</span>
+
+<span class="comment">% Azimuth angle in degrees:</span>
+phi = -180:179;
+Lphi = length(phi);
+f = zeros(1,Lphi);
+AF = zeros(1,Lphi);           <span class="comment">% Array Factor pre-allocation.</span>
+
+<span class="comment">% Platform Parameters:</span>
+beta = 1;                     <span class="comment">% beta parameter.</span>
+ha = 9e3;                     <span class="comment">% Platform altitude in meters.</span>
+</pre><h2>Thermal Noise Power Computations<a name="3"></a></h2><pre class="codeinput">k = 1.3806488e-23;            <span class="comment">% Boltzmann Constant in J/K.</span>
+To = 290;                     <span class="comment">% Standard room Temperature in Kelvin.</span>
+F = 3;                        <span class="comment">% Receiver Noise Figure in dB;</span>
+Te = To*(10^(F/10)-1);        <span class="comment">% Effective Receiver Temperature in Kelvin.</span>
+Lr = 2.68;                    <span class="comment">% System Losses on receive in dB.</span>
+Ts = 10^(Lr/10)*Te;           <span class="comment">% Reception System Noise Temperature in Kelvin.</span>
+Nn = k*Ts;                    <span class="comment">% Receiver Noise PSD in Watts/Hz.</span>
+Pn = Nn*B;                    <span class="comment">% Receiver Noise Power in Watts</span>
+sigma2 = 1;                   <span class="comment">% Normalized Noise Power in Watts.</span>
+</pre><h2>Clutter Patch Geometry computations<a name="4"></a></h2><pre class="codeinput">Rcik = 130000;                <span class="comment">% (clutter) range of interest in meters.</span>
+dphi = 2*pi/Nc;               <span class="comment">% Azimuth angle increment in rad.</span>
+dR = c/2/B;                   <span class="comment">% Radar Range Resolution in meters.</span>
+Re = 6370000;                 <span class="comment">% Earth Radius in meters.</span>
+ae = 4/3*Re;                  <span class="comment">% Effective Earth Radius in meters.</span>
+psi = asin(ha/Rcik);          <span class="comment">% Grazing angle at the clutter patch in rad (flat earth model).</span>
+theta = psi;                  <span class="comment">% Elevation (look-down angle) in rad. Flat earth assumption.</span>
+gamma = 10^(-3/10);           <span class="comment">% Terrain-dependent reflectivity factor.</span>
+phia = 0;                     <span class="comment">% Velocity Misalignment angle in degrees.</span>
+</pre><h2>Clutter-to-Noise Ratio (CNR) Calculation<a name="5"></a></h2><p>Calculate the Voltage Element Pattern:</p><pre class="codeinput"><span class="keyword">for</span> i =1:Lphi
+    <span class="keyword">if</span> abs(phi(i))&lt;=90
+        f(i) = cos(phi(i)*pi/180);
+    <span class="keyword">else</span>
+        f(i) = 10^(be/10)*cos(phi(i)*pi/180);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">% Calculate the Array Factor (AF) (Voltage):</span>
+steering_angle = 0; <span class="comment">% Angle of beam steering in degrees.</span>
+<span class="keyword">for</span> k=1:Lphi
+    AF(k) = sum(exp(-1i*2*pi/lambda*d*(0:N-1)*(sin(phi(k)*pi/180) <span class="keyword">...</span>
+                  - sin(steering_angle*pi/180))));
+<span class="keyword">end</span>
+
+<span class="comment">% Calculate the Full Array Transmit Power Gain:</span>
+Gtgain = 10^(Gt/10)*abs(AF).^2;
+
+<span class="comment">% Calculate the Element Receive Power Gain:</span>
+grgain = 10^(Gel/10)*abs(f).^2;
+
+<span class="comment">% Clutter Patch RCS Calculation:</span>
+PatchArea = Rcik*dphi*dR*sec(psi);
+sigma0 = gamma*sin(psi);
+sigma = sigma0*PatchArea;
+
+<span class="comment">% Calculate the Clutter to Noise Ratio (CNR) for each clutter patch:</span>
+ksi = Pt*Gtgain.*grgain*10^(Gr/10)*lambda^2*sigma/((4*pi)^3*Pn*10^(Ls/10)*Rcik^4);
+Ksic = sigma2*diag(ksi);
+</pre><h2>Clutter Covariance Matrix Computations<a name="6"></a></h2><pre class="codeinput"><span class="comment">% Platform Velocity for beta parameter value:</span>
+va = round(beta*d*fr/2);
+Ita = d/lambda*cos(theta);
+
+<span class="comment">% Calculate Spatial and Doppler Frequencies for k-th clutter patch.</span>
+<span class="comment">% Spatial frequency of the k-th clutter patch:</span>
+fsp = Ita*sin(phi*pi/180);
+<span class="comment">% Normalized Doppler Frequency of the k-th clutter patch:</span>
+omegac = beta*Ita*sin(phi*pi/180 + phia*pi/180);
+
+<span class="comment">% Clutter Steering Vector Pre-allocation:</span>
+a = zeros(N,Nc);
+b = zeros(M,Nc);
+Vc = zeros(M*N,Nc);
+
+<span class="keyword">for</span> k=1:Nc
+    a(:,k) = exp(1i*2*pi*fsp(k)*(0:N-1));    <span class="comment">% Spatial Steering Vector.</span>
+    b(:,k) = exp(1i*2*pi*omegac(k)*(0:M-1)); <span class="comment">% Temporal Steering Vector</span>
+    Vc(:,k) = kron(b(:,k),a(:,k));           <span class="comment">% Space-TIme Steering Vector.</span>
+<span class="keyword">end</span>
+
+Rc = Vc*Ksic*Vc';                            <span class="comment">% Eq. (64)</span>
+
+Rn = sigma2*eye(M*N);
+</pre><h2>Jamming Covariance Matrix Calculation<a name="7"></a></h2><pre class="codeinput">J = 2;                                                   <span class="comment">% Number of Jammers.</span>
+thetaj = 0; phij = [-40 25];                             <span class="comment">% Jammer elevation and azimuth angles in degrees.</span>
+R_j = [370 370]*1e3;
+Sj = 1e-3;                                               <span class="comment">% Jammer ERPD in Watts/Hz.</span>
+fspj = d/lambda*cos(thetaj*pi/180)*sin(phij*pi/180);     <span class="comment">% Spatial frequency of the j-th jammer.</span>
+Lrj = 1.92;                                              <span class="comment">% System Losses on Receive in dB.</span>
+Aj = zeros(N,J);
+<span class="keyword">for</span> j=1:J
+    Aj(:,j) =  exp(1i*2*pi*fspj(j)*(0:N-1));             <span class="comment">% Jammer Spatial Steering Vector.</span>
+<span class="keyword">end</span>
+
+indices= zeros(1,J);
+<span class="keyword">for</span> j=1:J
+    indices(j) = find(phi == phij(j));
+<span class="keyword">end</span>
+grgn = grgain(indices);
+ksi_j = (Sj*grgn*lambda^2)./((4*pi)^2.*Nn*10^(Lrj/10).*R_j.^2);
+
+Ksi_j = sigma2*diag(ksi_j);
+Phi_j = Aj*Ksi_j*Aj';                                    <span class="comment">% Eq. (47)</span>
+<span class="comment">% Jamming Covariance Matrix:</span>
+Rj = kron(eye(M),Phi_j);                                 <span class="comment">% Eq. (45)</span>
+</pre><h2>Total Interference Covariance Matrix<a name="8"></a></h2><pre class="codeinput">Ru = Rc + Rj + Rn;                                       <span class="comment">% Eq. (98)</span>
+</pre><h2>Target Space-Time Steering Vector<a name="9"></a></h2><pre class="codeinput">phit = 0; thetat = 0;                                    <span class="comment">% Target azimuth and elevation angles in degrees.</span>
+fdt = 100;                                               <span class="comment">% Target Doppler Frequency.</span>
+omegact = fdt/fr;                                        <span class="comment">% Normalized Target Frequency.</span>
+fspt = d/lambda*cos(thetat*pi/180)*sin(phit*pi/180);     <span class="comment">% Target Spatial Frequency.</span>
+at = exp(1i*2*pi*fspt*(0:N-1));                          <span class="comment">% Target Spatial Steering Vector.</span>
+bt = exp(1i*2*pi*omegact*(0:M-1));                       <span class="comment">% Target Doppler Steering Vector</span>
+vt = kron(bt,at).';                                      <span class="comment">% Target Space-Time Steering Vector.</span>
+</pre><h2>Optimum, Fully Adaptive STAP Solution<a name="10"></a></h2><pre class="codeinput">w = Ru\vt;                                               <span class="comment">% Eq. (104)</span>
+<span class="comment">% w = w/norm(w);</span>
+</pre><h2>Adapted Patterns<a name="11"></a></h2><pre class="codeinput">phi = -90:.5:90;     Lphi = length(phi);
+fd = -150:.5:150;  Lfd = length(fd);
+fsp = d/lambda*cos(theta)*sin(phi*pi/180);
+omega = fd/fr;
+Pw1 = zeros(Lfd,Lphi);
+<span class="keyword">for</span> m=1:Lphi
+    <span class="keyword">for</span> n=1:Lfd
+        a = exp(1i*2*pi*fsp(m)*(0:N-1));                <span class="comment">% Dummy Spatial Steering Vector.</span>
+        b = exp(1i*2*pi*omega(n)*(0:M-1));              <span class="comment">% Dummy Doppler Steering Vector</span>
+        v = kron(b,a).';
+        Pw1(n,m) = abs(w'*v)^2;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>Normalization:<a name="12"></a></h2><pre class="codeinput">max_value = max(max(Pw1));
+Pw = Pw1/max_value;
+</pre><h2>Cropping Extreme Values<a name="13"></a></h2><pre class="codeinput">[rows cols] = find(10*log10(abs(Pw))&lt;-100);
+<span class="keyword">for</span> i=1:length(rows)
+    Pw(rows(i),cols(i)) = 10^(-100/10);
+<span class="keyword">end</span>
+</pre><h2>Plot the Adapted Pattern<a name="14"></a></h2><pre class="codeinput">figure(<span class="string">'NumberTitle'</span>, <span class="string">'off'</span>,<span class="string">'Name'</span>, <span class="keyword">...</span>
+       <span class="string">'Figure 23a. Example Scenario: Adapted Pattern for Optimum Fully Adaptive STAP'</span>, <span class="keyword">...</span>
+       <span class="string">'Position'</span>,[1 1 700 600]);
+[Az Doppler] = meshgrid(sin(phi*pi/180),fd);
+colormap <span class="string">jet</span>;
+pcolor(Az, Doppler, 10*log10(abs(Pw)));
+shading <span class="string">interp</span>;
+xlim([-1 1])
+ylim([-150 150]);
+xlabel(<span class="string">'sin(Azimuth)'</span>);
+ylabel(<span class="string">'Doppler Frequency (Hz)'</span>);
+h = colorbar;
+<span class="comment">% h = colorbar('YTickLabel',{-80:10:0});</span>
+set(get(h,<span class="string">'YLabel'</span>),<span class="string">'String'</span>,<span class="string">'Relative Power (dB)'</span>);
+</pre><img vspace="5" hspace="5" src="fig23_01.png" alt=""> <h2>Plot the Principal Cuts<a name="15"></a></h2><pre class="codeinput">figure(<span class="string">'NumberTitle'</span>, <span class="string">'off'</span>,<span class="string">'Name'</span>, <span class="keyword">...</span>
+       <span class="string">'Figure 23b. Principal Cuts at Target Azimuth and Doppler'</span>,<span class="string">'Position'</span>,[1 1 700 600]);
+<span class="comment">% a. Cut of the Adapted Pattern at Doppler = 100 Hz.</span>
+subplot(2,1,1);
+plot(sin(phi*pi/180), 10*log10(abs(Pw(fd == fdt,:))));
+ylim([-80 0.5]); xlim([-1  1]);
+ylabel(<span class="string">'Relatuve Power (dB)'</span>);
+xlabel(<span class="string">'sin(Azimuth)'</span>);
+title(<span class="string">'Doppler Frequency = 100 Hz'</span>);
+grid <span class="string">on</span>;
+
+<span class="comment">% b. Cut of the Adapted Pattern at Azimuth Angle = 0 deg.</span>
+subplot(2,1,2);
+plot(fd, 10*log10(abs(Pw(:,phi == phit))));
+ylim([-80 0.5]); xlim([-150 150]);
+ylabel(<span class="string">'Relative Power (dB)'</span>);
+xlabel(<span class="string">'Doppler Frequency (Hz)'</span>);
+title(<span class="string">'Azimuth = 0 deg'</span>);
+grid <span class="string">on</span>;
+</pre><img vspace="5" hspace="5" src="fig23_02.png" alt=""> <p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+%% Figure 23. Example Scenario: Optimum fully adaptive STAP.
+% (a) Adapted pattern. (b) Principal cuts at target azimuth and Doppler.
+
+%%
+%
+% Coded by Ilias Konsoulas, 16 Dec. 2014.
+% Code provided for educational purposes only. All rights reserved.
+
+clc; clear; close all;
+
+%% Radar System Operational Parameters
+fo = 450e6;                   % Operating Frequency in Hz
+Pt = 200e3;                   % Peak Transmit Power 200 kW
+Gt = 22;                      % Transmit Gain in dB
+Gr = 10;                      % Column Receive Gain in dB
+B  = 4e6;                     % Receiver Instantaneous Bandwidth in Hz
+Ls = 4;                       % System Losses in dB
+fr = 300;                     % PRF in Hz
+Tr = 1/fr;                    % PRI in sec.
+M = 18;                       % Number of Pulses per CPI.
+Tp = 200e-6;                  % Pulse Width in sec.
+N = 18;                       % Number of Array Antenna Elements
+Gel = 4;                      % Element Gain in dB
+be = -30;                     % Element Backlobe Level in db
+Nc = 360;                     % Number of clutter patches uniformly distributed in azimuth.
+c   = 299792458;              % Speed of Light in m/sec.
+lambda = c/fo;                % Operating wavelength in meters.
+d = lambda/2;                 % Interelement Spacing
+
+% Azimuth angle in degrees:
+phi = -180:179;
+Lphi = length(phi);
+f = zeros(1,Lphi);
+AF = zeros(1,Lphi);           % Array Factor pre-allocation.
+
+% Platform Parameters:
+beta = 1;                     % beta parameter.
+ha = 9e3;                     % Platform altitude in meters.
+
+%% Thermal Noise Power Computations
+k = 1.3806488e-23;            % Boltzmann Constant in J/K.
+To = 290;                     % Standard room Temperature in Kelvin.
+F = 3;                        % Receiver Noise Figure in dB;
+Te = To*(10^(F/10)-1);        % Effective Receiver Temperature in Kelvin.
+Lr = 2.68;                    % System Losses on receive in dB.
+Ts = 10^(Lr/10)*Te;           % Reception System Noise Temperature in Kelvin.
+Nn = k*Ts;                    % Receiver Noise PSD in Watts/Hz.
+Pn = Nn*B;                    % Receiver Noise Power in Watts
+sigma2 = 1;                   % Normalized Noise Power in Watts.
+
+%% Clutter Patch Geometry computations
+Rcik = 130000;                % (clutter) range of interest in meters.
+dphi = 2*pi/Nc;               % Azimuth angle increment in rad.
+dR = c/2/B;                   % Radar Range Resolution in meters.
+Re = 6370000;                 % Earth Radius in meters.
+ae = 4/3*Re;                  % Effective Earth Radius in meters.
+psi = asin(ha/Rcik);          % Grazing angle at the clutter patch in rad (flat earth model).
+theta = psi;                  % Elevation (look-down angle) in rad. Flat earth assumption.
+gamma = 10^(-3/10);           % Terrain-dependent reflectivity factor.
+phia = 0;                     % Velocity Misalignment angle in degrees.
+
+%% Clutter-to-Noise Ratio (CNR) Calculation
+% Calculate the Voltage Element Pattern:
+for i =1:Lphi
+    if abs(phi(i))<=90
+        f(i) = cos(phi(i)*pi/180);
+    else
+        f(i) = 10^(be/10)*cos(phi(i)*pi/180);
+    end
+end
+
+% Calculate the Array Factor (AF) (Voltage):
+steering_angle = 0; % Angle of beam steering in degrees.
+for k=1:Lphi
+    AF(k) = sum(exp(-1i*2*pi/lambda*d*(0:N-1)*(sin(phi(k)*pi/180) ...
+                  - sin(steering_angle*pi/180))));
+end
+
+% Calculate the Full Array Transmit Power Gain:
+Gtgain = 10^(Gt/10)*abs(AF).^2;
+
+% Calculate the Element Receive Power Gain:
+grgain = 10^(Gel/10)*abs(f).^2;
+
+% Clutter Patch RCS Calculation:
+PatchArea = Rcik*dphi*dR*sec(psi);
+sigma0 = gamma*sin(psi);
+sigma = sigma0*PatchArea;
+
+% Calculate the Clutter to Noise Ratio (CNR) for each clutter patch:
+ksi = Pt*Gtgain.*grgain*10^(Gr/10)*lambda^2*sigma/((4*pi)^3*Pn*10^(Ls/10)*Rcik^4);
+Ksic = sigma2*diag(ksi);
+
+%% Clutter Covariance Matrix Computations
+
+% Platform Velocity for beta parameter value:
+va = round(beta*d*fr/2);
+Ita = d/lambda*cos(theta);
+
+% Calculate Spatial and Doppler Frequencies for k-th clutter patch.
+% Spatial frequency of the k-th clutter patch:
+fsp = Ita*sin(phi*pi/180);
+% Normalized Doppler Frequency of the k-th clutter patch:
+omegac = beta*Ita*sin(phi*pi/180 + phia*pi/180);
+
+% Clutter Steering Vector Pre-allocation:
+a = zeros(N,Nc);
+b = zeros(M,Nc);
+Vc = zeros(M*N,Nc);
+
+for k=1:Nc
+    a(:,k) = exp(1i*2*pi*fsp(k)*(0:N-1));    % Spatial Steering Vector.
+    b(:,k) = exp(1i*2*pi*omegac(k)*(0:M-1)); % Temporal Steering Vector
+    Vc(:,k) = kron(b(:,k),a(:,k));           % Space-TIme Steering Vector.
+end
+
+Rc = Vc*Ksic*Vc';                            % Eq. (64)
+
+Rn = sigma2*eye(M*N);
+
+%% Jamming Covariance Matrix Calculation
+J = 2;                                                   % Number of Jammers.
+thetaj = 0; phij = [-40 25];                             % Jammer elevation and azimuth angles in degrees.
+R_j = [370 370]*1e3;
+Sj = 1e-3;                                               % Jammer ERPD in Watts/Hz.
+fspj = d/lambda*cos(thetaj*pi/180)*sin(phij*pi/180);     % Spatial frequency of the j-th jammer.
+Lrj = 1.92;                                              % System Losses on Receive in dB.
+Aj = zeros(N,J);
+for j=1:J
+    Aj(:,j) =  exp(1i*2*pi*fspj(j)*(0:N-1));             % Jammer Spatial Steering Vector.
+end
+
+indices= zeros(1,J);
+for j=1:J
+    indices(j) = find(phi == phij(j));
+end
+grgn = grgain(indices);
+ksi_j = (Sj*grgn*lambda^2)./((4*pi)^2.*Nn*10^(Lrj/10).*R_j.^2);    
+
+Ksi_j = sigma2*diag(ksi_j);
+Phi_j = Aj*Ksi_j*Aj';                                    % Eq. (47)
+% Jamming Covariance Matrix:         
+Rj = kron(eye(M),Phi_j);                                 % Eq. (45)
+
+%% Total Interference Covariance Matrix
+Ru = Rc + Rj + Rn;                                       % Eq. (98)
+
+%% Target Space-Time Steering Vector
+phit = 0; thetat = 0;                                    % Target azimuth and elevation angles in degrees.
+fdt = 100;                                               % Target Doppler Frequency.
+omegact = fdt/fr;                                        % Normalized Target Frequency.
+fspt = d/lambda*cos(thetat*pi/180)*sin(phit*pi/180);     % Target Spatial Frequency.
+at = exp(1i*2*pi*fspt*(0:N-1));                          % Target Spatial Steering Vector.
+bt = exp(1i*2*pi*omegact*(0:M-1));                       % Target Doppler Steering Vector
+vt = kron(bt,at).';                                      % Target Space-Time Steering Vector.
+
+%% Optimum, Fully Adaptive STAP Solution
+w = Ru\vt;                                               % Eq. (104)
+% w = w/norm(w);
+
+%% Adapted Patterns
+phi = -90:.5:90;     Lphi = length(phi);
+fd = -150:.5:150;  Lfd = length(fd);
+fsp = d/lambda*cos(theta)*sin(phi*pi/180);
+omega = fd/fr;
+Pw1 = zeros(Lfd,Lphi);
+for m=1:Lphi
+    for n=1:Lfd
+        a = exp(1i*2*pi*fsp(m)*(0:N-1));                % Dummy Spatial Steering Vector.
+        b = exp(1i*2*pi*omega(n)*(0:M-1));              % Dummy Doppler Steering Vector
+        v = kron(b,a).';
+        Pw1(n,m) = abs(w'*v)^2;
+    end
+end
+
+%% Normalization:
+max_value = max(max(Pw1));
+Pw = Pw1/max_value;
+
+%% Cropping Extreme Values
+[rows cols] = find(10*log10(abs(Pw))<-100);
+for i=1:length(rows)
+    Pw(rows(i),cols(i)) = 10^(-100/10);
+end
+
+%% Plot the Adapted Pattern
+figure('NumberTitle', 'off','Name', ...
+       'Figure 23a. Example Scenario: Adapted Pattern for Optimum Fully Adaptive STAP', ...
+       'Position',[1 1 700 600]);
+[Az Doppler] = meshgrid(sin(phi*pi/180),fd);
+colormap jet;
+pcolor(Az, Doppler, 10*log10(abs(Pw)));
+shading interp;
+xlim([-1 1])
+ylim([-150 150]);
+xlabel('sin(Azimuth)');
+ylabel('Doppler Frequency (Hz)');
+h = colorbar;
+% h = colorbar('YTickLabel',{-80:10:0});
+set(get(h,'YLabel'),'String','Relative Power (dB)');
+
+
+%% Plot the Principal Cuts
+figure('NumberTitle', 'off','Name', ...
+       'Figure 23b. Principal Cuts at Target Azimuth and Doppler','Position',[1 1 700 600]);
+% a. Cut of the Adapted Pattern at Doppler = 100 Hz.
+subplot(2,1,1);
+plot(sin(phi*pi/180), 10*log10(abs(Pw(fd == fdt,:))));
+ylim([-80 0.5]); xlim([-1  1]);
+ylabel('Relatuve Power (dB)');
+xlabel('sin(Azimuth)');
+title('Doppler Frequency = 100 Hz');
+grid on;
+
+% b. Cut of the Adapted Pattern at Azimuth Angle = 0 deg.
+subplot(2,1,2);
+plot(fd, 10*log10(abs(Pw(:,phi == phit))));
+ylim([-80 0.5]); xlim([-150 150]);
+ylabel('Relative Power (dB)');
+xlabel('Doppler Frequency (Hz)');
+title('Azimuth = 0 deg');
+grid on;
+
+##### SOURCE END #####
+--></body></html>

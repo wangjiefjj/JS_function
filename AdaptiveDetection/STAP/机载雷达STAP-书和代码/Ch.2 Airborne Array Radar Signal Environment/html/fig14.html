@@ -1,0 +1,267 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Figure 14. Example clutter ridges with velocity misalignment, for Doppler-ambiguous clutter.</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-04-25"><meta name="DC.source" content="fig14.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>Figure 14. Example clutter ridges with velocity misalignment, for Doppler-ambiguous clutter.</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">Radar System Operational Parameters.</a></li><li><a href="#3">Platform Parameters.</a></li><li><a href="#4">Clutter Spatial Frequency of ik-th Clutter Patch.</a></li><li><a href="#5">Plot Normalized Doppler Frequency vs Spatial Frequency.</a></li></ul></div><p>Coded by Ilias Konsoulas, 16 Dec. 2014. Code provided for educational purposes only. All rights reserved.</p><pre class="codeinput">clc; clear; close <span class="string">all</span>;
+</pre><h2>Radar System Operational Parameters.<a name="2"></a></h2><pre class="codeinput">fo = 450e6;                   <span class="comment">% Operating Frequency in Hz</span>
+fr = 300;                     <span class="comment">% PRF in Hz</span>
+Tr = 1/fr;                    <span class="comment">% PRI in sec.</span>
+c = 299792458;                <span class="comment">% Speed of Light in m/sec.</span>
+lambda = c/fo;                <span class="comment">% Operating wavelength in meters.</span>
+d = lambda/2;                 <span class="comment">% Interelement Spacing</span>
+
+<span class="comment">% Azimuth angle in degrees:</span>
+phi = -180:0.5:180;
+Lphi = length(phi);
+fd = zeros(1,Lphi);
+</pre><h2>Platform Parameters.<a name="3"></a></h2><pre class="codeinput">beta = 1.5:0.5:3;             <span class="comment">% Beta parameter values.</span>
+ha = 9e3;                     <span class="comment">% Platform altitude in meters.</span>
+Rc = 13e4;                    <span class="comment">% (clutter) range of interest in meters.</span>
+psi = asin(ha/Rc);            <span class="comment">% Grazing angle at the clutter patch in rad (flat earth model).</span>
+theta = psi;                  <span class="comment">% Depression angle to ik-th clutter patch (flat earth model).</span>
+phia = [30 45 60 75];         <span class="comment">% Velocity Misalignment angle in degrees.</span>
+</pre><h2>Clutter Spatial Frequency of ik-th Clutter Patch.<a name="4"></a></h2><pre class="codeinput">fsp = d/lambda*cos(theta)*sin(phi*pi/180);
+</pre><h2>Plot Normalized Doppler Frequency vs Spatial Frequency.<a name="5"></a></h2><pre class="codeinput">figure(<span class="string">'NumberTitle'</span>, <span class="string">'off'</span>,<span class="string">'Name'</span>, <span class="keyword">...</span>
+    <span class="string">'Figure 14. Example clutter ridges with velocity misalignment, for Doppler-ambiguous clutter.'</span>, <span class="keyword">...</span>
+    <span class="string">'Position'</span>, [1 1 1150 1250]);
+
+<span class="keyword">for</span> i1=1:length(beta)
+    <span class="keyword">for</span> i2 = 1:length(phia)
+        <span class="comment">% Platform Velocity for various beta parameter values:</span>
+        va = beta(i1)*d*fr/2;
+
+        <span class="comment">% Doppler Frequency from ik-th Clutter Patch</span>
+        fd = 2*va/lambda*cos(theta)*sin(phi*pi/180 + phia(i2)*pi/180);      <span class="comment">% Eq. (82)</span>
+
+        <span class="comment">% Normalized Doppler Frequency:</span>
+        omegac = fd*Tr;
+
+        <span class="keyword">for</span> k=1:Lphi
+            <span class="keyword">if</span> omegac(k)&gt;0.5 &amp;&amp; omegac(k)&lt;=1.5
+                omegac(k) = omegac(k) - 1;
+            <span class="keyword">elseif</span> omegac(k)&lt;-0.5 &amp;&amp; omegac(k)&gt;=-1.5
+                omegac(k) = omegac(k) + 1;
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> omegac(k)&gt;1.5 &amp;&amp; omegac(k)&lt;=2.5
+                omegac(k) = omegac(k) - 2;
+            <span class="keyword">elseif</span> omegac(k)&lt;-1.5 &amp;&amp; omegac(k)&gt;=-2.5
+                omegac(k) = omegac(k) + 2;
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> omegac(k)&gt;2.5 &amp;&amp; omegac(k)&lt;=3.5
+                omegac(k) = omegac(k) - 3;
+            <span class="keyword">elseif</span> omegac(k)&lt;-2.5 &amp;&amp; omegac(k)&gt;=-3.5
+                omegac(k) = omegac(k) + 3;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+        front = zeros(1,Lphi);
+        back = zeros(1,Lphi);
+
+        <span class="keyword">for</span> k=1:Lphi
+            <span class="keyword">if</span> abs(phi(k)) &lt;= 90
+                front(k) = omegac(k);
+            <span class="keyword">else</span>
+                back(k) = omegac(k);
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+        zeroindfront = find(front==0);
+        zeroindback = find(back==0);
+        front(zeroindfront)   = NaN;
+        back(zeroindback) = NaN;
+
+        i3 = 4*(i1-1)+i2;
+        subplot(4,4,i3);
+        plot(fsp,front,<span class="string">'.'</span>);
+        hold <span class="string">on</span>;
+        plot(fsp,back,<span class="string">'r.'</span>);
+        title([<span class="string">'\beta = '</span>, num2str(beta(i1)), <span class="string">',  \phi_a = '</span>,num2str(phia(i2)),<span class="string">'\circ'</span>]);
+        <span class="keyword">if</span> i3==1||i3==5||i3==9||i3==13
+            ylabel(<span class="string">'Norm. Doppler Freq. \omega_c'</span>);
+        <span class="keyword">end</span>
+        ylim([-0.5 0.5]); xlim([-0.5 0.5]);
+        grid <span class="string">on</span>;
+        <span class="keyword">if</span> i3==16
+            legend(<span class="string">'front'</span>,<span class="string">'back'</span>,<span class="string">'Location'</span>,<span class="string">'Best'</span>);
+        <span class="keyword">end</span>
+        <span class="keyword">if</span> i1==4
+            xlabel(<span class="string">'Spatial Frequency \vartheta_c'</span>);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+tightfig;
+</pre><img vspace="5" hspace="5" src="fig14_01.png" alt=""> <p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+%% Figure 14. Example clutter ridges with velocity misalignment, for Doppler-ambiguous clutter.
+
+%%
+%
+% Coded by Ilias Konsoulas, 16 Dec. 2014.
+% Code provided for educational purposes only. All rights reserved.
+
+clc; clear; close all;
+
+%% Radar System Operational Parameters.
+fo = 450e6;                   % Operating Frequency in Hz
+fr = 300;                     % PRF in Hz
+Tr = 1/fr;                    % PRI in sec.
+c = 299792458;                % Speed of Light in m/sec.
+lambda = c/fo;                % Operating wavelength in meters.
+d = lambda/2;                 % Interelement Spacing
+
+% Azimuth angle in degrees:
+phi = -180:0.5:180;
+Lphi = length(phi);
+fd = zeros(1,Lphi);
+
+%% Platform Parameters.
+beta = 1.5:0.5:3;             % Beta parameter values.
+ha = 9e3;                     % Platform altitude in meters.
+Rc = 13e4;                    % (clutter) range of interest in meters.
+psi = asin(ha/Rc);            % Grazing angle at the clutter patch in rad (flat earth model).
+theta = psi;                  % Depression angle to ik-th clutter patch (flat earth model).
+phia = [30 45 60 75];         % Velocity Misalignment angle in degrees.
+
+%% Clutter Spatial Frequency of ik-th Clutter Patch.
+fsp = d/lambda*cos(theta)*sin(phi*pi/180);
+
+%% Plot Normalized Doppler Frequency vs Spatial Frequency.
+figure('NumberTitle', 'off','Name', ...
+    'Figure 14. Example clutter ridges with velocity misalignment, for Doppler-ambiguous clutter.', ...
+    'Position', [1 1 1150 1250]);
+
+for i1=1:length(beta)
+    for i2 = 1:length(phia)
+        % Platform Velocity for various beta parameter values:
+        va = beta(i1)*d*fr/2;
+        
+        % Doppler Frequency from ik-th Clutter Patch
+        fd = 2*va/lambda*cos(theta)*sin(phi*pi/180 + phia(i2)*pi/180);      % Eq. (82)
+        
+        % Normalized Doppler Frequency:
+        omegac = fd*Tr;
+        
+        for k=1:Lphi
+            if omegac(k)>0.5 && omegac(k)<=1.5
+                omegac(k) = omegac(k) - 1;
+            elseif omegac(k)<-0.5 && omegac(k)>=-1.5
+                omegac(k) = omegac(k) + 1;
+            end
+            
+            if omegac(k)>1.5 && omegac(k)<=2.5
+                omegac(k) = omegac(k) - 2;
+            elseif omegac(k)<-1.5 && omegac(k)>=-2.5
+                omegac(k) = omegac(k) + 2;
+            end
+            
+            if omegac(k)>2.5 && omegac(k)<=3.5
+                omegac(k) = omegac(k) - 3;
+            elseif omegac(k)<-2.5 && omegac(k)>=-3.5
+                omegac(k) = omegac(k) + 3;
+            end
+        end
+        
+        front = zeros(1,Lphi);
+        back = zeros(1,Lphi);
+        
+        for k=1:Lphi
+            if abs(phi(k)) <= 90
+                front(k) = omegac(k);
+            else
+                back(k) = omegac(k);
+            end
+        end
+        
+        zeroindfront = find(front==0);
+        zeroindback = find(back==0);
+        front(zeroindfront)   = NaN;
+        back(zeroindback) = NaN;
+        
+        i3 = 4*(i1-1)+i2;
+        subplot(4,4,i3);
+        plot(fsp,front,'.');
+        hold on;
+        plot(fsp,back,'r.');
+        title(['\beta = ', num2str(beta(i1)), ',  \phi_a = ',num2str(phia(i2)),'\circ']);
+        if i3==1||i3==5||i3==9||i3==13
+            ylabel('Norm. Doppler Freq. \omega_c');
+        end
+        ylim([-0.5 0.5]); xlim([-0.5 0.5]);
+        grid on;
+        if i3==16
+            legend('front','back','Location','Best');
+        end
+        if i1==4
+            xlabel('Spatial Frequency \vartheta_c');
+        end
+    end
+end
+
+tightfig;
+
+##### SOURCE END #####
+--></body></html>

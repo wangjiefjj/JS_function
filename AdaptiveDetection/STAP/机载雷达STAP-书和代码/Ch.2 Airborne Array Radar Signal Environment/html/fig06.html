@@ -1,0 +1,183 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Figure 6. The &#946;=1 Clutter Ridge.</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-04-25"><meta name="DC.source" content="fig06.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>Figure 6. The &#946;=1 Clutter Ridge.</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">Radar System Operational Parameters.</a></li><li><a href="#3">Platform Parameters:</a></li><li><a href="#4">Spatial Frequency of ik-th Clutter Patch:</a></li><li><a href="#5">Plot Doppler Frequency vs Azimuth and Normalized Doppler Frequency vs Spatial Frequency.</a></li></ul></div><p>Coded by Ilias Konsoulas, 16 Dec. 2014. Code provided for educational purposes only. All rights reserved.</p><pre class="codeinput">clc; clear; close <span class="string">all</span>;
+</pre><h2>Radar System Operational Parameters.<a name="2"></a></h2><pre class="codeinput">fo = 450e6;                   <span class="comment">% Operating Frequency in Hz</span>
+Pt = 200e3;                   <span class="comment">% Peak Transmit Power 200 kW</span>
+Gt = 22;                      <span class="comment">% Transmit Gain in dB</span>
+Gr = 10;                      <span class="comment">% Column Receive Gain in dB</span>
+B = 4e6;                      <span class="comment">% Receiver Instantaneous Bandwidth in Hz</span>
+Ls = 4;                       <span class="comment">% System Losses in dB</span>
+fr = 300;                     <span class="comment">% PRF in Hz</span>
+Tr = 1/fr;                    <span class="comment">% PRI in sec.</span>
+<span class="comment">% M = 18;                     % Number of Pulses per CPI:</span>
+Tp = 200e-6;                  <span class="comment">% Pulse Width in sec.</span>
+N = 18;                       <span class="comment">% Number of Array Antenna Elements</span>
+Gel = 4;                      <span class="comment">% Element Gain in dB</span>
+be = -30;                     <span class="comment">% Element Backlobe Level in db</span>
+Nc = 361;                     <span class="comment">% Number of clutter patches uniformly distributed in azimuth.</span>
+c   = 299792458;              <span class="comment">% Speed of Light in m/sec.</span>
+lambda = c/fo;                <span class="comment">% Operating wavelength in meters.</span>
+d = lambda/2;                 <span class="comment">% Interelement Spacing.</span>
+
+<span class="comment">% Azimuth angle in degrees:</span>
+phi = -180:.5:180;
+Lphi = length(phi);
+</pre><h2>Platform Parameters:<a name="3"></a></h2><pre class="codeinput">va = 50;                      <span class="comment">% Platform velocity in m/sec.</span>
+ha = 9e3;                     <span class="comment">% Platform altitude in meters.</span>
+Rc = 13e4;                    <span class="comment">% (clutter) range of interest in meters.</span>
+psi = asin(ha/Rc);            <span class="comment">% Grazing angle at the clutter patch in rad (flat earth model).</span>
+theta = psi;                  <span class="comment">% Depression angle to ik-th clutter patch (flat earth model).</span>
+</pre><h2>Spatial Frequency of ik-th Clutter Patch:<a name="4"></a></h2><pre class="codeinput">fsp = d/lambda*cos(theta)*sin(phi*pi/180);         <span class="comment">% Eq. (54)</span>
+
+<span class="comment">% Doppler Frequency of ik-th Clutter Patch:</span>
+fd = 2*va/lambda*cos(theta)*sin(phi*pi/180);       <span class="comment">% Eq. (69)</span>
+
+<span class="comment">% Normalized Doppler Frequency:</span>
+omegac = 2*va*Tr/d*fsp;                            <span class="comment">% Eq. (70)</span>
+
+beta = 2*va*Tr/d;                                  <span class="comment">% Eq. (71)</span>
+</pre><h2>Plot Doppler Frequency vs Azimuth and Normalized Doppler Frequency vs Spatial Frequency.<a name="5"></a></h2><pre class="codeinput">figure(<span class="string">'NumberTitle'</span>, <span class="string">'off'</span>,<span class="string">'Name'</span>,<span class="keyword">...</span>
+    [<span class="string">'Figure 6. The &#946; =1 clutter ridge for Side Looking Airborne Radar (SLAR). The PRF is '</span>, <span class="keyword">...</span>
+                                                        num2str(fr),<span class="string">' Hz.'</span>],<span class="string">'Position'</span>, [50  50  900 400] );
+subplot(1,2,1);
+plot(sin(phi*pi/180),fd,<span class="string">'.'</span>);
+grid <span class="string">on</span>;
+ylabel(<span class="string">'Doppler Frequency f_c(\theta_c,\phi_c) (Hz)'</span>);
+xlabel(<span class="string">'sin(\phi_c)'</span>);
+
+subplot(1,2,2);
+plot(fsp,omegac,<span class="string">'.'</span>);
+grid <span class="string">on</span>;
+ylabel(<span class="string">'Normalized Doppler Frequency \omega_c'</span>);
+xlabel(<span class="string">'Spatial Frequency \vartheta_c'</span>);
+</pre><img vspace="5" hspace="5" src="fig06_01.png" alt=""> <p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+%% Figure 6. The β=1 Clutter Ridge.
+
+%%
+% Coded by Ilias Konsoulas, 16 Dec. 2014.
+% Code provided for educational purposes only. All rights reserved.
+
+clc; clear; close all;
+
+%% Radar System Operational Parameters.
+fo = 450e6;                   % Operating Frequency in Hz
+Pt = 200e3;                   % Peak Transmit Power 200 kW
+Gt = 22;                      % Transmit Gain in dB
+Gr = 10;                      % Column Receive Gain in dB
+B = 4e6;                      % Receiver Instantaneous Bandwidth in Hz
+Ls = 4;                       % System Losses in dB
+fr = 300;                     % PRF in Hz
+Tr = 1/fr;                    % PRI in sec.
+% M = 18;                     % Number of Pulses per CPI: 
+Tp = 200e-6;                  % Pulse Width in sec.
+N = 18;                       % Number of Array Antenna Elements
+Gel = 4;                      % Element Gain in dB
+be = -30;                     % Element Backlobe Level in db
+Nc = 361;                     % Number of clutter patches uniformly distributed in azimuth.
+c   = 299792458;              % Speed of Light in m/sec.
+lambda = c/fo;                % Operating wavelength in meters.
+d = lambda/2;                 % Interelement Spacing.
+
+% Azimuth angle in degrees:
+phi = -180:.5:180;
+Lphi = length(phi);
+
+%% Platform Parameters:
+va = 50;                      % Platform velocity in m/sec.
+ha = 9e3;                     % Platform altitude in meters.
+Rc = 13e4;                    % (clutter) range of interest in meters.
+psi = asin(ha/Rc);            % Grazing angle at the clutter patch in rad (flat earth model).
+theta = psi;                  % Depression angle to ik-th clutter patch (flat earth model).
+
+%% Spatial Frequency of ik-th Clutter Patch:
+fsp = d/lambda*cos(theta)*sin(phi*pi/180);         % Eq. (54)
+
+% Doppler Frequency of ik-th Clutter Patch:
+fd = 2*va/lambda*cos(theta)*sin(phi*pi/180);       % Eq. (69)
+
+% Normalized Doppler Frequency:                    
+omegac = 2*va*Tr/d*fsp;                            % Eq. (70)
+
+beta = 2*va*Tr/d;                                  % Eq. (71)
+
+%% Plot Doppler Frequency vs Azimuth and Normalized Doppler Frequency vs Spatial Frequency.
+figure('NumberTitle', 'off','Name',...
+    ['Figure 6. The β =1 clutter ridge for Side Looking Airborne Radar (SLAR). The PRF is ', ...
+                                                        num2str(fr),' Hz.'],'Position', [50  50  900 400] );
+subplot(1,2,1);
+plot(sin(phi*pi/180),fd,'.');
+grid on;
+ylabel('Doppler Frequency f_c(\theta_c,\phi_c) (Hz)');
+xlabel('sin(\phi_c)');
+
+subplot(1,2,2);
+plot(fsp,omegac,'.');
+grid on;
+ylabel('Normalized Doppler Frequency \omega_c');
+xlabel('Spatial Frequency \vartheta_c');
+##### SOURCE END #####
+--></body></html>

@@ -1,0 +1,249 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Figure 7. Clutter Loci for Different Platform Velocities.</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-04-25"><meta name="DC.source" content="fig07.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>Figure 7. Clutter Loci for Different Platform Velocities.</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">Radar System Operational Parameters.</a></li><li><a href="#3">Platform Parameters.</a></li><li><a href="#4">Calculate and Plot the Clutter Loci for Different Platform Velocities.</a></li></ul></div><p>Coded by Ilias Konsoulas, 16 Dec. 2014. Code provided for educational purposes only. All rights reserved.</p><pre class="codeinput">clc; clear; close <span class="string">all</span>;
+</pre><h2>Radar System Operational Parameters.<a name="2"></a></h2><pre class="codeinput">fo = 450e6;                   <span class="comment">% Operating Frequency in Hz</span>
+Pt = 200e3;                   <span class="comment">% Peak Transmit Power 200 kW</span>
+Gt = 22;                      <span class="comment">% Transmit Gain in dB</span>
+Gr = 10;                      <span class="comment">% Column Receive Gain in dB</span>
+B = 4e6;                      <span class="comment">% Receiver Instantaneous Bandwidth in Hz</span>
+Ls = 4;                       <span class="comment">% System Losses in dB</span>
+fr = 300;                     <span class="comment">% PRF in Hz</span>
+Tr = 1/fr;                    <span class="comment">% PRI in sec.</span>
+<span class="comment">% M = 18;                     % Number of Pulses per CPI:</span>
+Tp = 200e-6;                  <span class="comment">% Pulse Width in sec.</span>
+N = 18;                       <span class="comment">% Number of Array Antenna Elements</span>
+Gel = 4;                      <span class="comment">% Element Gain in dB</span>
+be = -30;                     <span class="comment">% Element Backlobe Level in db</span>
+Nc = 361;                     <span class="comment">% Number of clutter patches uniformly distributed in azimuth.</span>
+c   = 299792458;              <span class="comment">% Speed of Light in m/sec.</span>
+lambda = c/fo;                <span class="comment">% Operating wavelength in meters.</span>
+d = lambda/2;                 <span class="comment">% Interelement Spacing.</span>
+
+<span class="comment">% Azimuth angle in degrees:</span>
+phi = -180:.5:180;
+Lphi = length(phi);
+</pre><h2>Platform Parameters.<a name="3"></a></h2><pre class="codeinput">va = 50;                      <span class="comment">% Platform velocity in m/sec.</span>
+ha = 9e3;                     <span class="comment">% Platform altitude in meters.</span>
+beta = 0:0.5:7;               <span class="comment">% Beta parameter values.</span>
+Rc = 13e4;                    <span class="comment">% (clutter) range of interest in meters.</span>
+psi = asin(ha/Rc);            <span class="comment">% Grazing angle at the clutter patch in rad (flat earth model).</span>
+theta = psi;                  <span class="comment">% Depression angle to ik-th clutter patch (flat earth model).</span>
+
+<span class="comment">% Clutter Spatial Frequency of ik-th Clutter Patch:</span>
+fsp = d/lambda*cos(theta)*sin(phi*pi/180);
+</pre><h2>Calculate and Plot the Clutter Loci for Different Platform Velocities.<a name="4"></a></h2><pre class="codeinput">figure(<span class="string">'NumberTitle'</span>, <span class="string">'off'</span>,<span class="string">'Name'</span>, <span class="keyword">...</span>
+       <span class="string">'Figure 7. Clutter Loci for Different Velocities of Side Looking Airborne Radar (SLAR) '</span>, <span class="keyword">...</span>
+       <span class="string">'Position'</span>, [50 50 1150 700] );
+
+<span class="keyword">for</span> i=1:length(beta)
+    <span class="comment">% Platform Velocity for various beta parameter values:</span>
+    va = beta(i)*d*fr/2;                                   <span class="comment">% Eq. (71)</span>
+
+    <span class="comment">% Doppler Frequency from ik-th Clutter Patch</span>
+    <span class="comment">% fd = 2*va/lambda*cos(theta)*sin(phi*pi/180);</span>
+
+    <span class="comment">% Normalized Doppler Frequency:</span>
+    <span class="comment">% omegac = 2*va*Tr/d*fsp;</span>
+    omegac = beta(i)*fsp;                                  <span class="comment">% Eq. (70)</span>
+
+    <span class="comment">% This loop simulates the fold-over of the Clutter ridge (i.e. brings omegac</span>
+    <span class="comment">% back into the [-0.5 0.5] interval) when clutter is Doppler-ambiguous (&#946;&gt;1).</span>
+    <span class="keyword">for</span> k=1:Lphi
+        <span class="keyword">if</span> omegac(k)&gt;0.5 &amp;&amp; omegac(k)&lt;=1.5
+            omegac(k) = omegac(k) - 1;
+        <span class="keyword">elseif</span> omegac(k)&lt;-0.5 &amp;&amp; omegac(k)&gt;=-1.5
+            omegac(k) = omegac(k) + 1;
+        <span class="keyword">end</span>
+
+        <span class="keyword">if</span> omegac(k)&gt;1.5 &amp;&amp; omegac(k)&lt;=2.5
+            omegac(k) = omegac(k) - 2;
+        <span class="keyword">elseif</span> omegac(k)&lt;-1.5 &amp;&amp; omegac(k)&gt;=-2.5
+            omegac(k) = omegac(k) + 2;
+        <span class="keyword">end</span>
+
+        <span class="keyword">if</span> omegac(k)&gt;2.5 &amp;&amp; omegac(k)&lt;=3.5
+            omegac(k) = omegac(k) - 3;
+        <span class="keyword">elseif</span> omegac(k)&lt;-2.5 &amp;&amp; omegac(k)&gt;=-3.5
+            omegac(k) = omegac(k) + 3;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">% Plot Normalized Doppler Frequency vs Spatial Frequency.</span>
+    subplot(3,5,i);
+    plot(fsp,omegac,<span class="string">'.'</span>);
+    title([<span class="string">'v_a = '</span>,num2str(round(va)),<span class="string">' m/sec, \bf\beta = '</span>,num2str(beta(i))]);
+    <span class="keyword">if</span> i==1 || i== 6 || i==11
+        ylabel(<span class="string">'Norm. Doppler Frequency \omega_c'</span>);
+    <span class="keyword">end</span>
+    <span class="keyword">if</span> i&gt;10
+        xlabel(<span class="string">'Spatial Frequency \vartheta_c'</span>);
+    <span class="keyword">end</span>
+    ylim([-0.5 0.5]); xlim([-0.5 0.5]);
+    grid <span class="string">on</span>;
+
+<span class="keyword">end</span>
+
+tightfig;
+</pre><img vspace="5" hspace="5" src="fig07_01.png" alt=""> <p class="footer"><br>
+      Published with MATLAB&reg; 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+%% Figure 7. Clutter Loci for Different Platform Velocities.
+%% 
+% Coded by Ilias Konsoulas, 16 Dec. 2014.
+% Code provided for educational purposes only. All rights reserved.
+
+clc; clear; close all;
+
+%% Radar System Operational Parameters.
+fo = 450e6;                   % Operating Frequency in Hz
+Pt = 200e3;                   % Peak Transmit Power 200 kW
+Gt = 22;                      % Transmit Gain in dB
+Gr = 10;                      % Column Receive Gain in dB
+B = 4e6;                      % Receiver Instantaneous Bandwidth in Hz
+Ls = 4;                       % System Losses in dB
+fr = 300;                     % PRF in Hz
+Tr = 1/fr;                    % PRI in sec.
+% M = 18;                     % Number of Pulses per CPI:
+Tp = 200e-6;                  % Pulse Width in sec.
+N = 18;                       % Number of Array Antenna Elements
+Gel = 4;                      % Element Gain in dB
+be = -30;                     % Element Backlobe Level in db
+Nc = 361;                     % Number of clutter patches uniformly distributed in azimuth.
+c   = 299792458;              % Speed of Light in m/sec.
+lambda = c/fo;                % Operating wavelength in meters.
+d = lambda/2;                 % Interelement Spacing.
+
+% Azimuth angle in degrees:
+phi = -180:.5:180;
+Lphi = length(phi);
+
+%% Platform Parameters.
+va = 50;                      % Platform velocity in m/sec.
+ha = 9e3;                     % Platform altitude in meters.
+beta = 0:0.5:7;               % Beta parameter values.
+Rc = 13e4;                    % (clutter) range of interest in meters.
+psi = asin(ha/Rc);            % Grazing angle at the clutter patch in rad (flat earth model).
+theta = psi;                  % Depression angle to ik-th clutter patch (flat earth model).
+
+% Clutter Spatial Frequency of ik-th Clutter Patch:
+fsp = d/lambda*cos(theta)*sin(phi*pi/180);
+
+%% Calculate and Plot the Clutter Loci for Different Platform Velocities.
+figure('NumberTitle', 'off','Name', ...
+       'Figure 7. Clutter Loci for Different Velocities of Side Looking Airborne Radar (SLAR) ', ...
+       'Position', [50 50 1150 700] );
+
+for i=1:length(beta)
+    % Platform Velocity for various beta parameter values:
+    va = beta(i)*d*fr/2;                                   % Eq. (71)
+    
+    % Doppler Frequency from ik-th Clutter Patch
+    % fd = 2*va/lambda*cos(theta)*sin(phi*pi/180);
+    
+    % Normalized Doppler Frequency:
+    % omegac = 2*va*Tr/d*fsp;
+    omegac = beta(i)*fsp;                                  % Eq. (70)
+    
+    % This loop simulates the fold-over of the Clutter ridge (i.e. brings omegac 
+    % back into the [-0.5 0.5] interval) when clutter is Doppler-ambiguous (β>1).
+    for k=1:Lphi
+        if omegac(k)>0.5 && omegac(k)<=1.5
+            omegac(k) = omegac(k) - 1;
+        elseif omegac(k)<-0.5 && omegac(k)>=-1.5
+            omegac(k) = omegac(k) + 1;
+        end
+        
+        if omegac(k)>1.5 && omegac(k)<=2.5
+            omegac(k) = omegac(k) - 2;
+        elseif omegac(k)<-1.5 && omegac(k)>=-2.5
+            omegac(k) = omegac(k) + 2;
+        end
+        
+        if omegac(k)>2.5 && omegac(k)<=3.5
+            omegac(k) = omegac(k) - 3;
+        elseif omegac(k)<-2.5 && omegac(k)>=-3.5
+            omegac(k) = omegac(k) + 3;
+        end
+    end
+    
+    % Plot Normalized Doppler Frequency vs Spatial Frequency.
+    subplot(3,5,i);
+    plot(fsp,omegac,'.');
+    title(['v_a = ',num2str(round(va)),' m/sec, \bf\beta = ',num2str(beta(i))]);
+    if i==1 || i== 6 || i==11
+        ylabel('Norm. Doppler Frequency \omega_c');
+    end
+    if i>10
+        xlabel('Spatial Frequency \vartheta_c');
+    end
+    ylim([-0.5 0.5]); xlim([-0.5 0.5]);
+    grid on;
+    
+end
+
+tightfig;
+
+##### SOURCE END #####
+--></body></html>
