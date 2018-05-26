@@ -8,7 +8,7 @@
 
 clc; clear; close all;
 
-%% Radar System Operational Parameters
+%% Radar System Operational Parameters，来自P31表2
 fo = 450e6;                   % Operating Frequency in Hz
 Pt = 200e3;                   % Peak Transmit Power 200 kW
 Gt = 22;                      % Transmit Gain in dB
@@ -68,7 +68,9 @@ for i =1:Lphi
         f(i) = 10^(be/10)*cos(phi(i)*pi/180);
     end
 end
-
+figure('NumberTitle', 'off','Name', ...
+       'Figure 9. The element voltage pattern. A -30-dB backlobe level is assumed.');
+polardb(phi*pi/180,10*log10(abs(f)),-60,'g');
 % Calculate the Array Factor (AF) (Voltage):
 steering_angle = 0; % Angle of beam steering in degrees.
 for k=1:Lphi
@@ -83,7 +85,7 @@ Gtgain = 10^(Gt/10)*abs(AF).^2;
 grgain = 10^(Gel/10)*abs(f).^2;
 
 % Clutter Patch RCS Calculation:
-PatchArea = Rcik*dphi*dR*sec(psi);
+PatchArea = Rcik*dphi*dR*sec(psi); %杂波面积 
 sigma0 = gamma*sin(psi);
 sigma = sigma0*PatchArea;
 
