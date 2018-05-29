@@ -10,7 +10,7 @@ AZ_beam = 1/180*pi; % 方位向波束宽度。1deg->rad
 [R2,Rs2] = fun_RsR(H(2));
 [R3,Rs3] = fun_RsR(H(3));
 [R4,Rs4] = fun_RsR(H(4));
-%% 计算足印长度
+%% 计算主足印长度
 L1 = fun_FootLength(H(1),EL_beam);
 L2 = fun_FootLength(H(2),EL_beam);
 L3 = fun_FootLength(H(3),EL_beam);
