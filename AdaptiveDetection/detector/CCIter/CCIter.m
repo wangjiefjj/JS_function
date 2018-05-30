@@ -2,13 +2,13 @@ clc
 clear 
 close all
 %%%%参数设置
-n = 2; %几倍的样本
-str_train = 'g';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
+n = 1; %几倍的样本
+str_train = 'p';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
 lambda = 3;
 mu = 1;
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
 rou = 0.95;  %%协方差矩阵生成的迟滞因子
-sigma_t = 1.3;
+sigma_t = 0.1;
 %%%%假设参数设置
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
@@ -120,8 +120,12 @@ Pd_CCIter_mc = zeros(1,length(SNRout));
 Pd_ML_mc = zeros(1,length(SNRout));
 Pd_CC_mc = zeros(1,length(SNRout));
 Pd_H_mc = zeros(1,length(SNRout));
+if str_train=='g'
+    alpha=sqrt(SNRnum/abs(s'*irouR*s)); % 根据SNR=|alpha|^2*s'*R^(-1)*s求得|alpha|
+elseif str_train=='p'
+    alpha=sqrt(SNRnum*(lambda-1)/mu);     
+end
 
-alpha=sqrt(SNRnum/abs(s'*irouR*s)); % 根据SNR=|alpha|^2*s'*R^(-1)*s求得|alpha|
 h = waitbar(0,'Please wait...');
 tic
 for m=1:length(SNRout)
@@ -214,6 +218,6 @@ set(gca,'FontSize',20)
 set(h_leg,'Location','SouthEast')
 axis([min(SNRout),max(SNRout),0,1])
 grid on
-str = [str_train,'_CCIter_ANMF','_',num2str(n),'N','_s',num2str(sigma_t),'.mat'];
-save (str); 
+% str = [str_train,'_CCIter_ANMF','_',num2str(n),'N','_s',num2str(sigma_t),'.mat'];
+% save (str); 
 

@@ -2,9 +2,11 @@
 clc
 clear 
 close all
-Read_Display_Data
+% Read_Display_Data
 Data_process
 load(matFile) 
+lambda =  2.4072;
+mu = 1.3600;
 %%%%参数设置
 n = 2; %几倍的样本%%%%假设参数设置
 Na = 2;     % 阵元数
@@ -111,7 +113,8 @@ Pd_ML_mc = zeros(1,length(SNRout));
 Pd_CC_mc = zeros(1,length(SNRout));
 Pd_H_mc = zeros(1,length(SNRout));
 
-alpha=sqrt(SNRnum/abs(s'*irouR*s)); % 根据SNR=|alpha|^2*s'*R^(-1)*s求得|alpha|
+% alpha=sqrt(SNRnum/abs(s'*irouR*s)); % 根据SNR=|alpha|^2*s'*R^(-1)*s求得|alpha|
+alpha=sqrt(SNRnum*(lambda-1)/mu);     
 h = waitbar(0,'Please wait...');
 tic
 for m=1:length(SNRout)
@@ -178,7 +181,7 @@ for m=1:length(SNRout)
 end
 toc
 close(h)
-figure(1);
+figure();
 hold on
 plot(SNRout,Pd_NMF_mc,'k','linewidth',1)
 plot(SNRout,Pd_SCM_mc,'k-+','linewidth',1)
@@ -196,7 +199,7 @@ ylabel('Pd','FontSize',20)
 set(gca,'FontSize',20)
 set(h_leg,'Location','SouthEast')
 grid on
-str = ['R_',num2str(Range),'_','CCIter_IPIX_',cdfFile_t,num2str(n),'N','.mat'];
-save (str); 
+% str = ['R_',num2str(Range),'_','CCIter_IPIX_',cdfFile_t,num2str(n),'N','.mat'];
+% save (str); 
 
 
