@@ -6,7 +6,7 @@ H = [506,1000,7000];
 alpha1 = (0:80)/180*pi; %卫星星下点所在纬度
 eta = (0:80)/180*pi; % fai：雷达轨道与赤道夹角
 [X,Y] = meshgrid(eta,alpha1);
-%% 计算航偏角, 航偏幅度
+%% 计算航偏角, 航偏幅度H=506 
 crabA1 = real(fun_CrabAngle(X,Y,H(1))/pi*180);
 crabM1 = (fun_CrabMagnitude(X,Y,H(1)));
 %% figure
@@ -24,7 +24,7 @@ ylabel('\alpha1')
 zlabel('\rho_c')
 title('倾斜轨道，偏航幅度与纬度的关系(H=506km)')
 
-%% 计算航偏角, 航偏幅度
+%% 计算航偏角, 航偏幅度H=1000 
 crabA2 = real(fun_CrabAngle(X,Y,H(2))/pi*180);
 crabM2 = (fun_CrabMagnitude(X,Y,H(2)));
 %% figure
@@ -43,7 +43,7 @@ zlabel('\rho_c')
 title('倾斜轨道，偏航幅度与纬度的关系(H=1000km)')
 
 
-%% 计算航偏角, 航偏幅度
+%% 计算航偏角, 航偏幅度H=7000
 crabA3 = real(fun_CrabAngle(X,Y,H(3))/pi*180);
 crabM3 = (fun_CrabMagnitude(X,Y,H(3)));
 %% figure
