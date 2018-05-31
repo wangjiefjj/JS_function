@@ -1,4 +1,4 @@
-function [ GrazeTH,R,Rs] = fun_GrazeTH(H,EL_beam,opt )
+function [ GrazeTH,R,Rs] = fun_GrazeTH(H, EL_beam,opt )
 %FUN_ 此处显示有关此函数的摘要
 %   此处显示详细说明
 % EL_beam: 俯仰向波束宽度。rad

@@ -22,14 +22,14 @@ Eta = repmat(eta,[1,L]);
 Etat = repmat(eta,[2,L]);
 %% figure
 figure(1)
-contour(Alpha1t,CrabA1,Etat,[90,60,30,0],'ShowText','on')
+contour(Alpha1t,CrabA1,Etat,[90,60,30,0],'ShowText','on','LineWidth',5)
 grid on 
 xlabel('Î³¶È\alpha_1/^o')
 ylabel('Æ«º½½Ç\phi_c/^o')
 axis([-100,100,-4,4])
 %% figure
 figure(2)
-contour(Alpha1,CrabM1,Eta,[90,60,30,0],'ShowText','on')
+contour(Alpha1,CrabM1,Eta,[90,60,30,0],'ShowText','on','LineWidth',5)
 grid on 
 xlabel('Î³¶È\alpha_1/^o')
 ylabel('Æ«º½·ù¶È\rho_c/^o')

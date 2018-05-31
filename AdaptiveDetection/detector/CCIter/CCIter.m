@@ -2,8 +2,8 @@ clc
 clear 
 close all
 %%%%参数设置
-n = 1; %几倍的样本
-str_train = 'p';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
+n = 2; %几倍的样本
+str_train = 'g';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
 lambda = 3;
 mu = 1;
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
@@ -35,8 +35,9 @@ for i = 1:1000
     R_KA = R_KA + rouR.*(t*t')/1000;
 end
 tic
+% h = waitbar(1,'Please wait...');
 parfor i = 1:MonteCarloPfa
-    warning('off')
+%     warning('off')
 %     warning('query')
 %     waitbar(i/MonteCarloPfa,h,sprintf([num2str(i/MonteCarloPfa*100),'%%']));
 %%%%%%%%%%%训练数据产生%%%%%%%%%%%%%%
@@ -51,14 +52,10 @@ parfor i = 1:MonteCarloPfa
     R_NSCM = (fun_NSCMN(Train));
 
     R_CC = fun_CC(Train,R_SCM,R_KA);
-    R_CCIter = fun_CCIter(Train,R_SCM,R_KA);
-%     if sigma_t <0.5
-%         R_CCIter = fun_CCIter2(Train,R_SCM,R_KA);
-%     else
-%         R_CCIter = fun_CCIter(Train,R_SCM,R_KA);
-%     end
     
-    R_ML = fun_MLalpha(Train,R_SCM,R_KA,x0)
+    R_CCIter = fun_CCIter(Train,R_SCM,R_KA);
+    
+    R_ML = fun_MLalpha(Train,R_SCM,R_KA,x0);
     
     R_H = 0.5 * R_KA + 0.5 * R_SCM;
     %%%检测器%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -84,6 +81,7 @@ parfor i = 1:MonteCarloPfa
     Tanmf_H(i) = fun_ANMF(R_H,x0,s);
 %     Tanmf_H(i) = fun_AMF(R_H,x0,s);
 end
+% close(h)
 toc
 TANMF_SCM=sort(Tanmf_SCM,'descend');
 TANMF_NSCM=sort(Tanmf_NSCM,'descend');
@@ -121,7 +119,8 @@ Pd_ML_mc = zeros(1,length(SNRout));
 Pd_CC_mc = zeros(1,length(SNRout));
 Pd_H_mc = zeros(1,length(SNRout));
 if str_train=='g'
-    alpha=sqrt(SNRnum/abs(s'*irouR*s)); % 根据SNR=|alpha|^2*s'*R^(-1)*s求得|alpha|
+%     alpha=sqrt(SNRnum/abs(s'*irouR*s)); % 根据SNR=|alpha|^2*s'*R^(-1)*s求得|alpha|
+    alpha=sqrt(SNRnum);
 elseif str_train=='p'
     alpha=sqrt(SNRnum*(lambda-1)/mu);     
 end
