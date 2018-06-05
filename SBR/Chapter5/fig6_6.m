@@ -17,7 +17,11 @@ beta0 = beta * d;
 % eta = 45/180*pi;                    %卫星倾角
 %% 目标区域
 RR = 400:10:1100;                    %地距km 
-Az = 89.5/180*pi;                    %方位角 
+wd = -1:0.01:1;
+P = zeros(length(RR),length(wd));
+for Az = 89.5:10:89.5                    %方位角 
+    Az
+Az = Az/180*pi;
 EL = fun_ELAngle(H,RR)/180*pi;       %俯仰角
 c = sin(EL)*cos(Az);                 %入射锥角
 L = length(c);                       %距离单元
@@ -36,23 +40,25 @@ v = 1;
 for i = 1:length(c)
     b = exp(-1j*(0:M-1)*pi*wdc(i)).';         %时间导向矢量
     a = exp(-1j*(0:N-1)*pi*d*c(i)).';         %空间导向矢量 
-    S(:,i) = gamrnd(v,1/v,1,1)*kron(b,a);     %杂波的导向矢量
+    S(:,i) = kron(b,a);     %杂波的导向矢量
 %     X(:,i) = awgn(S(:,i),0);
 end
 R = fun_SCMN(S);
-invR = inv(R);
-wd = -1:0.01:1;
+% invR = inv(R);
 for i_c = 1:length(c)
     for i_wd = 1:length(wd)
         b = exp(-1j*(0:M-1)*pi*wd(i_wd)).';         %时间导向矢量
         a = exp(-1j*(0:N-1)*pi*d*c(i_c)).';        %空间导向矢量 
         s = kron(b,a);
-        P(i_c,i_wd)= s'*R*s;
+        Pt(i_c,i_wd)= s'*R*s;
     end
+end
+% Pt = Pt/max(max(abs(Pt)));
+P = P+Pt;
 end
 %% figure
 figure(1)
 [X,Y]=meshgrid(wd,RR);
-mesh(X,Y,abs(fftshift(P)))
+mesh(X,Y,abs((P)))
 xlabel('归一化多普勒')
 ylabel('距离/km')

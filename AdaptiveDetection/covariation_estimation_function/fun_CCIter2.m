@@ -16,7 +16,7 @@ for k = 1:1
     t2 = 0;
     for i = 1:K
         Rk = X(:,i) * X(:,i)';
-        t1 = t1 + norm(Rk - R_CC,'fro')^2 + real(trace(R_KA*R_CC' - R_KA*Rk' + R_CC*Rk'-R_CC*R_CC'));
+        t1 = t1 + norm(Rk - R_CC,'fro')^2 ;%+ real(trace(R_KA*R_CC' - R_KA*Rk' + R_CC*Rk'-R_CC*R_CC'))
         t2 = t2 + norm(R_KA - Rk,'fro')^2;
     end
     alpha0 = max(min(1,(t1/t2)),0);   

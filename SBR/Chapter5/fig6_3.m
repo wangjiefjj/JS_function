@@ -6,7 +6,7 @@ N = 32;                             %阵元个数
 M = 16;                             %相干脉冲数
 Re = 6373;                          %地球半径km
 H = 506;                            %SBR高度km
-Vp = fun_Vp(H);                     %SBR速度
+Vp = fun_Vp(H);                     %SBR速度km/s
 d = 13.4;                           %归一化阵元间距
 PRF = 2000;                          %脉冲重复频率Hz，500~2000
 Tr =1/PRF;                          %脉冲重复间隔s
@@ -37,7 +37,7 @@ for i = 1:length(ELm)
     Az = (acos(c./sin(ELm(i))));
     wdr(i,:) = beta0*CrabM*sin(ELm(i)).*cos(Az+CrabA);
 end
-% wdr = real(wdr)+imag(wdr);
+wdr = real(wdr)+imag(wdr);
 %% figure
 figure(1)
 hold on

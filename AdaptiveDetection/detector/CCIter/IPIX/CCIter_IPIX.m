@@ -23,7 +23,7 @@ irouR = inv(rouR);
 L=round(n*N); 
 theta_sig = 0.1;
 nn = 0:N-1;
-s = exp(-1i*2*pi*nn*theta_sig)'/sqrt(N); %%%%%% 系统导向矢量
+s = exp(-1i*2*pi*nn*theta_sig).'/sqrt(N); %%%%%% 系统导向矢量
 Zhh = sig;
 before = 32; %%去前几帧作为先验协方差
 tic
@@ -112,9 +112,9 @@ Pd_CCIter_mc = zeros(1,length(SNRout));
 Pd_ML_mc = zeros(1,length(SNRout));
 Pd_CC_mc = zeros(1,length(SNRout));
 Pd_H_mc = zeros(1,length(SNRout));
-
-alpha=sqrt(SNRnum/abs(s'*irouR*s)); % 根据SNR=|alpha|^2*s'*R^(-1)*s求得|alpha|
-% alpha=sqrt(SNRnum*(lambda-1)/mu);     
+% 
+% alpha=sqrt(SNRnum/abs(s'*irouR*s)); % 根据SNR=|alpha|^2*s'*R^(-1)*s求得|alpha|
+alpha=sqrt(SNRnum*mu/(lambda-1));        
 h = waitbar(0,'Please wait...');
 tic
 for m=1:length(SNRout)
@@ -168,7 +168,7 @@ for m=1:length(SNRout)
         if Tnmf>Th_NMF;       counter_nmf=counter_nmf+1;    end
         if Tcciter>Th_CCIter;       counter_cciter=counter_cciter+1;    end
         if Tml>Th_ML;       counter_ml=counter_ml+1;    end
-        if Tnmf>Th_CC;       counter_cc=counter_cc+1;    end
+        if Tcc>Th_CC;       counter_cc=counter_cc+1;    end
         if Thh>Th_H;       counter_h=counter_h+1;    end
     end
     Pd_SCM_mc(m)=counter_scm/MonteCarloPd;           counter_scm=0;
@@ -199,7 +199,7 @@ ylabel('Pd','FontSize',20)
 set(gca,'FontSize',20)
 set(h_leg,'Location','SouthEast')
 grid on
-str = ['R_',num2str(Range),'_','CCIter_IPIX_',cdfFile_t,num2str(n),'N','.mat'];
+str = ['R_',num2str(Range),'_','new_CCIter_IPIX_',cdfFile_t,num2str(n),'N','.mat'];
 save (str); 
 
 

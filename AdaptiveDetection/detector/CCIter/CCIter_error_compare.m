@@ -11,7 +11,7 @@ sigma_t = [0.01,0.1:0.1:10];
 %  sigma_t = [0.01:0.01:1];
 % sigma_t = [11:101];
 L_s = length(sigma_t);
-L_R = 10000;
+L_R = 100;
 opt = 'k';
 rou = 0.95;  %%协方差矩阵生成的迟滞因子
 Na = 2;     % 阵元数
@@ -46,7 +46,7 @@ for i_s = 1:L_s
         R_AML = fun_AML(Train);
         [R_CC,alpha(i)]=fun_CC(Train,R_SCM,R_KA);
         [R_CCML,alpha_ML(i)]=fun_MLalpha(Train,R_SCM,R_KA,x0);
-        [R_CCIter,alpha_iter(i)]=fun_CCIter(Train,R_SCM,R_KA);
+        [R_CCIter,alpha_iter(i)]=fun_CCIter2(Train,R_SCM,R_KA);
 %         [R_AMLCC,alpha_aml(i)]=fun_CCIter(Train,R_AML,R_KA);
 %         if sigma_t(i_s) < 0.1
 %             [R_CCIter,alpha_iter(i)]=fun_CCIter2(Train,R_SCM,R_KA);
