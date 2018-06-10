@@ -4,12 +4,12 @@ close all
 % 刘维建，2017.09.15
 % 多种检测器的检测性能仿真
 %%
-Na=3;     % 阵元数
-Np=8;     % 脉冲数
+Na=2;     % 阵元数
+Np=4;     % 脉冲数
 N=Na*Np;
 optc = 'g';
 group_num = 2; %分组数
-L=round(1*N); 
+L=round(2*N); 
 SNRout = -5:1:25; % 输出SNR
 cos2=1;%%%失配情况
 PFA=1e-3;% PFA=1e-4;
@@ -54,6 +54,7 @@ parfor i=1:MonteCarloPfa
 %     S=(R_half*X)*(R_half*X)'; % 有L个训练样本估计的杂波与噪声的协方差矩阵(Rhalf*X表示接收的L个训练数据)
     Train = fun_TrainData(optc,N,L,R,2,1,1);
     S = fun_SCMN(Train);
+    R_NSCM = fun_NSCMN(Train);
     iS=inv(S);
 %     W=(randn(N,1)+1i*randn(N,1))/sqrt(2); % 1i == -i
 %     x=R_half*W;%+pp; % noise=(randn(N,1)+j*randn(N,1))/sqrt(2);  % 接收信号仅包括杂波和噪声
@@ -62,6 +63,7 @@ parfor i=1:MonteCarloPfa
     Tamf(i)=abs(vt'*iS*x)^2/abs(vt'*iS*vt);     %%%%%% AMF或者wald
     tmp=abs(x'*iS*x);
     Tglrt(i)=Tamf(i)/(1+tmp);                   %%%%%% KGLRT
+    Tanmf(i) = fun_ANMF(R_NSCM,x,vt)
 %     Tace(i)=Tamf(i)/tmp;                        %%%%%% ACE
 %     Tabort(i)=(1+Tamf(i))/(2+tmp);              %%%%%% ABORT  % eq.(16) 检测统计量
 %     Twabort(i)=1/(1+tmp)/(1-Tglrt(i))^2;        %%%%%% ABORT  % 见会议论文中的eq.(18)
@@ -75,6 +77,7 @@ parfor i=1:MonteCarloPfa
 end
 TAMF=sort(Tamf,'descend');
 % TACE=sort(Tace,'descend');
+TACE=sort(Tanmf,'descend');
 TKGLRT=sort(Tglrt,'descend');
 % TABORT=sort(Tabort,'descend');
 % TWABORT=sort(Twabort,'descend');
@@ -84,7 +87,7 @@ TKGLRT=sort(Tglrt,'descend');
 TKGLRT_NC = sort(Tglrt_nc,'descend');
 
 Th_AMF=(TAMF(floor(MonteCarloPfa*PFA-1))+TAMF(floor(MonteCarloPfa*PFA)))/2;
-% Th_ACE=(TACE(floor(MonteCarloPfa*PFA-1))+TACE(floor(MonteCarloPfa*PFA)))/2;
+Th_ACE=(TACE(floor(MonteCarloPfa*PFA-1))+TACE(floor(MonteCarloPfa*PFA)))/2;
 Th_KGLRT=(TKGLRT(floor(MonteCarloPfa*PFA-1))+TKGLRT(floor(MonteCarloPfa*PFA)))/2;
 % Th_ABORT=(TABORT(floor(MonteCarloPfa*PFA-1))+TABORT(floor(MonteCarloPfa*PFA)))/2;
 % Th_WABORT=(TWABORT(floor(MonteCarloPfa*PFA-1))+TWABORT(floor(MonteCarloPfa*PFA)))/2;
@@ -98,7 +101,7 @@ a=0;b=2*pi;
 %% 计算检测概率
 tic
 counter_amf=0;
-% counter_ace=0;
+counter_ace=0;
 counter_glrt=0;
 % counter_abort=0;
 % counter_wabort=0;
@@ -119,7 +122,7 @@ end
 %% 检测
 Pd_AMF_mc = zeros(1,length(SNRout));
 Pd_KGLRT_mc = zeros(1,length(SNRout));
-% Pd_ACE_mc = zeros(1,length(SNRout));
+Pd_ACE_mc = zeros(1,length(SNRout));
 % Pd_ABORT_mc = zeros(1,length(SNRout));
 % Pd_WABORT_mc = zeros(1,length(SNRout));
 % Pd_DMRao_mc = zeros(1,length(SNRout));
@@ -135,6 +138,7 @@ for m=1:length(SNRout)
 %         S=(R_half*X)*(R_half*X)'; % 有L个训练样本估计的杂波与噪声的协方差矩阵(Rhalf*X表示接收的L个训练数据)
         Train = fun_TrainData(optc,N,L,R,3,1,1);
         S = fun_SCMN(Train);
+        R_NSCM = fun_NSCMN(Train);
         iS=inv(S);
 %         W=(randn(N,1)+1i*randn(N,1))/sqrt(2); % 1i == -i
     %     THETA=a+(b-a)*rand; % 产出0--2*pi的均匀分布随机相位
@@ -146,6 +150,7 @@ for m=1:length(SNRout)
         Tamf=abs(vt'*iS*x)^2/abs(vt'*iS*vt);  %%%%%% AMF
         tmp=abs(x'*iS*x);
         Tglrt=Tamf/(1+tmp);                   %%%%%% KGLRT
+        Tace = fun_ANMF(R_NSCM,x,vt);
 %         Tace=Tamf/tmp;                        %%%%%% ACE
 %         Tabort=(1+Tamf)/(2+tmp);              %%%%%% ABORT  % eq.(16) 检测统计量
 %         Twabort=1/(1+tmp)/(1-Tglrt)^2;        %%%%%% ABORT  % 见会议论文中的eq.(18)
@@ -158,7 +163,7 @@ for m=1:length(SNRout)
         %%
         if Tamf>Th_AMF;         counter_amf=counter_amf+1;          end            
         if Tglrt>Th_KGLRT;      counter_glrt=counter_glrt+1;        end                
-%         if Tace>Th_ACE;         counter_ace=counter_ace+1;          end          
+        if Tace>Th_ACE;         counter_ace=counter_ace+1;          end          
 %         if Tabort>Th_ABORT;     counter_abort=counter_abort+1;      end            
 %         if Twabort>Th_WABORT;   counter_wabort=counter_wabort+1;    end        
 %         if Tprao>Th_DMRao;      counter_prao=counter_prao+1;        end          
@@ -168,7 +173,7 @@ for m=1:length(SNRout)
     end
     Pd_AMF_mc(m)=counter_amf/MonteCarloPd;          counter_amf=0;
     Pd_KGLRT_mc(m)=counter_glrt/MonteCarloPd;        counter_glrt=0;
-%     Pd_ACE_mc(m)=counter_ace/MonteCarloPd;          counter_ace=0;
+    Pd_ACE_mc(m)=counter_ace/MonteCarloPd;          counter_ace=0;
 %     Pd_ABORT_mc(m)=counter_abort/MonteCarloPd;      counter_abort=0;
 %     Pd_WABORT_mc(m)=counter_wabort/MonteCarloPd;    counter_wabort=0;
 %     Pd_DMRao_mc(m)=counter_prao/MonteCarloPd;        counter_prao=0;
@@ -183,7 +188,7 @@ figure(2);
 hold on
 plot(SNRout,Pd_KGLRT_mc,'b-+','linewidth',2)
 plot(SNRout,Pd_AMF_mc,'g.-')
-% plot(SNRout,Pd_ACE_mc,'r-x','linewidth',2)
+plot(SNRout,Pd_ACE_mc,'r-x','linewidth',2)
 % plot(SNRout,Pd_ABORT_mc,'c-*','linewidth',2)
 % plot(SNRout,Pd_WABORT_mc,'m-P','linewidth',2)
 % plot(SNRout,Pd_DMRao_mc,'r-o','linewidth',2)

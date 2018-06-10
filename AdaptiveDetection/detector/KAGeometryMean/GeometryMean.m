@@ -2,8 +2,8 @@ clc
 clear 
 close all
 %%%%参数设置
-n = 2; %几倍的样本
-str_train = 'g';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
+n = 1; %几倍的样本
+str_train = 'p';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
 lambda = 3;
 mu = 1;
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
@@ -29,7 +29,7 @@ rouR_abs=abs(rouR);
 rouR_half=rouR^0.5;
 irouR=inv(rouR);
 t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
-% R_KA = zeros(size(rouR));
+R_KA = zeros(size(rouR));
 for i = 1:1000
     t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
     R_KA = R_KA + rouR.*(t*t')/1000;
@@ -40,29 +40,43 @@ parfor i = 1:MonteCarloPfa
 %     warning('off')
 %%%%%%%%%%%训练数据产生%%%%%%%%%%%%%%
     Train = fun_TrainData(str_train,N,L,rouR,lambda,mu,opt_train);%%产生的训练数据,协方差矩阵为rouR的高斯杂波
-    [x0,tau0] = fun_TrainData(str_train,N,1,rouR,lambda,mu,opt_train); % 接收信号仅包括杂波和噪声
-%     %%先验协方差
-%     t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
-%     R_KA =  (tau0^2*rouR).*(t*t');
+    x0 = fun_TrainData(str_train,N,1,rouR,lambda,mu,opt_train); % 接收信号仅包括杂波和噪声
     %%%%协方差估计%%%%%%%%%%%%%%%%%%%%%%
-    
+%     R_x0 = (fun_SCMN(x0));
+     
     R_SCM = (fun_SCMN(Train));
+    
+    
 
+% 
     R_CC = fun_CC(Train,R_SCM,R_KA);
     
-    R_CCIter = fun_CCIter2(Train,R_SCM,R_KA);
+    R_CCIter = fun_CCIter(Train,R_SCM,R_KA);
     
     R_ML = fun_MLalpha(Train,R_SCM,R_KA,x0);
     
     %%%检测器%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%% ANMF_SCM
     Tanmf_SCM(i) = fun_ANMF(R_SCM,x0,s);
+%     Tanmf_SCM(i) = fun_AMF(R_SCM,x0,s);
+    %%%%%% ANMF_NSCM
+%     Tanmf_NSCM(i) = fun_ANMF(R_NSCM,x0,s);
+%     Tanmf_NSCM(i) = fun_AMF(R_NSCM,x0,s);
+    %%%%%% NMF
+%     Tnmf(i) = fun_ANMF(rouR,x0,s);
+%      Tnmf(i) = fun_AMF(rouR,x0,s);
     %%%%%% ANMF_CCIter
     Tanmf_CCIter(i) = fun_ANMF(R_CCIter,x0,s);
+%     Tanmf_CCIter(i) = fun_AMF(R_CCIter,x0,s);
     %%%%%% ANMF_ML
     Tanmf_ML(i) = fun_ANMF(R_ML,x0,s);
+%     Tanmf_ML(i) = fun_AMF(R_ML,x0,s);
     %%%%%% ANMF_CC
     Tanmf_CC(i) = fun_ANMF(R_CC,x0,s);
+%     Tanmf_CC(i) = fun_AMF(R_CC,x0,s);
+    %%%%%% ANMF_half
+%     Tanmf_H(i) = fun_ANMF(R_H,x0,s);
+%     Tanmf_H(i) = fun_AMF(R_H,x0,s);
 end
 % close(h)
 toc
@@ -109,15 +123,12 @@ for m=1:length(SNRout)
     parfor i=1:MonteCarloPd
         %%%%%%%%%%%训练数据产生%%%%%%%%%%%%%%
         Train = fun_TrainData(str_train,N,L,rouR,lambda,mu,opt_train);%%产生的训练数据,协方差矩阵为rouR的高斯杂波
-        [x0,tau0] = fun_TrainData(str_train,N,1,rouR,lambda,mu,opt_train); % 接收信号仅包括杂波和噪声
-        %%先验协方差
-%         t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
-%         R_KA =  (tau0^2*rouR).*(t*t');
+        x0 = fun_TrainData(str_train,N,1,rouR,lambda,mu,opt_train); % 接收信号仅包括杂波和噪声
         %%%%协方差估计%%%%%%%%%%%%%%%%%%%%%%
         
         R_SCM = (fun_SCMN(Train));
     
-        R_CCIter = fun_CCIter2(Train,R_SCM,R_KA);
+        R_CCIter = fun_CCIter(Train,R_SCM,R_KA);
         
         R_ML = fun_MLalpha(Train,R_SCM,R_KA,x0);
     
@@ -130,31 +141,44 @@ for m=1:length(SNRout)
         Tscm = fun_ANMF(R_SCM,x0,s);
         %%%%%% ANMF_CCIter
         Tcciter = fun_ANMF(R_CCIter,x0,s);
-        %%%%%% ANMF_ML
+        %%%%%% ANMF_KL
         Tml = fun_ANMF(R_ML,x0,s);
         %%%%%% ANMF_CC
         Tcc = fun_ANMF(R_CC,x0,s);
         %%%判断%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
         if Tscm>Th_SCM;          counter_scm=counter_scm+1;        end                
+%         if Tnscm>Th_NSCM;       counter_nscm=counter_nscm+1;    end   
+%         if Tnmf>Th_NMF;       counter_nmf=counter_nmf+1;    end
         if Tcciter>Th_CCIter;       counter_cciter=counter_cciter+1;    end
         if Tml>Th_ML;       counter_ml=counter_ml+1;    end
         if Tcc>Th_CC;       counter_cc=counter_cc+1;    end
+%         if Thh>Th_H;       counter_h=counter_h+1;    end
     end
     Pd_SCM_mc(m)=counter_scm/MonteCarloPd;           counter_scm=0;
+%     Pd_NSCM_mc(m)=counter_nscm/MonteCarloPd;        counter_nscm=0;
+%     Pd_NMF_mc(m)=counter_nmf/MonteCarloPd;        counter_nmf=0;
     Pd_CC_mc(m)=counter_cc/MonteCarloPd;           counter_cc=0;
     Pd_CCIter_mc(m)=counter_cciter/MonteCarloPd;        counter_cciter=0;
     Pd_ML_mc(m)=counter_ml/MonteCarloPd;        counter_ml=0;
+%     Pd_H_mc(m)=counter_h/MonteCarloPd;        counter_h=0;
 end
 toc
 close(h)
 figure(1);
 hold on
+% plot(SNRout,Pd_NMF_mc,'c','linewidth',2)
 plot(SNRout,Pd_SCM_mc,'r','linewidth',2)
+% plot(SNRout,Pd_NSCM_mc,'k.-','linewidth',1)
 plot(SNRout,Pd_CC_mc,'b','linewidth',2)
 plot(SNRout,Pd_CCIter_mc,'g','linewidth',2)
 plot(SNRout,Pd_ML_mc,'k','linewidth',2)
+
+% plot(SNRout,Pd_H_mc,'k-^','linewidth',1)
 h_leg = legend('ANMF with SCM',...
 'ANMF with CC','ANMF with KA-ICE','ANMF with ML');
+
+% h_leg = legend('NMF with correct covariance','NMF with SCM','NMF with NSCM',...
+% 'NMF with CCIter','NMF with ML','NMF with CC','NMF with H');
 
 xlabel('SNR/dB','FontSize',20)
 ylabel('Pd','FontSize',20)

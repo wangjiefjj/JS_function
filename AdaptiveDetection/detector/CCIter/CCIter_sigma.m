@@ -2,8 +2,8 @@ clc
 clear 
 close all
 % warning off
-n = 1; %几倍的样本
-str_train = 'g';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
+n = 2; %几倍的样本
+str_train = 'p';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
 lambda = 3;
 mu = 1;
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
@@ -53,7 +53,18 @@ for i_s = 1:L_s
     m_alpha_ML(i_s) = mean(alpha_ML);
 end
 close(h)
-str = [str_train,'_','CCIter_Alpha','_',num2str(n),'N','.mat'];
-save (str); 
+figure
+hold on 
+plot(sigma_t,m_alpha,'b','LineWidth',2)%k-.
+plot(sigma_t,m_alpha_iter,'k','LineWidth',2)
+plot(sigma_t,m_alpha_ML,'g','LineWidth',2)%k:
+grid on
+h_leg = legend('SCM','CC','KA-CE','ML');
+xlabel('\sigma^2','FontSize',10)
+ylabel('Error','FontSize',10)
+set(gca,'FontSize',10)
+set(h_leg,'Location','SouthEast')
+% str = [str_train,'_','CCIter_Alpha','_',num2str(n),'N','.mat'];
+% save (str); 
 
 

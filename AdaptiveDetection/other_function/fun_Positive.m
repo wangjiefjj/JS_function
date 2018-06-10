@@ -34,7 +34,7 @@ elseif opt == 2
     Rx = Rx./xk^2;
 elseif opt == 3
    Rx = (X*X'+ eye(N)); 
-elseif opt ==4
+elseif opt == 4
    Rx = fun_corrcoef(X);
 elseif opt ==5
    Rx = fun_corrcoef(X)/(X'*X/N);   

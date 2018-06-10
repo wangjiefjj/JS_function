@@ -7,9 +7,10 @@ function [ Train, tau ] = fun_TrainData_IGCC( N,L,M,lambda,mu,opt_train)
 %%M，复高斯协方差
 %%lamda：形状参数
 %%mu：尺度参数
-%%opt:1: 每个距离单元的纹理值不一样，在CPI内每个距离单元的纹理值一样，SIRP
+%%opt_train:1: 每个距离单元的纹理值不一样，在CPI内每个距离单元的纹理值一样，SIRP
 %%%%%%2：每个单元纹理值一样，为部分均匀环境
 %%%%%%3：每个单元纹理值每时每刻都不一样，最广义的compound Gaussian
+%%%%%%tau：纹理分量的开方
 %%%详见刘军大论文
 if nargin == 5
     opt_train = 1;

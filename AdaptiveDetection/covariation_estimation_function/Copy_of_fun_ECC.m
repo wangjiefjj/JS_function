@@ -18,7 +18,7 @@ if opt==1
 else
     for i = 1:K
         Rk = X(:,i) * X(:,i)'/( X(:,i)'* X(:,i)/N);
-        t1 = t1 + norm(Rk - R,'fro')^2/K ;%+ real(trace(R_KA*R' - R_KA*Rk' + R*Rk'-R*R'))/K
+        t1 = t1 + norm(Rk - R,'fro')^2/K + real(trace(R_KA*R' - R_KA*Rk' + R*Rk'-R*R'))/K;
         t2 = t2 + norm(R_KA - Rk,'fro')^2/K;
     end
     

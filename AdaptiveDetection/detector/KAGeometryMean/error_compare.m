@@ -48,8 +48,8 @@ for i_s = 1:L_s
         [R_CC,alpha_cc(i)]=fun_CC(Train,R_NSCM,R_KA);
         [R_ML,alpha_ML(i)]=fun_MLalpha(Train,R_NSCM,R_KA,x0);
         [R_ECC,alpha_ecc(i)]=fun_ECC(Train,R_NSCM,R_KA,2);
-        [R_LECC,alpha_lecc(i)]=fun_test_LogEKA(Train,R_NSCM,R_KA);
-% %         [R_LECC,alpha_lecc(i)]=fun_LECC(Train,R_NSCM,R_KA,2);
+%         [R_LECC,alpha_lecc(i)]=fun_test_LogEKA(Train,R_NSCM,R_KA);
+        [R_LECC,alpha_lecc(i)]=fun_LECC(Train,R_NSCM,R_KA,2);
         error_RCC(i) = norm(R_CC-Sigma,'fro');
         error_RECC(i) = norm(R_ECC-Sigma,'fro');
         error_RLECC(i) = norm(R_LECC-Sigma,'fro');
@@ -74,7 +74,7 @@ end
 
 figure
 hold on 
-plot(sigma_t,m_errorRSCM,'r','LineWidth',2)%k--
+plot(sigma_t,m_errorRNSCM,'r','LineWidth',2)%k--
 plot(sigma_t,m_errorRCC,'b','LineWidth',2)%k-.
 plot(sigma_t,m_errorRECC,'k','LineWidth',2)
 plot(sigma_t,m_errorRLECC,'c','LineWidth',2)
@@ -95,6 +95,6 @@ plot(sigma_t,mean_alpha_ML,'g','LineWidth',2)%k:
 grid on
 h_leg = legend('CC','KA-CE','KA-LCE','ML');
 xlabel('\sigma^2','FontSize',10)
-ylabel('Error','FontSize',10)
+ylabel('\alpha','FontSize',10)
 set(gca,'FontSize',10)
 set(h_leg,'Location','SouthEast')
