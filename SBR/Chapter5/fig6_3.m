@@ -30,8 +30,8 @@ for i = 1:length(ELm)
     cosAz = c./sin(ELm(i));
     wd(i,:) = beta0*sin(ELm(i)).*cosAz;
 end
-CrabA = (fun_CrabAngle( alpha1,eta, H));
-CrabM = fun_CrabMagnitude( alpha1,eta, H);
+CrabA = (fun_CrabAngle( alpha1,eta, H)); %Æ«º½½Ç
+CrabM = fun_CrabMagnitude( alpha1,eta, H);%Æ«º½·ù¶È
 % wdr=0;
 for i = 1:length(ELm)
     Az = (acos(c./sin(ELm(i))));

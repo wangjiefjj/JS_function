@@ -114,32 +114,32 @@ linewidth = 2;
 % grid on
 % box on
 %%%%%%%%%%%%IPIXæ‡¿Î∂‡∆’¿’Õº%%%%%%%%%%%%
-% clc
-% clear
-% close all
-% load ('.\Data\19980223_170435_IPIX.mat')
-% [M,L] = size(sig);
-% LL = 1:L;
-% MM = linspace(-0.5,0.5,M);
-% [X,Y]=meshgrid(LL,MM);
-% MTD = abs(fftshift(fft(sig,[],1)));
-% [x,y] = max(MTD);
-% 
-% figure()
-% plot3(8,MM(y(8)),1,'ro','markersize',10,'MarkerFaceColor','r')
-% str = [' Range cell: %.f \n Normalized Doppler: %.6f \n Normalized amplitude: %.3f'];
-% text(8,MM(y(8)),1,sprintf(str,8,MM(y(8)),1),...
-%     'VerticalAlignment','bottom','FontSize',25)
-% hold on
-% mesh(X,Y,MTD/max(max(MTD)));
-% ylabel('Normalized  Doppler','FontSize',FontSize)
-% xlabel('Range cell','FontSize',FontSize)
-% zlabel('Normalized amplitude','FontSize',FontSize)
-% set(gca,'FontSize',FontSize)
-% set(gcf,'Position',[700 0 1200 1000])
-% grid on
-% box on
-% axis([1,34,-0.5,0.5,0,1])
+clc
+clear
+close all
+load ('.\Data\19980223_170435_IPIX.mat')
+[M,L] = size(sig);
+LL = 1:L;
+MM = linspace(-0.5,0.5,M);
+[X,Y]=meshgrid(LL,MM);
+MTD = abs(fftshift(fft(sig,[],1)));
+[x,y] = max(MTD);
+
+figure()
+plot3(8,MM(y(8)),1,'ro','markersize',10,'MarkerFaceColor','r')
+str = [' Range cell: %.f \n Normalized Doppler: %.6f \n Normalized amplitude: %.3f'];
+text(8,MM(y(8)),1,sprintf(str,8,MM(y(8)),1),...
+    'VerticalAlignment','bottom','FontSize',25)
+hold on
+mesh(X,Y,MTD/max(max(MTD)));
+ylabel('Normalized  Doppler','FontSize',FontSize)
+xlabel('Range cell','FontSize',FontSize)
+zlabel('Normalized amplitude','FontSize',FontSize)
+set(gca,'FontSize',FontSize)
+set(gcf,'Position',[700 0 1200 1000])
+grid on
+box on
+axis([1,34,-0.5,0.5,0,1])
 
 
 % figure()
