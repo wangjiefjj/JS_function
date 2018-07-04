@@ -3,7 +3,7 @@ function [ EL, R, Rs ] = fun_ELAngle( H,R)
 %   此处显示详细说明
 %% 俯仰角与地距的关系，公式（4.7）
 %%
-Re = 6373; %flat earth radius，km
+Re = 6373e3; %flat earth radius，m
 if nargin==1
     [R,Rs]=fun_RsR(H);
     EL=(asin(Re./Rs.*sin(R./Re)));

@@ -43,3 +43,6 @@ figure(1)
 hold on
 plot(c,wd','b')
 plot(c,(wdr.'),'r')
+xlabel('×¶½Ç/rad')
+ylabel('¶àÆÕÀÕ/Hz')
+grid on

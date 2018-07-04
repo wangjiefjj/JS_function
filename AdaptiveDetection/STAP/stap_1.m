@@ -18,7 +18,7 @@ sita = sita_a*pi/180;
 %目标参数
 sita_t = -25;                  % 目标DOA
 omiga_t = 0.4;                 % 目标Doppler
-SNR = -20;                       % 信噪比
+SNR = -20;                     % 信噪比
 
 %空间导向矢量和时间导向矢量
 %空间频率和Dopple频率满足 omiga_d = beta * omiga_s

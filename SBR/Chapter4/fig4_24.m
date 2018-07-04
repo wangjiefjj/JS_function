@@ -7,10 +7,10 @@ c = 3e8;% m
 lambda = c/fo;
 PRF = 500;
 Tr = 1/PRF;
-H = 500;%km
+H = 500e3;%km
 angle_Az = (0:180)./180*pi; % 方位角
 cosAz = cos(angle_Az);
-R = [250,1000,1750]; %地距km
+R = [250e3,1000e3,1750e3]; %地距km
 %% 计算多普勒
 wd1 = fun_Wd(H,R(1),angle_Az, Tr, lambda);
 wd2 = fun_Wd(H,R(2),angle_Az, Tr, lambda);

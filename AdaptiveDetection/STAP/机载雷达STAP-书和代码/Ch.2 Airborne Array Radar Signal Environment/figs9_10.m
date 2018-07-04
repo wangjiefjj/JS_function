@@ -68,7 +68,7 @@ figure('NumberTitle', 'off','Name', ...
 polardb(phi*pi/180,10*log10(abs(f)),-60,'g');
 
 %% Calculate and Plot the Array Factor (AF) (Voltage).
-steering_angle = 0; % Angle of beam steering in degrees.
+steering_angle = 10; % Angle of beam steering in degrees.
 for k=1:Lphi
      AF(k) = sum(exp(-1i*2*pi/lambda*d*(0:N-1)*(sin(phi(k)*pi/180) ... 
                    - sin(steering_angle*pi/180))).*cos(phi(k)*pi/180));

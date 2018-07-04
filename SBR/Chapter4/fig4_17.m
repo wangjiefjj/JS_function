@@ -1,10 +1,10 @@
 %% 图4.17，PFR，地距和模糊距离的关系
 clc;clear;close all
 %% 参数设置1
-PRF1 = 500; %Hz
+PRF1 = 400; %Hz
 Tr1 = 1/PRF1; %s
-H = [500, 1000, 2000, 7000]; %Km
-c = 3e5; %km
+H = [700e3, 1000e3, 2000e3, 7000e3]; %m
+c = 3e8; %m
 %% 计算掠地角
 [Graze1,R1,~] = fun_GrazeAngle(H(1));
 [Graze2,R2,~] = fun_GrazeAngle(H(2));
@@ -29,7 +29,7 @@ plot(R1(500:end),dR11(500:end),'r','LineWidth',2);
 plot(R2(500:end),dR21(500:end),'k','LineWidth',2);
 plot(R3(500:end),dR31(500:end),'g','LineWidth',2);
 plot(R4(500:end),dR41(500:end),'b','LineWidth',2);
-h_leg = legend('H=500km','H=1000km','H=2000km','H=7000km');
+h_leg = legend('H=700km','H=1000km','H=2000km','H=7000km');
 set(h_leg,'Location','SouthEast')
 axis([500,4000,300,1000])
 grid on
@@ -53,7 +53,7 @@ plot(R1(500:end),dR12(500:end),'r','LineWidth',2);
 plot(R2(500:end),dR22(500:end),'k','LineWidth',2);
 plot(R3(500:end),dR32(500:end),'g','LineWidth',2);
 plot(R4(500:end),dR42(500:end),'b','LineWidth',2);
-h_leg = legend('H=500km','H=1000km','H=2000km','H=7000km');
+h_leg = legend('H=700km','H=1000km','H=2000km','H=7000km');
 set(h_leg,'Location','SouthEast')
 axis([500,4000,50,600])
 grid on

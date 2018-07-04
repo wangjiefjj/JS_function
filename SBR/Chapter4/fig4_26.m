@@ -5,10 +5,10 @@ clc;clear;close all
 fo = 1.25e9; %载频Hz
 c = 3e8;% m
 lambda = c/fo;
-H = 500;%km
+H = 500e3;%m
 Vp = fun_Vp(H);
 angle_Az = (0:180)./180*pi; % 方位角
-R = [1000,500]; %地距km
+R = [1000e3,500e3]; %地距km
 beta0 = 6;
 Tr =  lambda/2*beta0/2/Vp;
 wd1 = mod(fun_Wd_beta0(H,R(1),angle_Az,beta0),2)-1;

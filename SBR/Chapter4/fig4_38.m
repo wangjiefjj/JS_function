@@ -2,7 +2,7 @@
 clc;clear;close all
 %% 天基平台参数设置%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-fo = 40e9;                                  %载频 Hz
+fo = 12.5e9;                                  %载频 Hz
 c = 3e8;                                    %光速 m/s
 lambda = c/fo;                              %波长 m
 PRF = 500;                                  %脉冲重复频率 Hz
@@ -37,9 +37,9 @@ h_leg = legend('无自转\theta_{AZ}=75^{o}','考虑自转\theta_{AZ}=75^{o}',...
     '无自转\theta_{AZ}=80^{o}','考虑自转\theta_{AZ}=80^{o}',...
     '无自转\theta_{AZ}=90^{o}','考虑自转\theta_{AZ}=90^{o}');
 set(h_leg,'Location','SouthEast')
-axis([0,3000,-15,60])
+% axis([0,3000,-15,60])
 grid on
 box on
 xlabel('地距R/km')
 ylabel('多普勒/Hz')
-title('图4.38 偏航角对多普勒频率与距离的影响(H=500km)')
+title(['偏航角对多普勒频率与距离的影响(H=',num2str(H),'km)'])

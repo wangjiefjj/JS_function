@@ -1,12 +1,14 @@
 clear all; close all; clc
 
 
-Na=4;
-Np=6;
+Na=16;
+Np=16;
 N=Na*Np;
 CNR=60;
 Num=361;
 R=fun_GenerateSimpleR(Na,Np,Num,CNR);
+figure()
+mesh(abs(R))
 Eig_R=eig(R);
 figure;plot(db(Eig_R),'b-x')
 iR=inv(R);

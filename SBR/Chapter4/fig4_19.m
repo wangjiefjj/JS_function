@@ -2,12 +2,12 @@
 clc;clear;close all
 %% 天基平台参数设置1%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-PRF1 = 500; %Hz
+PRF1 = 5000;   %Hz
 Tr1 = 1/PRF1; %s
-H = [500,1000,2000,7000]; %% 天基雷达距星下点的距离,km
-EL_beam = 1/180*pi; % 俯仰向波束宽度。1deg->rad
-AZ_beam = 1/180*pi; % 方位向波束宽度。1deg->rad
-c = 3e5; %km 光速
+H = [850e3,1000e3,2000e3,7000e3]; %% 天基雷达距星下点的距离,m
+EL_beam = 0.005/180*pi; % 俯仰向波束宽度。1deg->rad
+AZ_beam = 0.08/180*pi; % 方位向波束宽度。1deg->rad
+c = 3e8; %m 光速
 %% 计算掠地角
 [Graze1,R1,~] = fun_GrazeAngle(H(1));
 [Graze2,R2,~] = fun_GrazeAngle(H(2));
@@ -42,9 +42,9 @@ plot(R1(500:end-500),Na11,'r','LineWidth',2);
 plot(R2(500:end-600),Na21,'k','LineWidth',2);
 plot(R3(500:end-750),Na31,'g','LineWidth',2);
 plot(R4(500:end-1200),Na41,'b','LineWidth',2);
-h_leg = legend('H=500km','H=1000km','H=2000km','H=7000km');
+h_leg = legend('H=850km','H=1000km','H=2000km','H=7000km');
 set(h_leg,'Location','SouthEast')
-axis([500,3500,0,3])
+axis([500,6000,0,5])
 grid on
 box on
 xlabel('地距R/km')

@@ -8,7 +8,7 @@ Read_Display_Data
 Data_process
 load(matFile) 
 %%%%参数设置
-n = 1; %几倍的样本
+n = 3; %几倍的样本
 sigma_t = 0.0;
 % range = 14;
 %%参数估计来自《Maximum Likelihood Estimation for
@@ -29,6 +29,7 @@ MonteCarloPfa=100/PFA;
 MonteCarloPd=1e4;
 % rou = 0.95;  %%协方差矩阵生成的迟滞因子
 % load rou_19980223_170435.mat
+R_KA = eye(N,N);
 rouR = R_KA;  %%真实的杂波协方差
 irouR = inv(rouR);
 L=round(n*N); 
@@ -73,6 +74,7 @@ parfor i = 1:MonteCarloPfa
     
     R_CC = fun_CC(Train,R_SCMN,R_KA);
     iR_CC = inv(R_CC);
+    R_SAML = fun_SAML(Train);
     %%%检测器%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%% KGLRT
     Tglrt(i) = fun_1SGLRT(R_SCMN,x0,s,mu);
@@ -82,17 +84,21 @@ parfor i = 1:MonteCarloPfa
     Tglrtnscm(i) = fun_1SGLRT(R_NSCMN,x0,s,mu);
     %%%%%% CLGLRT
     Tclglrt(i) = fun_CLGLRT3(lambda,mu,R_KA,R_SCMN,x0,s);
+    %%%%%% sAML
+    Tglrtsaml(i) = fun_1SGLRT(R_SAML,x0,s,mu);
 end
 toc
-% close(h)
+% % close(h)
 TKGLRT=sort(Tglrt,'descend');
 TCLGLRT=sort(Tclglrt,'descend');
 TKGLRTCC=sort(Tglrtcc,'descend');
+TGLRTSAML = sort(Tglrtsaml,'descend');
 TKGLRTNSCM=sort(Tglrtnscm,'descend');
 
 Th_KGLRT=(TKGLRT(floor(MonteCarloPfa*PFA-1))+TKGLRT(floor(MonteCarloPfa*PFA)))/2;
 Th_CLGLRT=(TCLGLRT(floor(MonteCarloPfa*PFA-1))+TCLGLRT(floor(MonteCarloPfa*PFA)))/2;
 Th_KGLRTCC=(TKGLRTCC(floor(MonteCarloPfa*PFA-1))+TKGLRTCC(floor(MonteCarloPfa*PFA)))/2;
+Th_GLRTSAML = (TGLRTSAML(floor(MonteCarloPfa*PFA-1))+TGLRTSAML(floor(MonteCarloPfa*PFA)))/2;
 Th_KGLRTNSCM=(TKGLRTNSCM(floor(MonteCarloPfa*PFA-1))+TKGLRTNSCM(floor(MonteCarloPfa*PFA)))/2;
 %%%%%%%%%%%%%%%%%%%%%检测概率%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -100,11 +106,13 @@ Th_KGLRTNSCM=(TKGLRTNSCM(floor(MonteCarloPfa*PFA-1))+TKGLRTNSCM(floor(MonteCarlo
 counter_glrt=0;
 counter_clglrt=0;
 counter_glrtcc=0;
+counter_glrtsaml = 0;
 counter_glrtnscm=0;
-
+% 
 Pd_KGLRT_mc = zeros(1,length(SNRout));
 Pd_CLGLRT_mc = zeros(1,length(SNRout));
 Pd_KGLRTCC_mc = zeros(1,length(SNRout));
+Pd_SAML_mc = zeros(1,length(SNRout));
 Pd_KGLRTNSCM_mc = zeros(1,length(SNRout));
 alpha=sqrt(SNRnum/abs(s'*irouR*s)); % 根据SNR=|alpha|^2*s'*R^(-1)*s求得|alpha|
 % alpha=sqrt(SNRnum/abs(s'*irouR*s));
@@ -126,22 +134,19 @@ for m=1:length(SNRout)
         x0 = Zhh(index_t1:index_t1+7,Range) ; % 接收信号仅包括杂波和噪声
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         x0=alpha(m)*s+x0;%+pp;    %%%%%%%  重要  %%%%%%%%%%%%%
-        %%%%协方差估计%%%%%%%%%%%%%%%%%%%%%%
-        R_SCM = (fun_SCM(Train));
-        iR_SCM = inv(R_SCM);
+%         %%%%协方差估计%%%%%%%%%%%%%%%%%%%%%%
         
         R_SCMN = (fun_SCMN(Train));
         iR_SCMN = inv(R_SCMN);
         
-        R_NSCM = fun_NSCM(Train,1);
-        iR_NSCM = inv(R_NSCM);
         
         R_NSCMN = fun_NSCMN(Train);
         iR_NSCMN = inv(R_NSCMN);
         
         R_CC = fun_CC(Train,R_SCMN,R_KA);
         iR_CC = inv(R_CC);
-        %%%检测器%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        R_SAML = fun_SAML(Train);
+%         %%%检测器%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %%%%%% KGLRT
         Tglrt = fun_1SGLRT(R_SCMN,x0,s,mu);
         %%%%%% KGLRTCC
@@ -150,15 +155,19 @@ for m=1:length(SNRout)
         Tglrtnscm = fun_1SGLRT(R_NSCMN,x0,s,mu);
         %%%%%% CLGLRT
         Tclglrt = fun_CLGLRT3(lambda,mu,R_KA,R_SCMN,x0,s);
+        %%%%%% AML
+        Tglrtsaml = fun_1SGLRT(R_SAML,x0,s,mu);
         %%%判断%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     
         if Tglrt>Th_KGLRT;          counter_glrt=counter_glrt+1;        end                          
         if Tclglrt>Th_CLGLRT;       counter_clglrt=counter_clglrt+1;    end   
         if Tglrtcc>Th_KGLRTCC;      counter_glrtcc=counter_glrtcc+1;    end
+        if Tglrtsaml>Th_GLRTSAML;             counter_glrtsaml=counter_glrtsaml+1; end
         if Tglrtnscm>Th_KGLRTNSCM;  counter_glrtnscm=counter_glrtnscm+1;      end
     end
     Pd_KGLRT_mc(m)=counter_glrt/MonteCarloPd;           counter_glrt=0;
     Pd_CLGLRT_mc(m)=counter_clglrt/MonteCarloPd;        counter_clglrt=0;
     Pd_KGLRTCC_mc(m)=counter_glrtcc/MonteCarloPd;       counter_glrtcc=0;
+    Pd_SAML_mc(m) = counter_glrtsaml/MonteCarloPd;           counter_glrtsaml=0;
     Pd_KGLRTNSCM_mc(m)=counter_glrtnscm/MonteCarloPd;    counter_glrtnscm=0;
 end
 close(h)
@@ -170,8 +179,9 @@ plot(SNRout,Pd_CLGLRT_mc,'k-p','linewidth',2)
 plot(SNRout,Pd_KGLRTCC_mc,'g->','linewidth',2)
 plot(SNRout,Pd_KGLRT_mc,'b-o','linewidth',2)
 plot(SNRout,Pd_KGLRTNSCM_mc,'c-s','linewidth',2)
-h_leg = legend('GLCLRT','1S-GLRT with CC','1S-GLRT with SCM','1S-GLRT with NSCM');
-% legend({'KGLRT','AMF/DMwald','DMRao'},'FontSize',20)
+plot(SNRout,Pd_SAML_mc,'r->','linewidth',2)
+h_leg = legend('GLCLRT','1S-GLRT with CC','1S-GLRT with SCM',...
+    '1S-GLRT with NSCM','1S-GLRT with SFPE');
 xlabel('SNR/dB','FontSize',20)
 ylabel('Pd','FontSize',20)
 set(gca,'FontSize',20)
@@ -180,5 +190,11 @@ grid on
 box on
 matFile(end-4:end)=[];
 % str=['Pd_CLGLRT_',matFile,'_',num2str(n),'K','s',num2str(sigma_t),'_',str_train,'.mat'];
-str=['Pd_CLGLRT_2_',matFile,'_',num2str(n),'K','s',num2str(sigma_t),'.mat'];
-save(str,'SNRout','Pd_CLGLRT_mc','Pd_KGLRT_mc','Pd_KGLRTCC_mc','Pd_KGLRTNSCM_mc');
+% str=['Pd_CLGLRT_2_',matFile,'_',num2str(n),'K','s',num2str(sigma_t),'.mat'];
+% save(str,'SNRout','Pd_CLGLRT_mc','Pd_KGLRT_mc','Pd_KGLRTCC_mc','Pd_KGLRTNSCM_mc');
+
+% str=['Pd_CLGLRT_saml',matFile,'_',num2str(n),'K','s',num2str(sigma_t),'_',str_train,'.mat'];
+% save(str,'SNRout','Pd_SAML_mc');
+
+str=['Pd_CLGLRT_one_',matFile,'_',num2str(n),'K','s',num2str(sigma_t),'_',str_train,'.mat'];
+save(str,'SNRout','Pd_CLGLRT_mc','Pd_KGLRT_mc','Pd_KGLRTCC_mc','Pd_KGLRTNSCM_mc','Pd_SAML_mc');

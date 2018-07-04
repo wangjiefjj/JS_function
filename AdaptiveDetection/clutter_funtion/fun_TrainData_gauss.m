@@ -10,7 +10,7 @@ if nargin<3
 end
 %%产生高斯杂波
 X = (randn(N,L)+1i*randn(N,L))/sqrt(2);
-M_half = M^0.5;
+M_half = M^(0.5);
 X = M_half*X;
 tau = 1;
 end

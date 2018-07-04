@@ -44,6 +44,7 @@ close all
 figure(2)
 hold on
 load Pd_CLGLRT3_1Kmu1lambda3s0.1o1_p.mat
+load Pd
 SNRout_real=0:1:20; % Êä³öSNR
 L = length(SNRout_real);
 plot(SNRout_real,Pd_CLGLRT_mc(1:L),'k-p','linewidth',2,'markersize',10);

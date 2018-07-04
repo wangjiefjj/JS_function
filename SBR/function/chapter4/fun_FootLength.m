@@ -4,7 +4,7 @@ function [ FootLength ] = fun_FootLength( H,EL_beam )
 % EL_beam: 俯仰向波束宽度。rad
 % H:天基雷达距星下点的距离,km
 %计算足印长度
-Re = 6373; %flat earth radius，km
+Re = 6373e3; %flat earth radius，m
 GrazeT = fun_GrazeTH(H,EL_beam,1);
 GrazeH = fun_GrazeTH(H,EL_beam,2);
 FootLength = Re.*(GrazeH-GrazeT-EL_beam);

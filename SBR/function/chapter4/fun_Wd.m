@@ -3,7 +3,7 @@ function [ wd ] = fun_Wd( H,R,Az, Tr, lambda)
 %   此处显示详细说明
 %% 无地球自转的多普勒频率
 Re = 6373e3; %flat earth radius，m
-Vp = fun_Vp(H*10^3);
+Vp = fun_Vp(H);
 % Vp = 7.61e3; %m/s
 beta = 2*Vp*Tr/2/lambda;
 t1 = Re*sin(R./Re).*cos(Az);

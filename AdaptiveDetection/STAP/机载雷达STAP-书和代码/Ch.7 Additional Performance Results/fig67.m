@@ -1,4 +1,4 @@
-%% Figure 67.(a) SINR loss for example system, â=2.6, ó_õ = 0.2 m/sec, 10 deg vel. misalinment.
+%% Figure 67.(a) SINR loss for example system, ?2.6, ó_?= 0.2 m/sec, 10 deg vel. misalinment.
 %
 %
 % Coded by Ilias Konsoulas, 25 Mar. 2016.
@@ -83,7 +83,7 @@ end
 steering_angle = 0; % Angle of beam steering in degrees.
 for k=1:Lphi
       AF(k) = sum(exp(-1i*2*pi/lambda*d*(0:N-1)*(sin(phi(k)*pi/180) ... 
-                                                                               - sin(steering_angle*pi/180))).*cos(phi(k)*pi/180));
+            - sin(steering_angle*pi/180))).*cos(phi(k)*pi/180));
 end
 
 % Calculate the Full Array Transmit Power Gain:
@@ -418,7 +418,7 @@ LSINRpostTSN = SINR30/SNRo;
 
 %% Plot the SINR Losses:
      figure('NumberTitle', 'off','Name', ... 
-                'Figure 67(a) SINR loss for example system, â=2.6, ó_õ = 0.2 m/sec, 10 deg vel. misalinment');
+                'Figure 67(a) SINR loss for example system, ?2.6, ó_?= 0.2 m/sec, 10 deg vel. misalinment');
      plot(fd,10*log10(LSINRopt),'k','LineWidth',1.5); hold on;
      plot(fd,10*log10(LSINRsub2),'m','LineWidth',1.5);
      plot(fd,10*log10(LSINR30),'g','LineWidth',1.5);

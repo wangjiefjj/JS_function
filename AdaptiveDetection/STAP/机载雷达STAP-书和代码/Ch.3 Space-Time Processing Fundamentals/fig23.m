@@ -49,7 +49,7 @@ Pn = Nn*B;                    % Receiver Noise Power in Watts
 sigma2 = 1;                   % Normalized Noise Power in Watts.
 
 %% Clutter Patch Geometry computations
-Rcik = 130000;                % (clutter) range of interest in meters.
+Rcik = 130000;                % (clutter) range of interest in meters. %%斜距
 dphi = 2*pi/Nc;               % Azimuth angle increment in rad.
 dR = c/2/B;                   % Radar Range Resolution in meters.
 Re = 6370000;                 % Earth Radius in meters.
@@ -73,7 +73,7 @@ figure('NumberTitle', 'off','Name', ...
 polardb(phi*pi/180,10*log10(abs(f)),-60,'g');
 % Calculate the Array Factor (AF) (Voltage):
 steering_angle = 0; % Angle of beam steering in degrees.
-for k=1:Lphi
+for k=1:Lphi  %%波束的指向
     AF(k) = sum(exp(-1i*2*pi/lambda*d*(0:N-1)*(sin(phi(k)*pi/180) ...
                   - sin(steering_angle*pi/180))));
 end
@@ -90,7 +90,7 @@ sigma0 = gamma*sin(psi);
 sigma = sigma0*PatchArea;
 
 % Calculate the Clutter to Noise Ratio (CNR) for each clutter patch:
-ksi = Pt*Gtgain.*grgain*10^(Gr/10)*lambda^2*sigma/((4*pi)^3*Pn*10^(Ls/10)*Rcik^4);
+ksi = Pt*Gtgain.*grgain*10^(Gr/10)*lambda^2*sigma/((4*pi)^3*Pn*10^(Ls/10)*Rcik^4); %%每个方位的杂噪比
 Ksic = sigma2*diag(ksi);
 
 %% Clutter Covariance Matrix Computations
@@ -168,7 +168,7 @@ omega = fd/fr;
 Pw1 = zeros(Lfd,Lphi);
 for m=1:Lphi
     for n=1:Lfd
-        a = exp(1i*2*pi*fsp(m)*(0:N-1));                % Dummy Spatial Steering Vector.
+        a = exp(1i*2*pi*fsp(m)*(0:N-1));                % Dummy Spatial Steering Vector.(Dummy虚拟)
         b = exp(1i*2*pi*omega(n)*(0:M-1));              % Dummy Doppler Steering Vector
         v = kron(b,a).';
         Pw1(n,m) = abs(w'*v)^2;

@@ -1,6 +1,8 @@
-function R=fun_ClutterR(V,H,N,M,K,lambda,d,fr,phi0,theta0,Inn,Imm,Ikk,CNR,senser_error,channel_error,ea,ep,crab_theta,Br)
+% function R=fun_ClutterR(V,H,N,M,K,lambda,d,fr,phi0,theta0,Inn,Imm,Ikk,CNR,senser_error,channel_error,ea,ep,crab_theta,Br)
 % fun_ClutterR is to generate covariance of the clutter.
-
+% clc
+% clear
+% close all
 V=140;                                            % 载机速度
 H=8000;                                           % 载机高度
 N=16;                                             % 每行有N个阵元
@@ -49,8 +51,8 @@ for el=0:L-1
     phi_el=asin(H/(H+el*Ru));
     Rel=1.5*H+el*Ru;   % 距离环的起始位置的取值范围为：[H,H+Ru]，此处设为：1.5H，
     for nn=1:length(theta)
-        F(nn)=sum(In.*exp(j*2*pi*d/lambda*(0:N-1)'*(cos(theta(nn))*cos(phi_el)-cos(theta0)*cos(phi0))))*...
-          sum(Im.*exp(j*2*pi*d/lambda*(0:M-1)'*(sin(phi_el)-sin(phi0))));     %(3.2.3)
+        F(nn)=sum(In.*exp(1j*2*pi*d/lambda*(0:N-1)'*(cos(theta(nn))*cos(phi_el)-cos(theta0)*cos(phi0))))*...
+          sum(Im.*exp(1j*2*pi*d/lambda*(0:M-1)'*(sin(phi_el)-sin(phi0))));     %(3.2.3)
     end
     omega_s=2*pi*d/lambda*cos(theta+crab_theta)*cos(phi_el);                         %(3.3.7a)
     omega_d=4*pi*V/(lambda*fr)*cos(theta+crab_theta)*cos(phi_el);                    %(3.3.24)

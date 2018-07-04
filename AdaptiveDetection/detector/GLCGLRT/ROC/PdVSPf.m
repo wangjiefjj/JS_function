@@ -62,76 +62,86 @@ s_real=Weight*s+(1-Weight)*s_v;
 h = waitbar(0,'Please wait...');
 for i_Pfa = 1:L_Pfa
     waitbar((i_Pfa/L_Pfa),h,sprintf([num2str(i_Pfa/L_Pfa*100),'%%']));
-    Tamf = zeros(MonteCarloPfa(i_Pfa),1);
-    Tamfcc = zeros(MonteCarloPfa(i_Pfa),1);
-    Tamfnscm = zeros(MonteCarloPfa(i_Pfa),1);
-    Tglrt = zeros(MonteCarloPfa(i_Pfa),1);
-    Tglrtcc = zeros(MonteCarloPfa(i_Pfa),1);
-    Tglrtnscm = zeros(MonteCarloPfa(i_Pfa),1);
-    Tclglrt = zeros(MonteCarloPfa(i_Pfa),1);
+%     Tamf = zeros(MonteCarloPfa(i_Pfa),1);
+%     Tamfcc = zeros(MonteCarloPfa(i_Pfa),1);
+%     Tamfnscm = zeros(MonteCarloPfa(i_Pfa),1);
+%     Tglrt = zeros(MonteCarloPfa(i_Pfa),1);
+%     Tglrtcc = zeros(MonteCarloPfa(i_Pfa),1);
+%     Tglrtnscm = zeros(MonteCarloPfa(i_Pfa),1);
+%     Tclglrt = zeros(MonteCarloPfa(i_Pfa),1);
+    Tglrtsaml = zeros(MonteCarloPfa(i_Pfa),1);
     parfor i = 1:MonteCarloPfa(i_Pfa)
 %     waitbar(i/MonteCarloPfa,h,sprintf([num2str(i/MonteCarloPfa*100),'%%']));
 %%%%%%%%%%%训练数据产生%%%%%%%%%%%%%%
     Train = fun_TrainData(str_train,N,L,rouR,lambda,mu,opt_train);%%产生的训练数据,协方差矩阵为rouR的高斯杂波
     x0 = fun_TrainData(str_train,N,1,rouR,lambda,mu,opt_train); % 接收信号仅包括杂波和噪声
     %%%%协方差估计%%%%%%%%%%%%%%%%%%%%%%
-    R_SCM = (fun_SCM(Train));
-    iR_SCM = inv(R_SCM);
-    
-    R_SCMN = (fun_SCMN(Train));
-    iR_SCMN = inv(R_SCMN);
-    
-    R_NSCM = fun_NSCM(Train);
-    iR_NSCM = inv(R_NSCM);
-    
-    R_CC = fun_CC(Train,R_SCMN,R_KA);
-    iR_CC = inv(R_CC);
+%     R_SCM = (fun_SCM(Train));
+%     iR_SCM = inv(R_SCM);
+%     
+%     R_SCMN = (fun_SCMN(Train));
+%     iR_SCMN = inv(R_SCMN);
+%     
+%     R_NSCM = fun_NSCM(Train);
+%     iR_NSCM = inv(R_NSCM);
+%     
+%     R_CC = fun_CC(Train,R_SCMN,R_KA);
+%     iR_CC = inv(R_CC);
+    R_SAML = fun_SAML(Train);
     %%%检测器%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%%%% AMF或者wald
-    Tamf(i) = abs(s'*iR_SCM*x0)^2/abs(s'*iR_SCM*s);    
-    tmp=abs(x0'*iR_SCM*x0);
-    %%%%%% AMFCC或者wald_CC
-    Tamfcc(i) = abs(s'*iR_CC*x0)^2/abs(s'*iR_CC*s);     
-    tmpcc=abs(x0'*iR_CC*x0);
-    %%%%%%%%%%% AMFNSCM
-    Tamfnscm(i) = abs(s'*iR_NSCM*x0)^2/abs(s'*iR_NSCM*s);     
-    tmpnscm=abs(x0'*iR_NSCM*x0);
-    %%%%%% KGLRT
-    Tglrt(i) = Tamf(i)/(1+tmp);     
-    %%%%%% KGLRTCC
-    Tglrtcc(i) = Tamfcc(i)/(1+tmpcc);
-    %%%%%% KGLRTNSCM
-    Tglrtnscm(i) = Tamfnscm(i)/(1+tmpnscm);
-    %%%%%% CLGLRT
-    Tclglrt(i) = fun_CLGLRT3(lambda,mu,R_KA,R_SCMN,x0,s);
+%     %%%%%% AMF或者wald
+%     Tamf(i) = abs(s'*iR_SCM*x0)^2/abs(s'*iR_SCM*s);    
+%     tmp=abs(x0'*iR_SCM*x0);
+%     %%%%%% AMFCC或者wald_CC
+%     Tamfcc(i) = abs(s'*iR_CC*x0)^2/abs(s'*iR_CC*s);     
+%     tmpcc=abs(x0'*iR_CC*x0);
+%     %%%%%%%%%%% AMFNSCM
+%     Tamfnscm(i) = abs(s'*iR_NSCM*x0)^2/abs(s'*iR_NSCM*s);     
+%     tmpnscm=abs(x0'*iR_NSCM*x0);
+%     %%%%%% KGLRT
+%     Tglrt(i) = Tamf(i)/(1+tmp);     
+%     %%%%%% KGLRTCC
+%     Tglrtcc(i) = Tamfcc(i)/(1+tmpcc);
+%     %%%%%% KGLRTNSCM
+%     Tglrtnscm(i) = Tamfnscm(i)/(1+tmpnscm);
+%     %%%%%% CLGLRT
+%     Tclglrt(i) = fun_CLGLRT3(lambda,mu,R_KA,R_SCMN,x0,s);
+    %%%%%% 1S_GLRT-SMAL
+    Tglrtsaml(i) = fun_1SGLRT(R_SAML,x0,s,mu);
     end
     % close(h)
-    TKGLRT=sort(Tglrt,'descend');
-    TCLGLRT=sort(Tclglrt,'descend');
-    TKGLRTCC=sort(Tglrtcc,'descend');
-    TKGLRTNSCM=sort(Tglrtnscm,'descend');
+%     TKGLRT=sort(Tglrt,'descend');
+%     TCLGLRT=sort(Tclglrt,'descend');
+%     TKGLRTCC=sort(Tglrtcc,'descend');
+%     TKGLRTNSCM=sort(Tglrtnscm,'descend');
+    TGLRTSAML = sort(Tglrtsaml,'descend');
 
-    Th_KGLRT(i_Pfa)=(TKGLRT(floor(MonteCarloPfa(i_Pfa)*PFA(i_Pfa)-1))+TKGLRT(floor(MonteCarloPfa(i_Pfa)*PFA(i_Pfa))))/2;
-    Th_CLGLRT(i_Pfa)=(TCLGLRT(floor(MonteCarloPfa(i_Pfa)*PFA(i_Pfa)-1))+TCLGLRT(floor(MonteCarloPfa(i_Pfa)*PFA(i_Pfa))))/2;
-    Th_KGLRTCC(i_Pfa)=(TKGLRTCC(floor(MonteCarloPfa(i_Pfa)*PFA(i_Pfa)-1))+TKGLRTCC(floor(MonteCarloPfa(i_Pfa)*PFA(i_Pfa))))/2;
-    Th_KGLRTNSCM(i_Pfa)=(TKGLRTNSCM(floor(MonteCarloPfa(i_Pfa)*PFA(i_Pfa)-1))+TKGLRTNSCM(floor(MonteCarloPfa(i_Pfa)*PFA(i_Pfa))))/2;
+    Th_GLRTSAML(i_Pfa) = (TGLRTSAML(floor(MonteCarloPfa(i_Pfa)*PFA(i_Pfa)-1))+TGLRTSAML(floor(MonteCarloPfa(i_Pfa)*PFA(i_Pfa))))/2;
+%     Th_KGLRT(i_Pfa)=(TKGLRT(floor(MonteCarloPfa(i_Pfa)*PFA(i_Pfa)-1))+TKGLRT(floor(MonteCarloPfa(i_Pfa)*PFA(i_Pfa))))/2;
+%     Th_CLGLRT(i_Pfa)=(TCLGLRT(floor(MonteCarloPfa(i_Pfa)*PFA(i_Pfa)-1))+TCLGLRT(floor(MonteCarloPfa(i_Pfa)*PFA(i_Pfa))))/2;
+%     Th_KGLRTCC(i_Pfa)=(TKGLRTCC(floor(MonteCarloPfa(i_Pfa)*PFA(i_Pfa)-1))+TKGLRTCC(floor(MonteCarloPfa(i_Pfa)*PFA(i_Pfa))))/2;
+%     Th_KGLRTNSCM(i_Pfa)=(TKGLRTNSCM(floor(MonteCarloPfa(i_Pfa)*PFA(i_Pfa)-1))+TKGLRTNSCM(floor(MonteCarloPfa(i_Pfa)*PFA(i_Pfa))))/2;
 end
 close(h)
-save('ThPfa2','PFA','Th_KGLRT','Th_CLGLRT','Th_KGLRTCC','Th_KGLRTNSCM','L',...
+% save('ThPfa2','PFA','Th_KGLRT','Th_CLGLRT','Th_KGLRTCC','Th_KGLRTNSCM','L',...
+%     'str_train','lambda','mu');
+save('ThPfa_saml','PFA','Th_GLRTSAML','L',...
     'str_train','lambda','mu');
 % %%%%%%%%%%%%%%%%%%%%%检测概率%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-load ThPfa.mat
-Pd_KGLRT_Mlti_mc = zeros(L_Pfa,length(SNRout));
-Pd_CLGLRT_Mlti_mc = zeros(L_Pfa,length(SNRout));
-Pd_KGLRTCC_Mlti_mc = zeros(L_Pfa,length(SNRout));
-Pd_KGLRTNSCM_Mlti_mc = zeros(L_Pfa,length(SNRout));
-
-counter_glrt=0;
-counter_clglrt=0;
-counter_glrtcc=0;
-counter_amfcc=0;
-counter_glrtnscm=0;
+% load ThPfa.mat
+load ThPfa_saml.mat
+% Pd_KGLRT_Mlti_mc = zeros(L_Pfa,length(SNRout));
+% Pd_CLGLRT_Mlti_mc = zeros(L_Pfa,length(SNRout));
+% Pd_KGLRTCC_Mlti_mc = zeros(L_Pfa,length(SNRout));
+% Pd_KGLRTNSCM_Mlti_mc = zeros(L_Pfa,length(SNRout));
+Pd_SAML_Mlti_mc = zeros(L_Pfa,length(SNRout));
+% counter_glrt=0;
+% counter_clglrt=0;
+% counter_glrtcc=0;
+% counter_amfcc=0;
+% counter_glrtnscm=0;
+counter_glrtsaml=0;
 alpha=sqrt(SNRnum/abs(s_real'*irouR*s_real)); % 根据SNR=|alpha|^2*s'*R^(-1)*s求得|alpha|
 h = waitbar(0,'Please wait...');
 tic
@@ -145,43 +155,47 @@ for i_Pfa = 1:L_Pfa %%虚警
             Train = fun_TrainData(str_train,N,L,rouR,lambda,mu,opt_train);%%产生的训练数据,协方差矩阵为rouR的高斯杂波
             x0 = fun_TrainData(str_train,N,1,rouR,lambda,mu,opt_train); % 接收信号仅包括杂波和噪声
             %%%%协方差估计%%%%%%%%%%%%%%%%%%%%%%
-            R_SCM = (fun_SCM(Train));
-            iR_SCM = inv(R_SCM);
-            R_SCMN = (fun_SCMN(Train));
-            iR_SCMN = inv(R_SCMN);
-            R_NSCM = (fun_NSCM(Train));
-            iR_NSCM = inv(R_NSCM);
-            R_CC = fun_CC(Train,R_SCMN,R_KA);
-            iR_CC = inv(R_CC);
+%             R_SCM = (fun_SCM(Train));
+%             iR_SCM = inv(R_SCM);
+%             R_SCMN = (fun_SCMN(Train));
+%             iR_SCMN = inv(R_SCMN);
+%             R_NSCM = (fun_NSCM(Train));
+%             iR_NSCM = inv(R_NSCM);
+%             R_CC = fun_CC(Train,R_SCMN,R_KA);
+%             iR_CC = inv(R_CC);
+            R_SAML = fun_SAML(Train);
             x0=alpha(m)*s_real+x0;%+pp;    %%%%%%%  重要  %%%%%%%%%%%%%
             %%%检测器%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            %%%%%% AMF或者wald
-            Tamf = abs(s'*iR_SCM*x0)^2/abs(s'*iR_SCM*s);   
-            tmp=abs(x0'*iR_SCM*x0);
-            %%%%%% AMFCC或者wald
-            Tamfcc = abs(s'*iR_CC*x0)^2/abs(s'*iR_CC*s);    
-            tmpcc = abs(x0'*iR_CC*x0);
-            %%%%%% AMF-NSCM或者wald即NAMF
-            Tamfnscm = abs(s'*iR_NSCM*x0)^2/abs(s'*iR_NSCM*s);    
-            tmpnscm = abs(x0'*iR_NSCM*x0);
-            %%%%%% KGLRT
-            Tglrt = Tamf/(1+tmp); 
-            %%%%%% KGLRTCC
-            Tglrtcc = Tamfcc/(1+tmpcc);
-            %%%%%% KGLRTNSCM
-            Tglrtnscm = Tamfnscm/(1+tmpnscm);                                 
-            %%%%%% CLGLRT
-            Tclglrt = fun_CLGLRT3(lambda,mu,R_KA,R_SCMN,x0,s);
+%             %%%%%% AMF或者wald
+%             Tamf = abs(s'*iR_SCM*x0)^2/abs(s'*iR_SCM*s);   
+%             tmp=abs(x0'*iR_SCM*x0);
+%             %%%%%% AMFCC或者wald
+%             Tamfcc = abs(s'*iR_CC*x0)^2/abs(s'*iR_CC*s);    
+%             tmpcc = abs(x0'*iR_CC*x0);
+%             %%%%%% AMF-NSCM或者wald即NAMF
+%             Tamfnscm = abs(s'*iR_NSCM*x0)^2/abs(s'*iR_NSCM*s);    
+%             tmpnscm = abs(x0'*iR_NSCM*x0);
+%             %%%%%% KGLRT
+%             Tglrt = Tamf/(1+tmp); 
+%             %%%%%% KGLRTCC
+%             Tglrtcc = Tamfcc/(1+tmpcc);
+%             %%%%%% KGLRTNSCM
+%             Tglrtnscm = Tamfnscm/(1+tmpnscm);                                 
+%             %%%%%% CLGLRT
+%             Tclglrt = fun_CLGLRT3(lambda,mu,R_KA,R_SCMN,x0,s);
+            Tglrtsaml = fun_1SGLRT(R_SAML,x0,s,mu);
             %%%判断%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
-            if Tglrt>Th_KGLRT(i_Pfa);          counter_glrt=counter_glrt+1;        end                  
-            if Tclglrt>Th_CLGLRT(i_Pfa);       counter_clglrt=counter_clglrt+1;    end   
-            if Tglrtcc>Th_KGLRTCC(i_Pfa);      counter_glrtcc=counter_glrtcc+1;    end
-            if Tglrtnscm>Th_KGLRTNSCM(i_Pfa);  counter_glrtnscm=counter_glrtnscm+1;      end
+%             if Tglrt>Th_KGLRT(i_Pfa);          counter_glrt=counter_glrt+1;        end                  
+%             if Tclglrt>Th_CLGLRT(i_Pfa);       counter_clglrt=counter_clglrt+1;    end   
+%             if Tglrtcc>Th_KGLRTCC(i_Pfa);      counter_glrtcc=counter_glrtcc+1;    end
+%             if Tglrtnscm>Th_KGLRTNSCM(i_Pfa);  counter_glrtnscm=counter_glrtnscm+1;      end
+            if Tglrtsaml>Th_GLRTSAML(i_Pfa);          counter_glrtsaml=counter_glrtsaml+1;        end
         end
-        Pd_KGLRT_Mlti_mc(i_Pfa,m)=counter_glrt/MonteCarloPd;           counter_glrt=0;
-        Pd_CLGLRT_Mlti_mc(i_Pfa,m)=counter_clglrt/MonteCarloPd;        counter_clglrt=0;
-        Pd_KGLRTCC_Mlti_mc(i_Pfa,m)=counter_glrtcc/MonteCarloPd;       counter_glrtcc=0;
-        Pd_KGLRTNSCM_Mlti_mc(i_Pfa,m)=counter_glrtnscm/MonteCarloPd;    counter_glrtnscm=0;
+%         Pd_KGLRT_Mlti_mc(i_Pfa,m)=counter_glrt/MonteCarloPd;           counter_glrt=0;
+%         Pd_CLGLRT_Mlti_mc(i_Pfa,m)=counter_clglrt/MonteCarloPd;        counter_clglrt=0;
+%         Pd_KGLRTCC_Mlti_mc(i_Pfa,m)=counter_glrtcc/MonteCarloPd;       counter_glrtcc=0;
+%         Pd_KGLRTNSCM_Mlti_mc(i_Pfa,m)=counter_glrtnscm/MonteCarloPd;    counter_glrtnscm=0;
+         Pd_SAML_Mlti_mc(i_Pfa,m)=counter_glrtsaml/MonteCarloPd;    counter_glrtsaml=0;
     end
 end
 
@@ -193,30 +207,38 @@ hold on
 % plot(PFA,Pd_KGLRTCC_Mlti_mc(:,1),'ko','linewidth',2,'MarkerSize',15)
 % plot(PFA,Pd_KGLRT_Mlti_mc(:,1),'k>','linewidth',2,'MarkerSize',15)
 % plot(PFA,Pd_KGLRTNSCM_Mlti_mc(:,1),'k*','linewidth',2,'MarkerSize',15)
+% plot(PFA,Pd_SAML_Mlti_mc(:,1),'r*','linewidth',2,'MarkerSize',15)
 %%5dB
-plot(PFA,Pd_CLGLRT_Mlti_mc(:,1),'k-s','linewidth',2,'MarkerSize',15)
-plot(PFA,Pd_KGLRTCC_Mlti_mc(:,1),'k-o','linewidth',2,'MarkerSize',15)
-plot(PFA,Pd_KGLRT_Mlti_mc(:,1),'k->','linewidth',2,'MarkerSize',15)
-plot(PFA,Pd_KGLRTNSCM_Mlti_mc(:,1),'k-*','linewidth',2,'MarkerSize',15)
-%%10dB
-plot(PFA,Pd_CLGLRT_Mlti_mc(:,2),'r-s','linewidth',2,'MarkerSize',15)
-plot(PFA,Pd_KGLRTCC_Mlti_mc(:,2),'r-o','linewidth',2,'MarkerSize',15)
-plot(PFA,Pd_KGLRT_Mlti_mc(:,2),'r->','linewidth',2,'MarkerSize',15)
-plot(PFA,Pd_KGLRTNSCM_Mlti_mc(:,2),'r-*','linewidth',2,'MarkerSize',15)
-%%15dB
-plot(PFA,Pd_CLGLRT_Mlti_mc(:,3),'g-s','linewidth',2,'MarkerSize',15)
-plot(PFA,Pd_KGLRTCC_Mlti_mc(:,3),'g-o','linewidth',2,'MarkerSize',15)
-plot(PFA,Pd_KGLRT_Mlti_mc(:,3),'g->','linewidth',2,'MarkerSize',15)
-plot(PFA,Pd_KGLRTNSCM_Mlti_mc(:,3),'g-*','linewidth',2,'MarkerSize',15)
-h_leg = legend('GLC-GLRT','GLRT with CC','GLRT with SCM','GLRT with NSCM');
+% plot(PFA,Pd_CLGLRT_Mlti_mc(:,1),'k-s','linewidth',2,'MarkerSize',15)
+% plot(PFA,Pd_KGLRTCC_Mlti_mc(:,1),'k-o','linewidth',2,'MarkerSize',15)
+% plot(PFA,Pd_KGLRT_Mlti_mc(:,1),'k->','linewidth',2,'MarkerSize',15)
+% plot(PFA,Pd_KGLRTNSCM_Mlti_mc(:,1),'k-*','linewidth',2,'MarkerSize',15)
+plot(PFA,Pd_SAML_Mlti_mc(:,1),'k-p','linewidth',2,'MarkerSize',15)
+% %%10dB
+% plot(PFA,Pd_CLGLRT_Mlti_mc(:,2),'r-s','linewidth',2,'MarkerSize',15)
+% plot(PFA,Pd_KGLRTCC_Mlti_mc(:,2),'r-o','linewidth',2,'MarkerSize',15)
+% plot(PFA,Pd_KGLRT_Mlti_mc(:,2),'r->','linewidth',2,'MarkerSize',15)
+% plot(PFA,Pd_KGLRTNSCM_Mlti_mc(:,2),'r-*','linewidth',2,'MarkerSize',15)
+plot(PFA,Pd_SAML_Mlti_mc(:,2),'r-p','linewidth',2,'MarkerSize',15)
+% %%15dB
+% plot(PFA,Pd_CLGLRT_Mlti_mc(:,3),'g-s','linewidth',2,'MarkerSize',15)
+% plot(PFA,Pd_KGLRTCC_Mlti_mc(:,3),'g-o','linewidth',2,'MarkerSize',15)
+% plot(PFA,Pd_KGLRT_Mlti_mc(:,3),'g->','linewidth',2,'MarkerSize',15)
+% plot(PFA,Pd_KGLRTNSCM_Mlti_mc(:,3),'g-*','linewidth',2,'MarkerSize',15)
+plot(PFA,Pd_SAML_Mlti_mc(:,3),'g-p','linewidth',2,'MarkerSize',15)
+% h_leg = legend('GLC-GLRT','GLRT with CC','GLRT with SCM','GLRT with NSCM');
 xlabel('Pfa','FontSize',20)
 ylabel('Pd','FontSize',20)
 set(gca,'FontSize',20)
-set(h_leg,'Location','SouthEast')
+% set(h_leg,'Location','SouthEast')
 grid on
 box on
-str=['Pd_CLGLRT2_ROC3',num2str(n),'K','mu',num2str(mu),...
+% str=['Pd_CLGLRT2_ROC3',num2str(n),'K','mu',num2str(mu),...
+%      'lambda', num2str(lambda),'s',num2str(sigma_t),...
+%      'o',num2str(opt_train),'_',str_train,'.mat'];
+% save(str,'lambda','mu','sigma_t','SNRout','PFA','Pd_CLGLRT_Mlti_mc','Pd_KGLRT_Mlti_mc',...
+%     'Pd_KGLRTCC_Mlti_mc','Pd_KGLRTNSCM_Mlti_mc');
+str=['Pd_ROC_aml',num2str(n),'K','mu',num2str(mu),...
      'lambda', num2str(lambda),'s',num2str(sigma_t),...
      'o',num2str(opt_train),'_',str_train,'.mat'];
-save(str,'lambda','mu','sigma_t','SNRout','PFA','Pd_CLGLRT_Mlti_mc','Pd_KGLRT_Mlti_mc',...
-    'Pd_KGLRTCC_Mlti_mc','Pd_KGLRTNSCM_Mlti_mc');
+save(str,'lambda','mu','sigma_t','SNRout','PFA','Pd_SAML_Mlti_mc');

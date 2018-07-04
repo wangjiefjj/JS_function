@@ -8,7 +8,8 @@ function [ R_AML ] = fun_AML( X )
 R_AML = eye(M,M);%R_x0;%eye(N,N);%以单位阵为迭代初值是，第二次迭代结果为NSCM结果
 tao_child = 1;%%本次迭代值
 tao_parent = 0;%%上次迭代值
-% count = 1;
+count = 0;
+
 while (abs(tao_child-tao_parent)>0.01)%
     tao_parent = tao_child;
     iR_AML = inv(R_AML);
@@ -18,6 +19,10 @@ while (abs(tao_child-tao_parent)>0.01)%
         R_AML_t = R_AML_t+X(:,i)*X(:,i)'/N/tao_child(i);
     end
     R_AML = (R_AML_t);
+    count = count + 1;
+    if count > 6
+        break;
+    end
 end
 end
 
