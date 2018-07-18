@@ -30,13 +30,13 @@ plot(PFA,Pd_KGLRTCC_Mlti_mc(:,3),'g-o','linewidth',linewide1,'MarkerSize',mkft)
 plot(PFA,Pd_KGLRT_Mlti_mc(:,3),'b->','linewidth',linewide1,'MarkerSize',mkft)
 plot(PFA,Pd_KGLRTNSCM_Mlti_mc(:,3),'c-*','linewidth',linewide1,'MarkerSize',mkft)
 plot(PFA,Pd_SAML_Mlti_mc(:,3),'r-*','linewidth',linewide1,'MarkerSize',mkft)
-h_leg = legend('GLC-GLRT,K=2N','1S-GLRT with CC,K=2N','1S-GLRT with SCM,K=2N',...
-               '1S-GLRT with NSCM,K=2N','1S-GLRT with SFPE,K=2N');
+h_leg = legend('GLC-GLRT, K=2N','1S-GLRT with CC, K=2N','1S-GLRT with SCM, K=2N',...
+               '1S-GLRT with NSCM, K=2N','1S-GLRT with SFPE, K=2N');
 xlabel('P_f_a','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('Pd','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-set(gca,'FontSize',labeltsize)
+set(gca,'FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gcf,'Position',[700 0 1200 1000])
-set(h_leg,'Location','SouthEast')
+set(h_leg,'Location','SouthEast','FontWeight',fw,'FontName',fn)
 set(gca,'Xscale','log')
 axis([1e-4,1e-1,0,1])
 grid on

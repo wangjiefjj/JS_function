@@ -1,16 +1,17 @@
-function [ Rk ] = fun_GenerateR( Nt, Nr, Np, Num, CNR, EL, beta, d,gamma, CrabA, CrabM)
+function [ Rk ] = fun_GenerateR( Nt, Nr, Np, Num, CNR, EL, beta, d,gamma, lambda,CrabA, CrabM)
 %FUN_GENERATER 此处显示有关此函数的摘要
 %   此处显示详细说明
-%% 产生协方差矩阵, 假设无距离模糊, 可有地球自转
+%% 产生协方差矩阵, 假设无距离模糊, 可有地球自转，阵列为线阵ULA
 % Nt: 发射天线数
 % Nr： 接收天线数
-%Np： 脉冲数
+% Np： 脉冲数
 % Num： 杂波块分数
 % CNR: 杂噪比 
 % EL: 俯仰角，rad
+% d: 阵元间距m
 % CrabA: 航偏角
 % CrabM：航片幅度
-if nargin<10    %默认地球无自转
+if nargin<11    %默认地球无自转
    CrabA = 0;
    CrabM = 1;
 end
@@ -20,22 +21,22 @@ AZ_du = linspace(0,179,Num);               %波束杂波块
 % AZ_du = 90;
 AZ = AZ_du/180*pi;
 %% 阵列因子
-steering_angle = 0; %% 波束指向
+steering_angle = 90; %% 波束指向
 win = chebwin(Num);
 for k=1:length(AZ)  
-    AF(k) = sum(exp(-1i*pi*d*(0:Nr*Nt-1)*(sin(AZ(k)) ...
-                  - sin(steering_angle*pi/180))));
+    AF(k) = sum(exp(-1i*pi*d*(0:Nr-1)*(cos(AZ(k)) ...
+                  - cos(steering_angle*pi/180))));
 end
-AF(1) = AF(2);
+% AF(1) = AF(2);
 
 AF = diag(abs(AF));
 
-cmj = sin(EL)*cos(AZ);       %入射锥角
-fspc = 0.5*d*cmj;             %空间频率
-wdc = 0.5*beta*d * CrabM * sin(EL)*cos(AZ+CrabA);   %杂波归1化多普勒
+cmj = sin(EL)*cos(AZ);             %入射锥角
+fspc = d/lambda/2*cmj;             %空间频率
+wdc = beta*d/lambda*2 * CrabM * sin(EL)*cos(AZ+CrabA);   %杂波归1化多普勒
 sc = zeros(D,length(cmj));
 for i_Az = 1:length(cmj)                   %俯仰角          
-    a = exp(1j*(0:Nr-1)*2*pi*fspc(i_Az)).';         %接收空间导向矢量 
+    a = exp(1j*(0:Nr-1)*2*pi*fspc(i_Az)).';          %接收空间导向矢量 
     b = exp(1j*(0:Nt-1)*2*pi*gamma*fspc(i_Az)).';    %发射空间导向矢量  
     c = exp(1j*(0:Np-1)*2*pi*wdc(i_Az)).';           %时间导向矢量 
     sc(:,i_Az) =  kron(c,kron(b,a));             %杂波的导向矢量%AF(i_Az) *
