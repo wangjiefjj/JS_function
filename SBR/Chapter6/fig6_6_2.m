@@ -4,6 +4,7 @@ clc;clear;close all
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 fo = 9600e6; %450e6   9600e6                 %载频 Hz
 C = 299792458;                            %光速 m/s
+c = C;
 lambda = C/fo;                      %波长 m
 Nr = 16;                             %接收阵元个数
 Nt = 4;                              %发射阵元个数
@@ -31,7 +32,7 @@ CrabM = fun_CrabMagnitude( alpha1,eta, H);%偏航幅度
 %% 目标区域
 RR = 1000e3:10e3:3400e3;                   %地距m 
 Rs = fun_R2Rs(H,RR);
-Graze = fun_GrazeAngle(H, R, Rs)/180*pi;
+Graze = fun_GrazeAngle(H, RR, Rs)/180*pi;
 dR =  c*Tr/2 *sec(Graze);   
 EL_du = fun_ELAngle(H,RR);           %波束俯仰角
 EL = EL_du/180*pi;
@@ -41,11 +42,12 @@ wd = linspace(-0.5,0.5,1000);       %虚拟规1化多普勒
 fsp = 0;
 Pt = zeros(length(RR),length(wd));
 Ptr = zeros(length(RR),length(wd));
-Rk = 
+Rk = zeros(Nt*Nr*Np,Nt*Nr*Np);
+Rk_r = zeros(Nt*Nr*Np,Nt*Nr*Np);
 for i = 1:length(EL)
     i
-    Rk = Rk + fun_GenerateR(Nt, Nr, Np, Num, CNR, EL(i), beta, d,gamma);%,CrabA,CrabM
-    Rk_r = Rk_r + fun_GenerateR(Nt, Nr, Np, Num, CNR, EL(i), beta, d,gamma,CrabA,CrabM); 
+    Rk = Rk + fun_GenerateR(Nt, Nr, Np, Num, CNR, EL(i), beta, d,gamma,lambda);%,CrabA,CrabM
+    Rk_r = Rk_r + fun_GenerateR(Nt, Nr, Np, Num, CNR, EL(i), beta, d,gamma,lambda,CrabA,CrabM); 
     for i_wd = 1:length(wd)
         a = exp(1j*(0:Nr-1)*2*pi*fsp).';               %接收空间导向矢量
         b = exp(1j*(0:Nt-1)*2*pi*gamma*fsp).';         %发射空间导向矢量

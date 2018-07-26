@@ -28,6 +28,7 @@ Nc = length(Az);
 LAz = length(Az);
 f = zeros(1,LAz);
 AF = ones(1,LAz);           % Array Factor pre-allocation. 天线阵因子
+Sys_DOF = M*N;
 
 % Platform Parameters:
 H = 500e3;%9e3 %700e3                    % Platform altitude in meters.
@@ -174,7 +175,9 @@ end
 Rc = Vc*Ksic*Vc';                            % Eq. (64)
 
 Rn = sigma2*eye(M*N);
-
+CNR_dB = 60;
+CNR = 10^(CNR_dB/10);
+Rn = CNR*Rc./sum(eig(Rn)/Sys_DOF);
 Rcn = Rc + Rn;
 
 

@@ -8,13 +8,13 @@ C  = 3e8;                       %光速m/s 299792458
 %% 雷达系统参数
 fo = 1.25e9;                    %载频Hz
 lambda = C/fo;                  %波长
-Nr_az = 16;%16                     %接收方位子阵个数
-Nr_el = 16;%25                     %接收俯仰子阵个数
-Nt_az = 1;%16                     %发射方位子阵个数
-Nt_el = 1;%25                     %发射俯仰子阵个数
+Nr_az = 8;%16                     %接收方位子阵个数
+Nr_el = 8;%25                     %接收俯仰子阵个数
+Nt_az = 8;%16                     %发射方位子阵个数
+Nt_el = 8;%25                     %发射俯仰子阵个数
 Ti = 14.2e-3;                   %驻留时间s
-fr = 5000;                      %脉冲重复周期Hz
-Np = 32;%floor(fr*Ti);              %接收脉冲数 
+fr = 10000;                      %脉冲重复周期Hz
+Np = 8;%floor(fr*Ti);              %接收脉冲数 
 Pt = 30e3;                      %峰值功率W
 Tp = 20e-6;                     %脉宽s
 Pa = Pt*Tp/(1/fr);              %平均发射功率
@@ -178,7 +178,7 @@ Rk = fun_Rs2R(H,Rsk);                       %模糊地距m
 elk = fun_ELAngle(H,Rk);                    %各模糊距离俯仰角deg
 grazek =  fun_GrazeAngle(H,Rk,Rsk);         %各模糊距离掠射角deg
 % grazek = acos(sin(elk/180*pi)*(Re+H)/Re)/pi*180; 
-sk = r./cos(grazek/180*pi)*2*pi.*Rk/Nc;     % 杂波单元面积m^2  (2.36)
+sk = r./cos(grazek/180*pi)*2*pi.*Rk/Nc*10;     % 杂波单元面积m^2  (2.36)
 % sak = sk*Nc;                              %杂波环面积m^2
 %% 后项散射系数
 %<<地杂波背景中机载预警雷达作用距离分析>>
@@ -210,7 +210,7 @@ sigmac = 10*log10(sigmac);                              %dB
 %  计算接收和发射增益
 for i = 1:Nc
     for j = 1:length(elk)
-        Ft_t=abs(fun_F(Nr_az,Nr_el,d,d, lambda, Az(i),elk(j),Az0,El0,EL,It1,It2)).^2;
+        Ft_t=abs(fun_F(Nt_az,Nt_el,d,d, lambda, Az(i),elk(j),Az0,El0,EL,It1,It2)).^2;
         Gtin(j,i) = Gt*Ft_t; 
         Fr_t=abs(fun_F(Nr_az,Nr_el,d,d, lambda, Az(i),elk(j),Az0,El0,EL,Ir1,Ir2)).^2;
         Grin(j,i) = Gr*Fr_t;
@@ -235,10 +235,6 @@ CNR = 10 * log10(CNR);
 
 %% 杂波协方差计算，计算每个杂波块的空间和时间频率（elk，azk）
 azk = Az;
-cmj1 = sin(elk/180*pi).' * cos(azk/180*pi);                    %入射锥角
-fspc1 = d/lambda*cmj1;                                       %空间频率
-cmj2 = sin(elk/180*pi).' * cos(azk/180*pi);                    %入射锥角
-fspc2 = d/lambda*cmj2;                                       %空间频率
 % 航偏角，航偏幅度
 if isRotation == 1
     disp('isRotation')
@@ -249,21 +245,25 @@ elseif isRotation == 0
     CrabA = 0;%                  %偏航角/rad
     CrabM = 1;%                  %偏航幅度
 end
-omegac = beta * d/lambda*2 * CrabM * (sin(elk/180*pi).'*cos(azk/180*pi+CrabA));   %杂波归1化多普勒
+
 
 Vc = zeros(Nr_az*Np*Nr_el,Nc);
 % Vc = zeros(Nr_az*Np,Nc);
 Rc = zeros(Nr_az*Np*Nr_el,Nr_az*Np*Nr_el);
 for j = 1:length(elk)
     j
-    for k=1:Nc    
+    for k=1:Nc
+        cmj = cos(elk(j)/180*pi).' * cos(azk(k)/180*pi);                    %入射锥角
+        fspc = d/lambda*cmj;                                       %空间频率
+        omegac = beta * d/lambda*2 * CrabM * (cos(elk(j)/180*pi).*cos(azk(k)/180*pi+CrabA));   %杂波归1化多普勒
         % 空间导向矢量.
-        a = exp(1i*2*pi*fspc1(j,k)*(0:Nr_az-1)).';    % 空间导向矢量,方位向
-        c = exp(1i*2*pi*fspc2(j,k)*(0:Nr_el-1)).';  % 空间导向矢量,俯仰向
-        b = exp(1i*2*pi*omegac(j,k)*(0:Np-1)).';     % Temporal Steering Vector 
+        a = exp(1i*2*pi*fspc*(0:Nr_az-1)).';    % 空间导向矢量,方位向
+        c = exp(1i*2*pi*fspc*(0:Nr_el-1)).';    % 空间导向矢量,俯仰向
+        b = exp(1i*2*pi*omegac*(0:Np-1)).';     % Temporal Steering Vector 
         Vc(:,k) = kron(b,kron(c,a));
     end
-    Rc = Rc+Vc*Vc';
+    A = diag((CNR(j,:)));
+    Rc = Rc+Vc*A*Vc';
 end
 % Rc = Nr_az*Np*Nr_el*Rc/sum(eig(Rc));
 Rn = sigma2*eye(Nr_az*Np*Nr_el);

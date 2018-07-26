@@ -39,7 +39,7 @@ for i_Az = 1:length(cmj)                   %俯仰角
     a = exp(1j*(0:Nr-1)*2*pi*fspc(i_Az)).';          %接收空间导向矢量 
     b = exp(1j*(0:Nt-1)*2*pi*gamma*fspc(i_Az)).';    %发射空间导向矢量  
     c = exp(1j*(0:Np-1)*2*pi*wdc(i_Az)).';           %时间导向矢量 
-    sc(:,i_Az) =  kron(c,kron(b,a));             %杂波的导向矢量%AF(i_Az) *
+    sc(:,i_Az) =  kron(b,kron(c,a));             %杂波的导向矢量%AF(i_Az) *
 end 
 Rk = sc*AF*sc';%*AF
 Ac=(10^(CNR/10))^0.5; % 设噪声功率为1

@@ -7,16 +7,20 @@ close all
 %% 杂波协方差
 isRu = 0;
 isRotation = 0;
-[Rcn_00,El0,d,lambda,fr,M,N] = fun_JWR(isRu,isRotation);%无自转
+[Rcn_00,El0,d,lambda] = fun_GenerateComplexR(isRu,isRotation);%无自转
+% [Rcn_00,El0,d,lambda,fr,M,N] = fun_JWR(isRu,isRotation);%无自转
 isRu = 0;
 isRotation = 1;
-[Rcn_01] = fun_JWR(isRu,isRotation);%有自转
+[Rcn_01] = fun_GenerateComplexR(isRu,isRotation);%有自转
+% [Rcn_01] = fun_JWR(isRu,isRotation);%有自转
 isRu = 1;
 isRotation = 0;
-[Rcn_10] = fun_JWR(isRu,isRotation);%有自转
+[Rcn_10] = fun_GenerateComplexR(isRu,isRotation);%有自转
+% [Rcn_10] = fun_JWR(isRu,isRotation);%有自转
 isRu = 1;
 isRotation = 1;
-[Rcn_11] = fun_JWR(isRu,isRotation);%有自转
+[Rcn_11] = fun_GenerateComplexR(isRu,isRotation);%有自转
+% [Rcn_11] = fun_JWR(isRu,isRotation);%有自转
 %%%%%%%%%%%%%%%%
 %% 杂波子的秩
 E=abs(eig(Rcn_00));
@@ -41,88 +45,88 @@ grid on
 box on
 xlabel('Index')
 ylabel('Eig')
-axis([0,200,-1,60])
+% axis([0,200,-1,60])
 %% %% 杂波脊
-az = 0:1:180;     Laz = length(az);
-fd = -60928/2:60928/1000:60928/2;  Lfd = length(fd);
-fsp = d/lambda*sin(El0/180*pi)*cos(az*pi/180);
-omega = fd/fr;
-Pw2_00 = zeros(Lfd,Laz);
-for m=1:Laz
-    m
-    for n=1:Lfd
-        a = exp(1i*2*pi*fsp(m)*(0:N-1));                % Dummy Spatial Steering Vector.(Dummy虚拟)
-        b = exp(1i*2*pi*omega(n)*(0:M-1));              % Dummy Doppler Steering Vector
-        v = kron(b,a).';
-        Pw2_00(n,m) = abs(v'*Rcn_00*v)^2;                      %杂波脊
-        Pw2_01(n,m) = abs(v'*Rcn_01*v)^2;                      %杂波脊
-        Pw2_10(n,m) = abs(v'*Rcn_10*v)^2;                      %杂波脊
-        Pw2_11(n,m) = abs(v'*Rcn_11*v)^2;                      %杂波脊
-    end
-end
-%%Normalization:
-[Az,Doppler] = meshgrid(cos(az*pi/180),fd);
-max_value2 = max(max(Pw2_00));
-Pw2_00 = Pw2_00/max_value2;
-figure()
-colormap jet;
-imagesc(cos(az*pi/180), fd, 10*log10(abs(Pw2_00)));
-shading interp;
-% xlim([-1 1])
-% ylim([-150 150]);
-str = ['cos(','\theta_{Az}',')'];
-xlabel(str);
-ylabel('Doppler Frequency (Hz)');
-h = colorbar;
-% h = colorbar('YTickLabel',{-80:10:0});
-set(get(h,'YLabel'),'String','Relative Power (dB)');
-title('无距离模糊无自转')
-% 
+% az = 0:1:180;     Laz = length(az);
+% fd = -60928/2:60928/1000:60928/2;  Lfd = length(fd);
+% fsp = d/lambda*sin(El0/180*pi)*cos(az*pi/180);
+% omega = fd/fr;
+% Pw2_00 = zeros(Lfd,Laz);
+% for m=1:Laz
+%     m
+%     for n=1:Lfd
+%         a = exp(1i*2*pi*fsp(m)*(0:N-1));                % Dummy Spatial Steering Vector.(Dummy虚拟)
+%         b = exp(1i*2*pi*omega(n)*(0:M-1));              % Dummy Doppler Steering Vector
+%         v = kron(b,a).';
+%         Pw2_00(n,m) = abs(v'*Rcn_00*v)^2;                      %杂波脊
+%         Pw2_01(n,m) = abs(v'*Rcn_01*v)^2;                      %杂波脊
+%         Pw2_10(n,m) = abs(v'*Rcn_10*v)^2;                      %杂波脊
+%         Pw2_11(n,m) = abs(v'*Rcn_11*v)^2;                      %杂波脊
+%     end
+% end
+% %%Normalization:
+% [Az,Doppler] = meshgrid(cos(az*pi/180),fd);
+% max_value2 = max(max(Pw2_00));
+% Pw2_00 = Pw2_00/max_value2;
+% figure()
+% colormap jet;
+% imagesc(cos(az*pi/180), fd, 10*log10(abs(Pw2_00)));
+% shading interp;
+% % xlim([-1 1])
+% % ylim([-150 150]);
+% str = ['cos(','\theta_{Az}',')'];
+% xlabel(str);
+% ylabel('Doppler Frequency (Hz)');
+% h = colorbar;
+% % h = colorbar('YTickLabel',{-80:10:0});
+% set(get(h,'YLabel'),'String','Relative Power (dB)');
+% title('无距离模糊无自转')
+% % 
+% % %%%
+% % max_value2 = max(max(Pw2_01));
+% Pw2_01 = Pw2_01/max_value2;
+% figure()
+% colormap jet;
+% imagesc(cos(az*pi/180), fd, 10*log10(abs(Pw2_01)));
+% shading interp;
+% % xlim([-1 1])
+% % ylim([-150 150]);
+% xlabel(str);
+% ylabel('Doppler Frequency (Hz)');
+% h = colorbar;
+% % h = colorbar('YTickLabel',{-80:10:0});
+% set(get(h,'YLabel'),'String','Relative Power (dB)');
+% title('无距离模糊有自转')
 % %%%
-% max_value2 = max(max(Pw2_01));
-Pw2_01 = Pw2_01/max_value2;
-figure()
-colormap jet;
-imagesc(cos(az*pi/180), fd, 10*log10(abs(Pw2_01)));
-shading interp;
-% xlim([-1 1])
-% ylim([-150 150]);
-xlabel(str);
-ylabel('Doppler Frequency (Hz)');
-h = colorbar;
-% h = colorbar('YTickLabel',{-80:10:0});
-set(get(h,'YLabel'),'String','Relative Power (dB)');
-title('无距离模糊有自转')
-%%%
-% max_value2 = max(max(Pw2_10));
-Pw2_10 = Pw2_10/max_value2;
-figure()
-colormap jet;
-imagesc(cos(az*pi/180), fd, 10*log10(abs(Pw2_10)));
-shading interp;
-% xlim([-1 1])
-% ylim([-150 150]);
-xlabel(str);
-ylabel('Doppler Frequency (Hz)');
-h = colorbar;
-% h = colorbar('YTickLabel',{-80:10:0});
-set(get(h,'YLabel'),'String','Relative Power (dB)');
-title('有距离模糊无自转')
-%%%
-% max_value2 = max(max(Pw2_11));
-Pw2_11 = Pw2_11/max_value2;
-figure()
-colormap jet;
-imagesc(cos(az*pi/180), fd, 10*log10(abs(Pw2_11)));
-shading interp;
-% xlim([-1 1])
-% ylim([-150 150]);
-xlabel(str);
-ylabel('Doppler Frequency (Hz)');
-h = colorbar;
-% h = colorbar('YTickLabel',{-80:10:0});
-set(get(h,'YLabel'),'String','Relative Power (dB)');
-title('有距离模糊有自转')
+% % max_value2 = max(max(Pw2_10));
+% Pw2_10 = Pw2_10/max_value2;
+% figure()
+% colormap jet;
+% imagesc(cos(az*pi/180), fd, 10*log10(abs(Pw2_10)));
+% shading interp;
+% % xlim([-1 1])
+% % ylim([-150 150]);
+% xlabel(str);
+% ylabel('Doppler Frequency (Hz)');
+% h = colorbar;
+% % h = colorbar('YTickLabel',{-80:10:0});
+% set(get(h,'YLabel'),'String','Relative Power (dB)');
+% title('有距离模糊无自转')
+% %%%
+% % max_value2 = max(max(Pw2_11));
+% Pw2_11 = Pw2_11/max_value2;
+% figure()
+% colormap jet;
+% imagesc(cos(az*pi/180), fd, 10*log10(abs(Pw2_11)));
+% shading interp;
+% % xlim([-1 1])
+% % ylim([-150 150]);
+% xlabel(str);
+% ylabel('Doppler Frequency (Hz)');
+% h = colorbar;
+% % h = colorbar('YTickLabel',{-80:10:0});
+% set(get(h,'YLabel'),'String','Relative Power (dB)');
+% title('有距离模糊有自转')
 %% MVD
 fsp = 0;
 % fsp = d/lambda/2 * sin(El0/180*pi);
