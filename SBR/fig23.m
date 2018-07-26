@@ -9,13 +9,13 @@
 clc; clear; close all;
 isRotation = 0;
 %% Radar System Operational Parameters£¨¿¥◊‘P31±Ì2
-fo = 450e6;                   % Operating Frequency in Hz
+fo = 600e6;                   % Operating Frequency in Hz
 Pt = 200e3;                   % Peak Transmit Power 200 kW
 Gt = 22;                      % Transmit Gain in dB
 Gr = 10;                      % Column Receive Gain in dB
 B  = 4e6;                     % Receiver Instantaneous Bandwidth in Hz
 Ls = 4;                       % System Losses in dB
-fr = 500;                     % PRF in Hz
+fr = 60928;                     % PRF in Hz
 Tr = 1/fr;                    % PRI in sec.
 M = 18;                       % Number of Pulses per CPI.
 Tp = 200e-6;                  % Pulse Width in sec.
@@ -23,11 +23,11 @@ N = 18;                       % Number of Array Antenna Elements
 Gel = 4;                      % Element Gain in dB
 be = -30;                     % Element Backlobe Level in db
 Nc = 360;                     % Number of clutter patches uniformly distributed in azimuth.
-c   = 299792458;              % Speed of Light in m/sec.
+c   = 3e8;%299792458;              % Speed of Light in m/sec.
 lambda = c/fo;                % Operating wavelength in meters.
 d = lambda/2;                 % Interelement Spacing
-alpha1 = 45;           %Œ¿–«Œ≥∂»
-eta = 90;              %Œ¿–««„Ω«
+alpha1 = 0;           %Œ¿–«Œ≥∂»
+eta = 45;              %Œ¿–««„Ω«
 
 % Azimuth angle in degrees:
 azk = -180:179;
@@ -36,7 +36,7 @@ f = zeros(1,Lazk);
 AF = zeros(1,Lazk);           % Array Factor pre-allocation.
 
 % Platform Parameters:
-H = 9e3;                     % Platform altitude in meters.
+H = 500e3;                     % Platform altitude in meters.
 
 %% Thermal Noise Power Computations
 k = 1.3806488e-23;            % Boltzmann Constant in J/K.
@@ -50,7 +50,10 @@ Pn = Nn*B;                    % Receiver Noise Power in Watts
 sigma2 = 1;                   % Normalized Noise Power in Watts.
 
 %% Clutter Patch Geometry computations
-Rs = 1300e3;                % (clutter) range of interest in meters. %%–±æ‡
+Rs = 1300e3;
+if H<100e3
+    Rs = 130e3;                % (clutter) range of interest in meters. %%–±æ‡
+end
 R = fun_Rs2R(H,Rs);
 daz = 2*pi/Nc;               % Azimuth angle increment in rad.
 dR = c/2/B;                   % Radar Range Resolution in meters.
@@ -62,11 +65,18 @@ gamma = 10^(-3/10);           % Terrain-dependent reflectivity factor.
 
 %% Clutter-to-Noise Ratio (CNR) Calculation
 % Calculate the Voltage Element Pattern:
+% for i =1:Lazk
+%     if abs(azk(i))<=90
+%         f(i) = cos(azk(i)*pi/180);
+%     else
+%         f(i) = 10^(be/10)*cos(azk(i)*pi/180);
+%     end
+% end
 for i =1:Lazk
-    if abs(azk(i))<=90
-        f(i) = cos(azk(i)*pi/180);
+    if (azk(i))>=0 && (azk(i))<180
+        f(i) = sin(azk(i)*pi/180);
     else
-        f(i) = 10^(be/10)*cos(azk(i)*pi/180);
+        f(i) = 10^(be/10)*sin(azk(i)*pi/180);
     end
 end
 figure('NumberTitle', 'off','Name', ...
@@ -99,12 +109,16 @@ Ksic = sigma2*diag(ksi);
 % Platform Velocity for beta parameter value:
 % va = round(beta*d*fr/2);
 va = fun_Vp(H);
+if H<100e3
+    va = 50;
+end
+
 beta = 2*va/fr/d;                     % beta parameter.
-Ita = d/lambda*cos(pi/2-el0);
+Ita = d/lambda*sin(el0);
 
 % Calculate Spatial and Doppler Frequencies for k-th clutter patch.
 % Spatial frequency of the k-th clutter patch:
-fsp = Ita*sin(azk*pi/180);
+fsp = Ita*cos(azk*pi/180);
 % Normalized Doppler Frequency of the k-th clutter patch:
 if isRotation == 1
     CrabA = fun_CrabAngle(alpha1,eta, H);
@@ -114,7 +128,7 @@ elseif isRotation == 0
     CrabM = 1;
 end
 
-omegac = beta*Ita*CrabM*sin(azk*pi/180 + CrabA);
+omegac = beta*Ita*CrabM*cos(azk*pi/180 + CrabA);
 
 % Clutter Steering Vector Pre-allocation:
 a = zeros(N,Nc);
@@ -136,7 +150,7 @@ J = 2;                                                   % Number of Jammers.
 Elj = 0; azj = [-40 25];                             % Jammer elevation and azimuth angles in degrees.
 R_j = [370 370]*1e3;
 Sj = 1e-3;                                               % Jammer ERPD in Watts/Hz.
-fspj = d/lambda*cos(pi/2-Elj*pi/180)*sin(azj*pi/180);     % Spatial frequency of the j-th jammer.
+fspj = d/lambda*sin(Elj*pi/180)*cos(azj*pi/180);     % Spatial frequency of the j-th jammer.
 Lrj = 1.92;                                              % System Losses on Receive in dB.
 Aj = zeros(N,J);
 for j=1:J
@@ -162,7 +176,7 @@ Ru = Rc + Rn;                                       % Eq. (98)
 azt = 0; elt = 0;                                    % Target azimuth and elevation angles in degrees.
 fdt = 100;                                               % Target Doppler Frequency.
 omegact = fdt/fr;                                        % Normalized Target Frequency.
-fspt = d/lambda*cos(pi/2-elt*pi/180)*sin(azt*pi/180);     % Target Spatial Frequency.
+fspt = d/lambda*sin(elt*pi/180)*cos(azt*pi/180);     % Target Spatial Frequency.
 at = exp(1i*2*pi*fspt*(0:N-1));                          % Target Spatial Steering Vector.
 bt = exp(1i*2*pi*omegact*(0:M-1));                       % Target Doppler Steering Vector
 vt = kron(bt,at).';                                      % Target Space-Time Steering Vector.
@@ -172,9 +186,9 @@ w = Ru\vt;                                               % Eq. (104)
 % w = w/norm(w);
 
 %% Adapted Patterns
-azk = -90:.5:90;     Lazk = length(azk);
-fd = -150:.5:150;  Lfd = length(fd);
-fsp = d/lambda*cos(pi/2-el0)*sin(azk*pi/180);
+azk = 0:.5:180;     Lazk = length(azk);
+fd = -fr/2:fr/1000:fr/2;  Lfd = length(fd);
+fsp = d/lambda*sin(el0)*cos(azk*pi/180);
 omega = fd/fr;
 Pw1 = zeros(Lfd,Lazk);
 for m=1:Lazk
@@ -200,13 +214,13 @@ end
 figure('NumberTitle', 'off','Name', ...
        'Figure 23a. Example Scenario: Adapted Pattern for Optimum Fully Adaptive STAP', ...
        'Position',[1 1 700 600]);
-[Az Doppler] = meshgrid(sin(azk*pi/180),fd);
+[Az Doppler] = meshgrid(cos(azk*pi/180),fd);
 colormap jet;
 mesh(Az, Doppler, 10*log10(abs(Pw)));
 shading interp;
 xlim([-1 1])
-ylim([-150 150]);
-xlabel('sin(Azimuth)');
+ylim([-fr/2 fr/2]);
+xlabel('cos(Azimuth)');
 ylabel('Doppler Frequency (Hz)');
 h = colorbar;
 % h = colorbar('YTickLabel',{-80:10:0});
@@ -217,27 +231,27 @@ set(get(h,'YLabel'),'String','Relative Power (dB)');
 figure('NumberTitle', 'off','Name', ...
        'Figure 23b. Principal Cuts at Target Azimuth and Doppler','Position',[1 1 700 600]);
 % a. Cut of the Adapted Pattern at Doppler = 100 Hz.
-subplot(2,1,1);
-plot(sin(azk*pi/180), 10*log10(abs(Pw(fd == fdt,:))));
-ylim([-80 0.5]); xlim([-1  1]);
-ylabel('Relatuve Power (dB)');
-xlabel('sin(Azimuth)');
-title('Doppler Frequency = 100 Hz');
-grid on;
+% subplot(2,1,1);
+% plot(cos(azk*pi/180), 10*log10(abs(Pw(fd == fdt,:))));
+% ylim([-80 0.5]); xlim([-1  1]);
+% ylabel('Relatuve Power (dB)');
+% xlabel('cos(Azimuth)');
+% title('Doppler Frequency = 100 Hz');
+% grid on;
 
 % b. Cut of the Adapted Pattern at Azimuth Angle = 0 deg.
-subplot(2,1,2);
-plot(fd, 10*log10(abs(Pw(:,azk == azt))));
-ylim([-80 0.5]); xlim([-150 150]);
-ylabel('Relative Power (dB)');
-xlabel('Doppler Frequency (Hz)');
-title('Azimuth = 0 deg');
-grid on;
+% subplot(2,1,2);
+% plot(fd, 10*log10(abs(Pw(:,azk == azt))));
+% ylim([-80 0.5]); xlim([-150 150]);
+% ylabel('Relative Power (dB)');
+% xlabel('Doppler Frequency (Hz)');
+% title('Azimuth = 0 deg');
+% grid on;
 
 %% ‘”≤®ºπ
 phi = -90:.5:90;     Lphi = length(phi);
-fd = -150:.5:150;  Lfd = length(fd);
-fsp = d/lambda*cos(pi/2-el0)*sin(phi*pi/180);
+fd = -fr/2:fr/1000:fr/2;  Lfd = length(fd);
+fsp = d/lambda*sin(el0)*cos(phi*pi/180);
 omega = fd/fr;
 Pw2 = zeros(Lfd,Lphi);
 for m=1:Lphi
@@ -256,8 +270,8 @@ colormap jet;
 mesh(Az, Doppler, 10*log10(abs(Pw2)));
 shading interp;
 xlim([-1 1])
-ylim([-150 150]);
-xlabel('sin(Azimuth)');
+ylim([-fr/2 fr/2]);
+xlabel('cos(Azimuth)');
 ylabel('Doppler Frequency (Hz)');
 h = colorbar;
 % h = colorbar('YTickLabel',{-80:10:0});

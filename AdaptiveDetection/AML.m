@@ -69,6 +69,6 @@ for iMC = 1:MC
     error_AML(iMC) = sum(sum(abs(rouR - R0_gu)));
     error_NS(iMC) = sum(sum(abs(rouR - NS_abs)));
 end
-mean_error_S = mean(error_S);
-mean_error_AML = mean(error_AML);
-mean_error_NS = mean(error_NS);
+mean_error_S = mean(error_S)
+mean_error_AML = mean(error_AML)
+mean_error_NS = mean(error_NS)

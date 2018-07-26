@@ -66,5 +66,5 @@ while (norm(beta_parent-beta_child,'fro')/norm(beta_child,'fro')>0.1)
         break;
     end
 end
-erroS = norm(rouR - S_abs,'fro')/norm(rouR,'fro');
-erro_AIWCM = norm(rouR - R0_gu,'fro')/norm(rouR,'fro');
+erroS = norm(rouR - S_abs,'fro')/norm(rouR,'fro')
+erro_AIWCM = norm(rouR - R0_gu,'fro')/norm(rouR,'fro')

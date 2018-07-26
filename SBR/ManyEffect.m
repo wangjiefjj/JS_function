@@ -44,7 +44,7 @@ ylabel('Eig')
 axis([0,200,-1,60])
 %% %% 杂波脊
 az = 0:1:180;     Laz = length(az);
-fd = -150:1:150;  Lfd = length(fd);
+fd = -60928/2:60928/1000:60928/2;  Lfd = length(fd);
 fsp = d/lambda*sin(El0/180*pi)*cos(az*pi/180);
 omega = fd/fr;
 Pw2_00 = zeros(Lfd,Laz);
@@ -79,7 +79,7 @@ set(get(h,'YLabel'),'String','Relative Power (dB)');
 title('无距离模糊无自转')
 % 
 % %%%
-max_value2 = max(max(Pw2_01));
+% max_value2 = max(max(Pw2_01));
 Pw2_01 = Pw2_01/max_value2;
 figure()
 colormap jet;
@@ -94,7 +94,7 @@ h = colorbar;
 set(get(h,'YLabel'),'String','Relative Power (dB)');
 title('无距离模糊有自转')
 %%%
-max_value2 = max(max(Pw2_10));
+% max_value2 = max(max(Pw2_10));
 Pw2_10 = Pw2_10/max_value2;
 figure()
 colormap jet;
@@ -109,7 +109,7 @@ h = colorbar;
 set(get(h,'YLabel'),'String','Relative Power (dB)');
 title('有距离模糊无自转')
 %%%
-max_value2 = max(max(Pw2_11));
+% max_value2 = max(max(Pw2_11));
 Pw2_11 = Pw2_11/max_value2;
 figure()
 colormap jet;
@@ -146,9 +146,9 @@ end
 figure()
 plot(omega*fr,10*log10(abs(MVD_00)/max(max(abs(MVD_00)))))
 hold on 
-plot(omega*fr,10*log10(abs(MVD_01)/max(max(abs(MVD_01)))),'r')
-plot(omega*fr,10*log10(abs(MVD_10)/max(max(abs(MVD_10)))),'g')
-plot(omega*fr,10*log10(abs(MVD_11)/max(max(abs(MVD_11)))),'k')
+plot(omega*fr,10*log10(abs(MVD_01)/max(max(abs(MVD_00)))),'r')
+plot(omega*fr,10*log10(abs(MVD_10)/max(max(abs(MVD_00)))),'g')
+plot(omega*fr,10*log10(abs(MVD_11)/max(max(abs(MVD_00)))),'k')
 xlabel('多普勒(Hz)')
 ylabel('相对功率(dB）')
 legend('无距离模糊无自转','无距离模糊有自转','有距离模糊无自转','有距离模糊有自转')
@@ -173,7 +173,7 @@ w10 = Rcn_10\vt;
 w11 = Rcn_11\vt;
 %% Adapted Patterns
 az = 0:.5:179;     Laz = length(az);
-fd = -150:.5:150;  Lfd = length(fd);
+fd = -60928/2:60928/1000:60928/2;;  Lfd = length(fd);
 fsp = d/lambda*sin(El0*pi/180)*cos(az*pi/180);
 omega = fd/fr;
 Pw1_00 = zeros(Lfd,Laz);

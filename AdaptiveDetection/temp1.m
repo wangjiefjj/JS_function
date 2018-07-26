@@ -1,38 +1,38 @@
 clc
 clear 
 close all
-% ¸ù¾İÎÄÏ×¡¶A New CFAR Detection Test for Radar¡·±àĞ´µÄ
-% ×ÔÊÊÓ¦Æ¥ÅäÂË²¨£¨AMF£©
-%%ÔİÊ±ÈÏÎªÃ¿¸öÂö³åµÄµ½´ï½ÇÏàÍ¬¡£
-%%%ÔöÒæÊÇMN*ÂöÑ¹ÔöÒæ£¬M=1£¬N=1,ĞÅºÅ·ù¶ÈÎª1Ê±
-%%%SNRĞÅÔë±È¶ÔÓ¦µÄ¼ì²â¸ÅÂÊ=SNR-10*log10£¨MN*ÂöÑ¹ÔöÒæ£©Ê±µÄ¼ì²â¸ÅÂÊ
-fc = 1e9;       %ÔØÆµ
-C = 3e8;        %¹âËÙ
-lamda = C/fc;   %²¨³¤
-tao = 127e-6;    %Âö¿í
-B = 1e6;        %´ø¿í
-mu = B/tao;     %µ÷ÆµÂÊ
-Fs = 2*B;       %²ÉÑùÆµÂÊ
+% æ ¹æ®æ–‡çŒ®ã€ŠA New CFAR Detection Test for Radarã€‹ç¼–å†™çš„
+% è‡ªé€‚åº”åŒ¹é…æ»¤æ³¢ï¼ˆAMFï¼‰
+%%æš‚æ—¶è®¤ä¸ºæ¯ä¸ªè„‰å†²çš„åˆ°è¾¾è§’ç›¸åŒã€‚
+%%%å¢ç›Šæ˜¯MN*è„‰å‹å¢ç›Šï¼ŒM=1ï¼ŒN=1,ä¿¡å·å¹…åº¦ä¸º1æ—¶
+%%%SNRä¿¡å™ªæ¯”å¯¹åº”çš„æ£€æµ‹æ¦‚ç‡=SNR-10*log10ï¼ˆMN*è„‰å‹å¢ç›Šï¼‰æ—¶çš„æ£€æµ‹æ¦‚ç‡
+fc = 1e9;       %è½½é¢‘
+C = 3e8;        %å…‰é€Ÿ
+lamda = C/fc;   %æ³¢é•¿
+tao = 127e-6;    %è„‰å®½
+B = 1e6;        %å¸¦å®½
+mu = B/tao;     %è°ƒé¢‘ç‡
+Fs = 2*B;       %é‡‡æ ·é¢‘ç‡
 Ts = 1/Fs;
-t = -tao/2:Ts:tao/2-Ts;  %¿ìÊ±¼ä
+t = -tao/2:Ts:tao/2-Ts;  %å¿«æ—¶é—´
 L = length(t);
 R = 0e3;
 dt = 2*R/C;
-M = 2;                  %Âö³åÊı
-%%ÕóÁĞ²ÎÊı
-N = 1;                  %ÕóÔªÊı
-d = 0.5*lamda;          %ÕóÔª¼ä¸ô
-theta = 0;%jiao2hu(10);    %µ½´ï½Ç
-St = exp(1j*2*pi*d*(0:N-1).'/lamda*sin(theta));%µ¼ÏòÊ¸Á¿
+M = 2;                  %è„‰å†²æ•°
+%%é˜µåˆ—å‚æ•°
+N = 1;                  %é˜µå…ƒæ•°
+d = 0.5*lamda;          %é˜µå…ƒé—´éš”
+theta = 0;%jiao2hu(10);    %åˆ°è¾¾è§’
+St = exp(1j*2*pi*d*(0:N-1).'/lamda*sin(theta));%å¯¼å‘çŸ¢é‡
 S = St;
-S = repmat(S,[M,1]);    %µ¼ÏòÊ¸Á¿
-%%%½ÓÊÕ´¦Àí(ÂöÑ¹)
+S = repmat(S,[M,1]);    %å¯¼å‘çŸ¢é‡
+%%%æ¥æ”¶å¤„ç†(è„‰å‹)
 signal = exp(-1j*2*pi*(fc*t+0.5*mu*t.^2) );
 h_fft = fft(signal);
 MC = 1000;
 %%%
-Pfa = 1e-6;     %Ğé¾¯ÂÊ
-r0 = -log(Pfa); %ÃÅÏŞ
+Pfa = 1e-6;     %è™šè­¦ç‡
+r0 = -log(Pfa); %é—¨é™
 SNR = -17:0.1:0;
 for SNR_i = 1:length(SNR)
     SNR_i
@@ -41,8 +41,8 @@ for SNR_i = 1:length(SNR)
             Pc = zeros(N,M*L);
 %             A = 1*rand()+1j*1*rand();
             A=1;
-            for i =1:M %Âö³å
-                for j =1:N %ÕóÁĞ
+            for i =1:M %è„‰å†²
+                for j =1:N %é˜µåˆ—
                     echo = A*exp(1j*2*pi*(fc*dt+0.5*mu*(t-dt).^2) );
                     echo = awgn(echo,SNR(SNR_i),'measured');
                     echo_fft = fft(echo);
@@ -52,7 +52,7 @@ for SNR_i = 1:length(SNR)
                 end
             end
           detect_R=L/2+1;
-    %     detect_R=round(L/4);%%Ã»Ä¿±êµÄÎ»ÖÃ
+    %     detect_R=round(L/4);%%æ²¡ç›®æ ‡çš„ä½ç½®
             x1 = [];
             x2 = [];
             x = [];
@@ -64,7 +64,7 @@ for SNR_i = 1:length(SNR)
                 y = cat(1,y,Pc(:,detect_R+L*(i-1)));
             end
             M_gu = x*x'/length(x);
-            r = abs((abs(S.'*inv(M_gu)*y))^2/(S.'*inv(M_gu)*S));%GLRT¡ªAMF¼ì²âÆ÷
+            r = abs((abs(S.'*inv(M_gu)*y))^2/(S.'*inv(M_gu)*S));%GLRTâ€”AMFæ£€æµ‹å™¨
             if r > r0
                 num = num+1;
             end
@@ -75,10 +75,10 @@ plot(SNR,proportion)
 
 % figure()
 % plot(abs(Pc(1,:)))
-% %%%ÀíÂÛÖµ
+% %%%ç†è®ºå€¼
 % %%%
-Pfa = 1e-6;     %Ğé¾¯ÂÊ
-r0 = -log(Pfa); %ÃÅÏŞ
+Pfa = 1e-6;     %è™šè­¦ç‡
+r0 = -log(Pfa); %é—¨é™
 SNR = 0:0.1:20;
 alpha = SNR2real(SNR,10);
 n = 0:150;
@@ -88,7 +88,5 @@ end
 % figure()
 hold on
 plot(SNR,Pd,'r')
-grid on
-box on 
 
 

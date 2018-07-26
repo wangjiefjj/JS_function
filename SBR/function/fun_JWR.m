@@ -4,13 +4,13 @@ if nargin <3
     Rs = 1300e3;
 end
 %% 雷达系统参数
-fo = 9600e6; %9600e6 450e6     % Operating Frequency in Hz
+fo = 6000e6; %9600e6 450e6     % Operating Frequency in Hz
 Pt = 200e3;                   % Peak Transmit Power 200 kW
 Gt = 22;                      % Transmit Gain in dB
 Gr = 10;                      % Column Receive Gain in dB
 B  = 4e6;                     % Receiver Instantaneous Bandwidth in Hz
 Ls = 4;                       % System Losses in dB
-fr = 500;                     % PRF in Hz
+fr = 60928;                     % PRF in Hz
 Tr = 1/fr;                    % PRI in sec.
 M = 32;  %16                  % Number of Pulses per CPI.
 Tp = 200e-6;                  % Pulse Width in sec.
@@ -30,14 +30,14 @@ f = zeros(1,LAz);
 AF = ones(1,LAz);           % Array Factor pre-allocation. 天线阵因子
 
 % Platform Parameters:
-H = 700e3;%9e3 %700e3                    % Platform altitude in meters.
+H = 500e3;%9e3 %700e3                    % Platform altitude in meters.
 Vp = 49.9654;
 if H > 500e3
     Vp = fun_Vp(H);          % 平台速度m/s
 end
 beta = Vp*2/fr/d;         %%混叠系数;% beta parameter.
-alpha1 = 30;           %卫星纬度deg
-eta = 70;              %卫星倾角deg
+alpha1 = 0;           %卫星纬度deg
+eta = 45;              %卫星倾角deg
 
 %% Thermal Noise Power Computations 终端噪声计算
 k = 1.3806488e-23;            % Boltzmann Constant in J/K.
