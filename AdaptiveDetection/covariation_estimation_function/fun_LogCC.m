@@ -11,12 +11,11 @@ R_CC = R;
 Rim = zeros(N,N,K);
 
 for i = 1:K
-    Rim(:,:,i) = logm(fun_Positive( X(:,i),4));
-    
+    Rim(:,:,i) = logm(fun_Positive( X(:,i),4));   
 end
 alpha = 0;
 alpha0 =0;
-for k = 1:20
+for k = 1:1
     alpha = alpha0;
     t1 = 0;
     t2 = 0;

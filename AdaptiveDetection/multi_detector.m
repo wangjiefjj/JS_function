@@ -2,14 +2,14 @@ clc
 clear 
 close all
 % 刘维建，2017.09.15
-% 多种检测器的检测性能仿真
+% 多种�?��器的�?��性能仿真
 %%
-Na=2;     % 阵元数
-Np=4;     % 脉冲数
+Na=2;     % 阵元�?
+Np=4;     % 脉冲�?
 N=Na*Np;
 optc = 'g';
-group_num = 2; %分组数
-L=round(2*N); 
+group_num = 2; %分组�?
+L=round(1*N); 
 SNRout = -5:1:25; % 输出SNR
 cos2=1;%%%失配情况
 PFA=1e-3;% PFA=1e-4;
@@ -36,7 +36,7 @@ end
 Weight=weight(Index);
 vt_real=Weight*vt+(1-Weight)*vt_v;
 figure; plot(weight,cos2_tmpt);
-%% 计算检测门限
+%% 计算�?��门限
 Tamf = zeros(1,MonteCarloPfa);
 Tglrt = zeros(1,MonteCarloPfa);
 Tace = zeros(1,MonteCarloPfa);
@@ -50,8 +50,8 @@ tic
 parfor i=1:MonteCarloPfa
     warning off
 %     waitbar(i/MonteCarloPfa,h,sprintf([num2str(i/MonteCarloPfa*100),'%%']));
-%     X=(randn(N,L)+1i*randn(N,L))/sqrt(2); % 产生方差为1的复高斯白噪声 % Rwhite1=1/snapshot1*X1*X1'; eig(Rwhite1); % round(mean(abs(eig(Rwhite1)))) == 1
-%     S=(R_half*X)*(R_half*X)'; % 有L个训练样本估计的杂波与噪声的协方差矩阵(Rhalf*X表示接收的L个训练数据)
+%     X=(randn(N,L)+1i*randn(N,L))/sqrt(2); % 产生方差�?的复高斯白噪�?% Rwhite1=1/snapshot1*X1*X1'; eig(Rwhite1); % round(mean(abs(eig(Rwhite1)))) == 1
+%     S=(R_half*X)*(R_half*X)'; % 有L个训练样本估计的杂波与噪声的协方差矩�?Rhalf*X表示接收的L个训练数�?
     Train = fun_TrainData(optc,N,L,R,2,1,1);
     S = fun_SCMN(Train);
     R_NSCM = fun_NSCMN(Train);
@@ -60,17 +60,17 @@ parfor i=1:MonteCarloPfa
 %     x=R_half*W;%+pp; % noise=(randn(N,1)+j*randn(N,1))/sqrt(2);  % 接收信号仅包括杂波和噪声
     x = fun_TrainData(optc,N,1,R,3,1,1);
     %%
-    Tamf(i)=abs(vt'*iS*x)^2/abs(vt'*iS*vt);     %%%%%% AMF或者wald
+    Tamf(i)=abs(vt'*iS*x)^2/abs(vt'*iS*vt);     %%%%%% AMF或�?wald
     tmp=abs(x'*iS*x);
     Tglrt(i)=Tamf(i)/(1+tmp);                   %%%%%% KGLRT
     Tanmf(i) = fun_ANMF(R_NSCM,x,vt)
 %     Tace(i)=Tamf(i)/tmp;                        %%%%%% ACE
-%     Tabort(i)=(1+Tamf(i))/(2+tmp);              %%%%%% ABORT  % eq.(16) 检测统计量
+%     Tabort(i)=(1+Tamf(i))/(2+tmp);              %%%%%% ABORT  % eq.(16) �?��统计�?
 %     Twabort(i)=1/(1+tmp)/(1-Tglrt(i))^2;        %%%%%% ABORT  % 见会议论文中的eq.(18)
 %     Tace_bar=Tace(i)/(1-Tace(i));
 %     Tprao(i)=Tglrt(i)^2/(Tamf(i)*(1-Tglrt(i))); %%%%%% DMRao
-%     Tdnamf(i)=Tace_bar/tmp;                     %%%%%% DNAMF  % eq.(24) 检测统计量
-%     Taed(i)=tmp;                                %%%%%% 能量检测器 
+%     Tdnamf(i)=Tace_bar/tmp;                     %%%%%% DNAMF  % eq.(24) �?��统计�?
+%     Taed(i)=tmp;                                %%%%%% 能量�?���?
     %% Non-conherent 
     Tglrt_nc(i) = fun_KGLRT_NC(Train,x,vt,group_num);
 
@@ -98,7 +98,7 @@ Th_KGLRT_NC = (TKGLRT_NC(floor(MonteCarloPfa*PFA-1))+TKGLRT_NC(floor(MonteCarloP
 toc
 % alpha=sqrt(SNRnum/abs(vt'*invR*vt)); % 根据SNR=|alpha|^2*s'*R^(-1)*s求得|alpha|
 a=0;b=2*pi;
-%% 计算检测概率
+%% 计算�?��概率
 tic
 counter_amf=0;
 counter_ace=0;
@@ -112,14 +112,14 @@ counter_glrtnc = 0;
 %%
 alpha=sqrt(SNRnum/abs(vt'*iR*vt)); % 根据SNR=|alpha|^2*s'*R^(-1)*s求得|alpha|
 % alpha = sqrt(SNRnum/2);
-%% 求每组的信噪比
+%% 求每组的信噪�?
 m = N/group_num;
 for i = 1:group_num
     R_t = R((i-1)*m+1:i*m,(i-1)*m+1:i*m);
     iR_t = inv(R_t);
     alpha_g((i-1)*m+1:i*m,:) = repmat(sqrt(SNRnum/abs(vt((i-1)*m+1:i*m)'*iR_t*vt((i-1)*m+1:i*m))),[m,1]);
 end
-%% 检测
+%% �?��
 Pd_AMF_mc = zeros(1,length(SNRout));
 Pd_KGLRT_mc = zeros(1,length(SNRout));
 Pd_ACE_mc = zeros(1,length(SNRout));
@@ -134,14 +134,14 @@ for m=1:length(SNRout)
     waitbar(m/length(SNRout),h,sprintf([num2str(m/length(SNRout)*100),'%%']));
     parfor i=1:MonteCarloPd
         warning off
-%         X=(randn(N,L)+1i*randn(N,L))/sqrt(2); % 产生方差为1的复高斯白噪声 % Rwhite1=1/snapshot1*X1*X1'; eig(Rwhite1); % round(mean(abs(eig(Rwhite1)))) == 1
-%         S=(R_half*X)*(R_half*X)'; % 有L个训练样本估计的杂波与噪声的协方差矩阵(Rhalf*X表示接收的L个训练数据)
+%         X=(randn(N,L)+1i*randn(N,L))/sqrt(2); % 产生方差�?的复高斯白噪�?% Rwhite1=1/snapshot1*X1*X1'; eig(Rwhite1); % round(mean(abs(eig(Rwhite1)))) == 1
+%         S=(R_half*X)*(R_half*X)'; % 有L个训练样本估计的杂波与噪声的协方差矩�?Rhalf*X表示接收的L个训练数�?
         Train = fun_TrainData(optc,N,L,R,3,1,1);
         S = fun_SCMN(Train);
         R_NSCM = fun_NSCMN(Train);
         iS=inv(S);
 %         W=(randn(N,1)+1i*randn(N,1))/sqrt(2); % 1i == -i
-    %     THETA=a+(b-a)*rand; % 产出0--2*pi的均匀分布随机相位
+    %     THETA=a+(b-a)*rand; % 产出0--2*pi的均�?��布随机相�?
     %         x=alpha(m)*exp(1i*THETA)*vt+Clutter;%+pp;
         x = fun_TrainData(optc,N,1,R,3,1,1);
         x=alpha(m)*vt+x;%+pp;    %%%%%%%  重要  %%%%%%%%%%%%%
@@ -152,12 +152,12 @@ for m=1:length(SNRout)
         Tglrt=Tamf/(1+tmp);                   %%%%%% KGLRT
         Tace = fun_ANMF(R_NSCM,x,vt);
 %         Tace=Tamf/tmp;                        %%%%%% ACE
-%         Tabort=(1+Tamf)/(2+tmp);              %%%%%% ABORT  % eq.(16) 检测统计量
+%         Tabort=(1+Tamf)/(2+tmp);              %%%%%% ABORT  % eq.(16) �?��统计�?
 %         Twabort=1/(1+tmp)/(1-Tglrt)^2;        %%%%%% ABORT  % 见会议论文中的eq.(18)
 %         Tace_bar=Tace/(1-Tace);
 %         Tprao=Tglrt^2/(Tamf*(1-Tglrt));       %%%%%% DMRao
-%         Tdnamf=Tace_bar/tmp;                  %%%%%% DNAMF  % eq.(24) 检测统计量
-%         Taed=tmp;                             %%%%%% 能量检测器  
+%         Tdnamf=Tace_bar/tmp;                  %%%%%% DNAMF  % eq.(24) �?��统计�?
+%         Taed=tmp;                             %%%%%% 能量�?���? 
        %%
         Tglrt_nc = fun_KGLRT_NC(Train,x,vt,group_num);
         %%
@@ -196,6 +196,7 @@ plot(SNRout,Pd_ACE_mc,'r-x','linewidth',2)
 % plot(SNRout,Pd_DNAMF_mc,'g-s','linewidth',2); 
 plot(SNRout,Pd_KGLRT_NC_mc,'b-s','linewidth',2); 
 % legend('KGLRT','AMF/DMwald','ACE','ABORT','WABORT','DMRao','AED','DNAMF','NC')
+legend('KGLRT','AMF/DMwald','ACE','NC')
 % legend({'KGLRT','AMF/DMwald','DMRao'},'FontSize',20)
 xlabel('SNR/dB','FontSize',20)
 ylabel('Pd','FontSize',20)
@@ -205,7 +206,7 @@ grid on
 % clear TAMF TACE TKGLRT TABORT TWABORT TDMRao TDNAMF   Tamf Tace Tglrt Tabort Twabort Tprao Tdnamf Taed TAED X
 % cd  D:\MATLAB\Mat数据\Monograph\Chp03 
 % tmpt=L/N;
-% if  mod(tmpt,2) % L不是N的整数倍
+% if  mod(tmpt,2) % L不是N的整数�?
 %     eval(['save Pd_8RankOneDetectors_MC_Diff_SNRs_N' num2str(N) '_L'  num2str(L)   '_SNR'  num2str(min(SNRout)) 't'   num2str(max(SNRout)) '_cos2e'   num2str(cos2)  '_PFAm' num2str(-log10(PFA)) '.mat'])
 % else
 %    eval(['save Pd_8RankOneDetectors_MC_Diff_SNRs_N' num2str(N) '_L' num2str(tmpt) 'N_SNR'  num2str(min(SNRout)) 't'   num2str(max(SNRout)) '_cos2e'   num2str(cos2) '_PFAm' num2str(-log10(PFA)) '.mat'])

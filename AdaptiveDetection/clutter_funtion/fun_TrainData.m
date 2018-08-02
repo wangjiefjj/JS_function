@@ -13,7 +13,7 @@ switch str
         if nargin < 4
            error('Gauss分布训练数据输入参数为4个：g 选项，导向矢量维数，训练数据长度，协方差'); 
         end
-        N = varargin{2};
+        N = varargin{2}; %导向矢量维数
         L = varargin{3};
         R = varargin{4}; %%协方差
         X = fun_TrainData_gauss(N,L, R);

@@ -7,19 +7,31 @@ close all
 %% 杂波协方差
 isRu = 0;
 isRotation = 0;
-[Rcn_00,El0,d,lambda] = fun_GenerateComplexR(isRu,isRotation);%无自转
+P00= fun_GenerateComplexTrainData(isRu,isRotation);
+Rcn_00 = P00.R{1};
+% [Rcn_00,El0,d,lambda] = fun_GenerateComplexR(isRu,isRotation);%无自转
 % [Rcn_00,El0,d,lambda,fr,M,N] = fun_JWR(isRu,isRotation);%无自转
 isRu = 0;
 isRotation = 1;
-[Rcn_01] = fun_GenerateComplexR(isRu,isRotation);%有自转
+P01= fun_GenerateComplexTrainData(isRu,isRotation);
+Rcn_01 = P01.R{1};
+% [Rcn_01] = fun_GenerateComplexR(isRu,isRotation);%有自转
 % [Rcn_01] = fun_JWR(isRu,isRotation);%有自转
 isRu = 1;
 isRotation = 0;
-[Rcn_10] = fun_GenerateComplexR(isRu,isRotation);%有自转
+P10= fun_GenerateComplexTrainData(isRu,isRotation);
+Rcn_10 = P10.R{1};
+% [Rcn_10] = fun_GenerateComplexR(isRu,isRotation);%有自转
 % [Rcn_10] = fun_JWR(isRu,isRotation);%有自转
 isRu = 1;
 isRotation = 1;
-[Rcn_11] = fun_GenerateComplexR(isRu,isRotation);%有自转
+P11= fun_GenerateComplexTrainData(isRu,isRotation);
+Rcn_11 = P11.R{1};
+Train11 = P11.TrainData;
+N = length(Rcn_11);
+Train11 = fun_TrainData('g',N,2*N, Rcn_11);
+SCM11 = fun_SCMN(Train11);
+% [Rcn_11] = fun_GenerateComplexR(isRu,isRotation);%有自转
 % [Rcn_11] = fun_JWR(isRu,isRotation);%有自转
 %%%%%%%%%%%%%%%%
 %% 杂波子的秩
@@ -27,20 +39,24 @@ E=abs(eig(Rcn_00));
 E = 10*log10(sort(E,'descend')).';
 figure
 hold on
-plot(E,'r')
+plot(E,'r','LineWidth',2)
 %%
 E=abs(eig(Rcn_01));
 E = 10*log10(sort(E,'descend')).';
-plot(E,'k')
+plot(E,'k','LineWidth',2)
 % % 
 E=abs(eig(Rcn_10));
 E = 10*log10(sort(E,'descend')).';
-plot(E,'g')
+plot(E,'g','LineWidth',2)
 % % 
 E=abs(eig(Rcn_11));
 E = 10*log10(sort(E,'descend')).';
-plot(E,'b')
-legend('无距离模糊无自转','无距离模糊有自转','有距离模糊无自转','有距离模糊有自转')
+plot(E,'b','LineWidth',2)
+% %
+E=abs(eig(SCM11));
+E = 10*log10(sort(E,'descend')).';
+plot(E,'y','LineWidth',2)
+legend('无距离模糊无自转','无距离模糊有自转','有距离模糊无自转','有距离模糊有自转','有距离模糊有自转SCM')%
 grid on
 box on
 xlabel('Index')
@@ -129,18 +145,23 @@ ylabel('Eig')
 % title('有距离模糊有自转')
 %% MVD
 fsp = 0;
+
 % fsp = d/lambda/2 * sin(El0/180*pi);
 a = exp(1i*2*pi*fsp*(0:N-1)).';    % Spatial Steering Vector.
 L2 = 500;
 omega = linspace(-0.5,0.5,L2);%% 归一化时间频率 
 % fsp = d/lambda/2*cmj;
+St=exp(1j*omega*(0:P.Np-1)).';
+Ssr=exp(1j*fsp*(0:N-1)).';
+Sst=exp(1j*fsp*(0:M-1)).';
+
 iRcn_00 = inv(Rcn_00);
 iRcn_01 = inv(Rcn_01);
 iRcn_10 = inv(Rcn_10);
 iRcn_11 = inv(Rcn_11);
 for j = 1:L2
-    b = exp(1i*2*pi*omega(j)*(0:M-1)).'; % Temporal Steering Vector
-    v = kron(b,a);           % Space-TIme Steering Vector.
+    St=exp(1j*omega*(0:P.Np-1)).';; % Temporal Steering Vector
+    v = kron(Us.'*Rs.'*Us*Ut.'*Sst,kron(St,Ssr));;           % Space-TIme Steering Vector.
     MVD_00(j) = v'*iRcn_00*v;
     MVD_01(j) = v'*iRcn_01*v;
     MVD_10(j) = v'*iRcn_10*v;

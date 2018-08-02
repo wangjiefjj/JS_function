@@ -1,18 +1,19 @@
+function [ P ] = fun_GenerateComplexTrainData( isRu,isRotation,Num_TrainData)
+%% 产生不同距离单元的杂波数据以及杂波协方差
+
 %% 本程序用于产生机载雷达回波仿真数据
-clear 
-close all
-clc
-isRotation = 1;
-isRu = 0;
 %% 生成仿真参数
 %% 雷达参数
+if nargin == 2
+    Num_TrainData = 1;
+end
 N=8;        %每行阵元数
 M=8;        %每列阵元数
 K=8;        %脉冲数
 lambda=0.5; %波长
 c=3e8;      %光速
 d=0.25;     %阵元间距
-fr=5000;   %脉冲重复频率
+fr=10000;   %脉冲重复频率
 % Rmax=para_data(10);%最大作用距离 【无用参数，后面根据场景计算】
 
 Inn=30;             %行向所加切比雪夫权重dB
@@ -31,7 +32,7 @@ Q=1;                %% 信号数量,MIMO的话Q=8
 H=800e3;                    %高度
 V=fun_Vp(H);                %速度
 rsmax = fun_Rsmax(H);
-rs=1300e3;          %
+rs=H;%1300e3;          %
 r=fun_Rs2R(H,rs);
 el0=fun_ELAngle(H,r)/180*pi;        %波束指向俯仰角
 az0=pi/2;                           %波束指向方位角
@@ -47,7 +48,7 @@ end
 
 %% 杂波
 Br=0;               %杂波起伏
-flag_clutter=4;     %杂波类型，分别为海杂波、沙漠、农田、丘陵、高山
+flag_clutter=5;     %杂波类型，分别为海杂波、沙漠、农田、丘陵、高山
 flag_sea=5;         %海情等级1-5
 flag_kind=3;        %杂波幅度分布类型，分别为Log-normal、Weibull和K分布
 flag_noise=0;       %是否含有噪声
@@ -82,7 +83,7 @@ if isRu==1
 elseif isRu == 0
     rsk = rs;%
 end
-L = length(rsk)
+L = length(rsk);
 % L=floor((rsmax-H)/rsu)+1;
 % rsk=H+(1:L)*rsu;%####到载机高度距离各次折叠对应的实际距离    0:L的设置使得从H距离处开始采样
 % phil=asin(H./rsk);%不同折叠的初始俯仰角
@@ -152,17 +153,16 @@ Sys_DOF = Q*N*K;   % 系统自由度
 tic
 %% 杂波产生程序
 % for ncell=1:N_pcell%第一层循环：不同距离门
-for ncell=1%第一层循环：不同距离门
+for ncell=1:Num_TrainData%第一层循环：不同距离门
     ops=ops+1
     Rcell=Rorigin+(ncell-1)*R_percell;%Rcell为不同距离门对应的不同距离
     clutter_ceho_temp = zeros(Sys_DOF,1);                        % && 用于存储每个距离门的杂波数据
     clutter_covariance_temp = zeros(Sys_DOF);                  % && 用于存储每个距离门的杂波协方差矩阵
     for l=1:L%第二层循环：不同混叠距离
-        l
         Rlc=rsk(l)+Rcell; % Rlc为不同距离门不同距离环对应的距离           Rl 里已经加了载机高度 H
-        if  Rlc>=H & Rlc<=rsmax
+        if  Rlc>=H && Rlc<=rsmax
             sin_thetag=H./Rlc-(Rlc.^2-H^2)./(2*Re.*Rlc);%sin(theta_g)
-            if sin_thetag>0 & (1-sin_thetag)>(1e-10)
+            if sin_thetag>0 && (1-sin_thetag)>(1e-10)
                 theta_g=atan(sin_thetag/sqrt(1-sin_thetag^2+(1e-20)));%擦地角
                 sin_phil=H/Rlc+(Rlc^2-H^2)/(2*Rlc*Re);%不同距离时的俯仰角的正弦sin(phe)
                 phi_l=atan(sin_phil/sqrt(1-sin_phil^2+(1e-20)));%俯仰角
@@ -222,6 +222,7 @@ for ncell=1%第一层循环：不同距离门
                     end
                     %C=Scale*lognrnd(0,1.2,1,1)/Rlc^2*kron(Us.'*Rs*Us*(Ut.')*(Im.*Sst),kron(St,Ssr));
                     C=Scale*sqrt(deltc)/Rlc^2*kron(Us.'*Rs.'*Us*Ut.'*Sst,kron(St,Ssr));
+                    C = C/norm(C);
                     clutter_ceho_temp = clutter_ceho_temp+C;                               % && 用于存储每个距离门的杂波数据
                     clutter_covariance_temp = clutter_covariance_temp+C*C';         % && 用于存储每个距离门的杂波协方差矩阵
                 end
@@ -251,101 +252,15 @@ R_real = clutter_covariance{1};
 
 R = CNR*R_real./sum(eig(R_real)/Sys_DOF);
 R = R+1*eye(Sys_DOF);
-DD = eig(R);
-DD = sort(abs(DD),'descend');
-D_db = db(DD)/2;
-figure;plot(D_db,'*-');grid on;title('杂波协方差矩阵的特征谱');
 
-%计算杂波功率谱P并绘图
-fd = linspace(-1,1,180);
-fs = linspace(-1,1,180);
-R_inv=inv(R);
-for p=1:length(fs)
-    Ssr=exp(1j*pi*(0:N-1)*fs(p)).';
-    Sst=exp(1j*pi*gamma*(0:M-1)*fs(p)).';
-    for q=1:length(fd)
-        St=exp(1j*pi*(0:K-1)*fd(q)).';
-        S=kron(Ut.'*Sst,kron(St,Ssr));
-        S = S/norm(S);
-        P(p,q)=1/abs(S'*R_inv*S);
-    end
+P.R = clutter_covariance;
+P.TrainData = clutter_data;
+P.lambda = lambda;
+P.Nrow = N;    %每行阵元数
+P.Ncol = M;    %每列阵元数
+P.Np = K;      %脉冲数      
+P.Us = Us;      
+P.Ut = Ut; 
+P.Rs = Rs;
 end
-P_db = db(P)/2;
-P_db =P_db -max(max(P_db ));
-% surf(P_db);shading interp;
-figure;
-axes('Position',[0.1,0.1,0.8,0.8]);
-mesh(fd,fs,P_db);
-set(gca,'FontSize',32);
-xlabel('2fd/fr','FontSize',32);ylabel('cos\psi_{r}','FontSize',32);zlabel('P/dB','FontSize',32);  %绘制杂波功率谱图
-axes('Position',[0.6,0.6,0.4,0.4])
-contourf(fd,fs,P_db);   %绘制杂波功率谱等高线图
-set(gca,'xtick',[],'ytick',[]);
-axis square
 
-
-%%
-% %% 杂波功率谱分析
-%
-% %计算协方差特征值D并绘图
-% R =clutter_covariance{1};
-% R = CNR*R./sum(eig(R)/Sys_DOF);
-% R = R+1*eye(Sys_DOF);
-% % R =Clutter*Clutter'/150;
-% % CNR_dB = 60;
-% % CNR = 10^(CNR_dB/10);
-% % %R_real =Clutter_ch*Clutter_ch'/30;
-% % %R_real =Clutter*Clutter'/30;
-% % R_real = R;
-% % R = CNR*R_real./sum(eig(R_real)/Sys_DOF);
-% % R = R+1*eye(Sys_DOF);
-%
-% DD= eig(R);
-% DD = sort(abs(DD),'descend');
-% D_db = db(DD)/2;
-% figure;plot(D_db'-max(D_db),'*-');grid on;title('杂波协方差矩阵的特征谱');
-%
-% %计算杂波功率谱P并绘图
-% Nfs=180;
-% fs = (-Nfs:1:Nfs)/Nfs;
-% Nfd=180;
-% fd = (-Nfd:1:Nfd)/Nfd;
-% %fd=2*cos(phi0)*cos(pi*fs+natenna_angle+crab_theta)*V/lambda/fr;
-% R_inv=inv(R);
-% for p=1:length(fs)
-%     s_ph_azimuth=exp(-j*pi*fs(p)*(0:N-1));                         %空频方位维相位
-%     s_ph_pitch=exp(-j*pi*fs(p)*(0:0));                                 %空频俯仰维相位
-%     Ss=kron(s_ph_pitch,s_ph_azimuth);                                                                   %合成的空频相位
-%     for q=1:length(fd)
-%         St=exp(j*pi*(0:K-1).'*fd(q));
-%         S=kron(St,Ss.');
-%         S = S/norm(S);
-%         P(p,q)=1/abs(S'*R_inv*S);
-%     end
-% end
-% P_db = db(P)/2;
-% P_db =P_db -max(max(P_db ));
-% %P_db =P_db ;
-% figure; %surf(P_db);shading interp;
-% axis([-0.5,0.5,-0.5,0.5,-60,0]);
-% angle=180*acos(fs)/pi;
-%  %mesh(fd,fs,P_db);
-% surf(fd,fs,P_db);shading interp;lighting gouraud;colorbar;axis tight;
-% title('杂波功率谱');xlabel('2fd/fr');ylabel('cos(\psi)');zlabel('P/dB');  %绘制杂波功率谱图mesh(fd,fs,P_db);cos(\psi)
-% figure;contour(fd,fs,P_db,20);   %绘制杂波功率谱等高线图
-% title('杂波功率谱等高线');xlabel('2fd/fr');ylabel('cos(\psi)');zlabel('P/dB');
-% % P_db = db(P)/2;
-% % P_db =P_db -max(max(P_db ));
-% % % surf(P_db);shading interp;
-% % figure;
-% % axes('Position',[0.1,0.1,0.8,0.8]);
-% % mesh(fd,fs,P_db);
-% % set(gca,'FontSize',32);
-% % xlabel('2fd/fr','FontSize',32);ylabel('cos\psi_{r}','FontSize',32);zlabel('P/dB','FontSize',32);  %绘制杂波功率谱图
-% % axes('Position',[0.6,0.6,0.4,0.4])
-% % contourf(fd,fs,P_db);   %绘制杂波功率谱等高线图
-% % set(gca,'xtick',[],'ytick',[]);
-% % axis square
-%
-% %
-% %

@@ -10,7 +10,7 @@ function [ R_CC,alpha0 ] = fun_test_LogEKA( X,R,R_KA )
 [M,N]=size(X);
 rou_ba_t = 0;
 for i = 1:N
-    Ri = fun_Positive(X(:,i),5);
+    Ri = fun_Positive(X(:,i),4);
     rou_ba_t = rou_ba_t+norm(logm(Ri),'fro')^2/(N^2);
 end
 rou_ba = rou_ba_t-norm(R,'fro')^2/N;%R_KA
