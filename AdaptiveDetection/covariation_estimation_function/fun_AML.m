@@ -9,7 +9,9 @@ R_AML = eye(M,M);%R_x0;%eye(N,N);%以单位阵为迭代初值是，第二次迭代结果为NSCM结果
 tao_child = 1;%%本次迭代值
 tao_parent = 0;%%上次迭代值
 count = 0;
-
+for i= 1:N
+    X(:,i)= X(:,i) / norm( X(:,i));
+end
 while (abs(tao_child-tao_parent)>0.01)%
     tao_parent = tao_child;
     iR_AML = inv(R_AML);

@@ -14,12 +14,6 @@ for k = 1:10
     end
     alpha0_1 = alpha0;
 end
-% iter = 20;
-% alpha0 = zeros(iter+1,1);
-% [R_CC,alpha0(1)] = fun_CC(X,R,R_KA);
-% for i = 1 :iter
-%     [R_CC,alpha0(i+1)] = fun_CC(X,R_CC,R_KA);
-% end
 end
 
 

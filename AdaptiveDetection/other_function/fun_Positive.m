@@ -11,7 +11,7 @@ if opt == 1
 %%barycenters and its application to radar training data selection¡·
     Rx = X*X';
     [V,D] = svd(Rx);
-    Evalue = abs(diag(D));
+    Evalue = (diag(D));
     index_1 = find(Evalue<=1);
     Evalue(index_1) = 1;
     % Evalue = sort(Evalue,'descend');
@@ -22,7 +22,7 @@ elseif opt == 2
 %%clutter¡·
     Rx = X*X';
     [V,D] = svd(Rx);
-    Evalue = abs(diag(D));
+    Evalue = (diag(D));
     Km = max(Evalue)/min(Evalue);
     xk = norm(X,'fro');
     lambdak = max(1, xk^2*Km/(Km^2+N-1) );

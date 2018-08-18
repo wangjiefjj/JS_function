@@ -12,9 +12,9 @@ t1 = 0;
 t2 = 0;
 logm_R = logm(fun_RLogEMean(X,1));
 for i = 1:L
-    t11 = fun_Logm(Ri(:,:,i)) - logm_R;
+    t11 = logm(Ri(:,:,i)) - logm_R;
     t1 = t1 + norm(t11,'fro')^2;
-    t22 = fun_Logm(R_KA) - fun_Logm(Ri(:,:,i));
+    t22 = logm(R_KA) - logm(Ri(:,:,i));
     t2 = t2 + norm(t22,'fro')^2;
 end
 alpha = min(1,t1/t2);

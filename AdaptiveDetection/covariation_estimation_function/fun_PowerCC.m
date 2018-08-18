@@ -10,7 +10,7 @@ end
 R_beta = fun_RPowerEMean( X,beta );
 Ri = zeros(N,N,L);
 for i = 1:L
-    Ri(:,:,i) = fun_Positive(X(:,i),4);
+    Ri(:,:,i) = fun_Positive(X(:,i),5);
 %     logm_R = logm_R + fun_Logm(Ri(:,:,i))/L;
 end
 t1 = 0;
