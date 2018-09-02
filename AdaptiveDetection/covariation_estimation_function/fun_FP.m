@@ -5,13 +5,17 @@ function [ R ] = fun_FP( X )
 % Application to STAP Detection Problem>> 式（3）
 % X：训练数据
 [m,N] = size(X);%m:训练数据向量维数，N训练数据向量个数
-R0 = eye(m,m);
 R = eye(m,m);
 for iter = 1:10
     Rt = zeros(m,m);
     R0 = R;
     for i = 1:N
-        Rt = Rt + m/M*(X(:,i)*X(:,i)')/(X(:,i)'*R0*X(:,i)); 
+        %%归一化
+        %%<Robust Shrinkage Estimation of High-DimensionalCovariance Matrices>
+        %%（4）式
+%         X(:,i) = X(:,i)/sqrt(norm(X(:,i),'fro')^2/m);
+%         X(:,i) = X(:,i)/norm(X(:,i));
+        Rt = Rt + m/N*(X(:,i)*X(:,i)')/(X(:,i)'*inv(R0)*X(:,i)); 
     end
     R = m/trace(Rt)*Rt;
     if norm(R-R0)/norm(R)<1e-2

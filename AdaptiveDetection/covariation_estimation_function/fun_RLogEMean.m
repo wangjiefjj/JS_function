@@ -5,27 +5,22 @@ logm_R = zeros(N,N);
 % logm_Rr = zeros(N,N);
 % logm_Ri = zeros(N,N);
 if nargin<2
-    opt = 1;
+    opt = 4; %%正则化选项
 end
-if opt == 1
-    for i = 1:L
-        Ri = fun_Positive(X(:,i),4);
-        logm_R = logm_R + logm(Ri)/L;
-    end
+for i = 1:L
+    Ri = fun_Positive(X(:,i),opt);
+    if opt == 4 || opt == 1
+       logm_R = logm_R + logm(Ri);
+    else
+       logm_R = logm_R + fun_Logm(Ri);
+    end  
+end
+if opt == 4 || opt == 1
+    R = expm(logm_R/L);
 else
-    for i = 1:L%%归一化的
-        Ri = fun_Positive(X(:,i),5);
-        logm_R = logm_R + logm(Ri)/L;
-%         Rir = real(Ri);
-%         Rii = imag(Ri);
-%         logm_Rr = logm_Rr + logm(Rir)/L;
-%         logm_Ri = logm_Ri + logm(Rii)/L;
-    end
+    R = fun_Expm(logm_R/L);
 end
 
-% % logm_R = logm_R/L;
-% % R = fun_Expm(logm_R);
-R = expm(logm_R);
-% R = expm(logm_Rr) + 1j*expm(logm_Ri);
+
 end
 

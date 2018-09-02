@@ -1,32 +1,32 @@
 clc
 clear 
 close all
-% åˆ˜ç»´å»ºï¼Œ2017.09.15
-% å¤šç§æ£?µ‹å™¨çš„æ£?µ‹æ€§èƒ½ä»¿çœŸ
+%2017.09.15
+% 
 %%
 Na=2;     % é˜µå…ƒæ•?
 Np=4;     % è„‰å†²æ•?
 N=Na*Np;
 optc = 'g';
 group_num = 2; %åˆ†ç»„æ•?
-L=round(1*N); 
+L=round(2*N); 
 SNRout = -5:1:25; % è¾“å‡ºSNR
-cos2=1;%%%å¤±é…æƒ…å†µ
+cos2=1;%%%Ê§Åä
 PFA=1e-3;% PFA=1e-4;
 SNRnum=10.^(SNRout/10);
 MonteCarloPfa=round(1/PFA*100);
 MonteCarloPd=1e4;
 % vt=randn(N,1)+1i*randn(N,1);
-theta_sig=0.1;
+theta_sig=0.15;
 nn=0:N-1;
-vt=exp(-1i*2*pi*nn*theta_sig)'; %%%%%% ç³»ç»Ÿå¯¼å‘çŸ¢é‡
-rhoR=0.95;
-R = fun_rho(rhoR,N,1,0.05);
+vt=exp(-1i*2*pi*nn*theta_sig)'; %%%%%% µ¼ÏòÊ¸Á¿
+rhoR=0.9;
+R = fun_rho(rhoR,N,1,0);
 iR=inv(R);
 R_half=R^0.5;
 % [Ddescend,Index]=sort(diagD,'descend'); figure; plot(10*log10(abs(Ddescend)),'b-x')
 [UU,SS,VV]=svd(iR*vt);
-vt_v=UU(:,2); %%%%%% ä¸vtåœ¨ç™½åŒ–ç©ºé—´æ­£äº¤ï¼Œå³ï¼švt^H*iR*vt_v==0
+vt_v=UU(:,2); %µ¼ÏòÊ¸Á¿ºÍÔÓ²¨µÄÕı½»·ÖÁ¿vt^H*iR*vt_v==0
 weight=linspace(0,1,300);
 for i=1:length(weight)
     vt_tmpt=weight(i)*vt+(1-weight(i))*vt_v;
@@ -36,7 +36,7 @@ end
 Weight=weight(Index);
 vt_real=Weight*vt+(1-Weight)*vt_v;
 figure; plot(weight,cos2_tmpt);
-%% è®¡ç®—æ£?µ‹é—¨é™
+%% ÃÅÏŞ
 Tamf = zeros(1,MonteCarloPfa);
 Tglrt = zeros(1,MonteCarloPfa);
 Tace = zeros(1,MonteCarloPfa);
@@ -50,20 +50,18 @@ tic
 parfor i=1:MonteCarloPfa
     warning off
 %     waitbar(i/MonteCarloPfa,h,sprintf([num2str(i/MonteCarloPfa*100),'%%']));
-%     X=(randn(N,L)+1i*randn(N,L))/sqrt(2); % äº§ç”Ÿæ–¹å·®ä¸?çš„å¤é«˜æ–¯ç™½å™ªå£?% Rwhite1=1/snapshot1*X1*X1'; eig(Rwhite1); % round(mean(abs(eig(Rwhite1)))) == 1
-%     S=(R_half*X)*(R_half*X)'; % æœ‰Lä¸ªè®­ç»ƒæ ·æœ¬ä¼°è®¡çš„æ‚æ³¢ä¸å™ªå£°çš„åæ–¹å·®çŸ©é˜?Rhalf*Xè¡¨ç¤ºæ¥æ”¶çš„Lä¸ªè®­ç»ƒæ•°æ?
     Train = fun_TrainData(optc,N,L,R,2,1,1);
     S = fun_SCMN(Train);
     R_NSCM = fun_NSCMN(Train);
+%     R_LogM = fun_RLogEMean(Train,5);
+    R_SFP = fun_RLogEMean(Train,4);
     iS=inv(S);
-%     W=(randn(N,1)+1i*randn(N,1))/sqrt(2); % 1i == -i
-%     x=R_half*W;%+pp; % noise=(randn(N,1)+j*randn(N,1))/sqrt(2);  % æ¥æ”¶ä¿¡å·ä»…åŒ…æ‹¬æ‚æ³¢å’Œå™ªå£°
     x = fun_TrainData(optc,N,1,R,3,1,1);
     %%
     Tamf(i)=abs(vt'*iS*x)^2/abs(vt'*iS*vt);     %%%%%% AMFæˆ–è?wald
     tmp=abs(x'*iS*x);
     Tglrt(i)=Tamf(i)/(1+tmp);                   %%%%%% KGLRT
-    Tanmf(i) = fun_ANMF(R_NSCM,x,vt)
+    Tanmf(i) = fun_ANMF(R_SFP,x,vt)
 %     Tace(i)=Tamf(i)/tmp;                        %%%%%% ACE
 %     Tabort(i)=(1+Tamf(i))/(2+tmp);              %%%%%% ABORT  % eq.(16) æ£?µ‹ç»Ÿè®¡é‡?
 %     Twabort(i)=1/(1+tmp)/(1-Tglrt(i))^2;        %%%%%% ABORT  % è§ä¼šè®®è®ºæ–‡ä¸­çš„eq.(18)
@@ -96,9 +94,9 @@ Th_KGLRT=(TKGLRT(floor(MonteCarloPfa*PFA-1))+TKGLRT(floor(MonteCarloPfa*PFA)))/2
 % Th_AED=(TAED(floor(MonteCarloPfa*PFA-1))+TAED(floor(MonteCarloPfa*PFA)))/2;
 Th_KGLRT_NC = (TKGLRT_NC(floor(MonteCarloPfa*PFA-1))+TKGLRT_NC(floor(MonteCarloPfa*PFA)))/2;
 toc
-% alpha=sqrt(SNRnum/abs(vt'*invR*vt)); % æ ¹æ®SNR=|alpha|^2*s'*R^(-1)*sæ±‚å¾—|alpha|
+% alpha=sqrt(SNRnum/abs(vt'*invR*vt)); % SNR=|alpha|^2*s'*R^(-1)*s 
 a=0;b=2*pi;
-%% è®¡ç®—æ£?µ‹æ¦‚ç‡
+%% ¿ªÊ¼¼ì²â
 tic
 counter_amf=0;
 counter_ace=0;
@@ -110,16 +108,16 @@ counter_glrt=0;
 % counter_aed=0;
 counter_glrtnc = 0;
 %%
-alpha=sqrt(SNRnum/abs(vt'*iR*vt)); % æ ¹æ®SNR=|alpha|^2*s'*R^(-1)*sæ±‚å¾—|alpha|
+alpha=sqrt(SNRnum/abs(vt'*iR*vt)); % SNR=|alpha|^2*s'*R^(-1)*s 
 % alpha = sqrt(SNRnum/2);
-%% æ±‚æ¯ç»„çš„ä¿¡å™ªæ¯?
+%% ¼ì²âMC
 m = N/group_num;
 for i = 1:group_num
     R_t = R((i-1)*m+1:i*m,(i-1)*m+1:i*m);
     iR_t = inv(R_t);
     alpha_g((i-1)*m+1:i*m,:) = repmat(sqrt(SNRnum/abs(vt((i-1)*m+1:i*m)'*iR_t*vt((i-1)*m+1:i*m))),[m,1]);
 end
-%% æ£?µ‹
+%% ¼ì²â¸ÅÂÊ 
 Pd_AMF_mc = zeros(1,length(SNRout));
 Pd_KGLRT_mc = zeros(1,length(SNRout));
 Pd_ACE_mc = zeros(1,length(SNRout));
@@ -139,6 +137,8 @@ for m=1:length(SNRout)
         Train = fun_TrainData(optc,N,L,R,3,1,1);
         S = fun_SCMN(Train);
         R_NSCM = fun_NSCMN(Train);
+%         R_LogM = fun_RLogEMean(Train,5);
+        R_SFP = fun_RLogEMean(Train,4);
         iS=inv(S);
 %         W=(randn(N,1)+1i*randn(N,1))/sqrt(2); % 1i == -i
     %     THETA=a+(b-a)*rand; % äº§å‡º0--2*piçš„å‡åŒ?ˆ†å¸ƒéšæœºç›¸ä½?
@@ -150,7 +150,7 @@ for m=1:length(SNRout)
         Tamf=abs(vt'*iS*x)^2/abs(vt'*iS*vt);  %%%%%% AMF
         tmp=abs(x'*iS*x);
         Tglrt=Tamf/(1+tmp);                   %%%%%% KGLRT
-        Tace = fun_ANMF(R_NSCM,x,vt);
+        Tace = fun_ANMF(R_SFP,x,vt);
 %         Tace=Tamf/tmp;                        %%%%%% ACE
 %         Tabort=(1+Tamf)/(2+tmp);              %%%%%% ABORT  % eq.(16) æ£?µ‹ç»Ÿè®¡é‡?
 %         Twabort=1/(1+tmp)/(1-Tglrt)^2;        %%%%%% ABORT  % è§ä¼šè®®è®ºæ–‡ä¸­çš„eq.(18)
@@ -204,10 +204,3 @@ set(gca,'FontSize',20)
 grid on
 % axis([5 25 0 1])
 % clear TAMF TACE TKGLRT TABORT TWABORT TDMRao TDNAMF   Tamf Tace Tglrt Tabort Twabort Tprao Tdnamf Taed TAED X
-% cd  D:\MATLAB\Matæ•°æ®\Monograph\Chp03 
-% tmpt=L/N;
-% if  mod(tmpt,2) % Lä¸æ˜¯Nçš„æ•´æ•°å?
-%     eval(['save Pd_8RankOneDetectors_MC_Diff_SNRs_N' num2str(N) '_L'  num2str(L)   '_SNR'  num2str(min(SNRout)) 't'   num2str(max(SNRout)) '_cos2e'   num2str(cos2)  '_PFAm' num2str(-log10(PFA)) '.mat'])
-% else
-%    eval(['save Pd_8RankOneDetectors_MC_Diff_SNRs_N' num2str(N) '_L' num2str(tmpt) 'N_SNR'  num2str(min(SNRout)) 't'   num2str(max(SNRout)) '_cos2e'   num2str(cos2) '_PFAm' num2str(-log10(PFA)) '.mat'])
-% end

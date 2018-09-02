@@ -7,19 +7,19 @@ str_train = 'g';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
 lambda = 3;
 mu = 1;
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
-sigma_t = 0.99;
+sigma_t = 0.1;
 rou = 0.95;  %%协方差矩阵生成的迟滞因子
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
 N = Na*Np;
-R = fun_rho(rou,N,1,0.00);
+R = fun_rho(rou,N,1,0.5);
 SNRout=-5:1:20; % 输出SNR
 PFA=1e-3;% PFA=1e-4;
 SNRnum=10.^(SNRout/10);
 MonteCarloPfa=1/PFA*100;
 MonteCarloPd=1e4;
 L=round(n*N); 
-theta_sig = 0.1;
+theta_sig = 0.5;
 nn = 0:N-1;
 s = exp(-1i*2*pi*nn*theta_sig)'; %%%%%% 系统导向矢量
 R_KA = zeros(size(R));
@@ -29,7 +29,7 @@ for i = 1:1000
 end
 
 iter = 10;
-for i =1:1000
+for i =1:100
     warning off
     i
     Train = fun_TrainData(str_train,N,L,R,lambda,mu,opt_train);%%产生的训练数据,协方差矩阵为rouR的高斯杂波

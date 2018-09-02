@@ -16,10 +16,14 @@ L = length(rho);
 for l = 1:L
     for i=1:N
         for j=1:N
-            R_rho(i,j,l)=rho(l)^abs(i-j)^mi*exp(-1j*2*pi*fd*(i-j));
+            R_rho(i,j,l)=(rho(l)^abs(i-j)^mi)*exp(1j*2*pi*fd*(i-j));
         end
     end
 end
+for i = 1:L
+    R_rho(:,:,i) = R_rho(:,:,i) + 10^(-2)*eye(N);
+end
+
 end
 
 

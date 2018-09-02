@@ -28,7 +28,7 @@ for i = 1:1000
     R_KA = R_KA + Sigma.*(t*t')/1000;
 end
 tic
-parfor i =1:100
+for i =1:100
     Train = fun_TrainData(str_train,N,L,Sigma,lambda,mu,opt_train);%%产生的训练数据,协方差矩阵为rouR的高斯杂波
     [x0,tau] = fun_TrainData(str_train,N,1,Sigma,lambda,mu,opt_train); 
     R_SCM = (fun_SCMN(Train));

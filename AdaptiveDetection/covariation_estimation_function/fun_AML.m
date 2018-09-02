@@ -10,7 +10,7 @@ tao_child = 1;%%本次迭代值
 tao_parent = 0;%%上次迭代值
 count = 0;
 for i= 1:N
-    X(:,i)= X(:,i) / norm( X(:,i));
+    X(:,i)= X(:,i) / norm( X(:,i));%(X(:,i)'*X(:,i)/N);%
 end
 while (abs(tao_child-tao_parent)>0.01)%
     tao_parent = tao_child;

@@ -5,31 +5,31 @@ FontSize = 30;
 markersize =10;
 linewidth = 2;
 % % % % % % % % % % % % % % % 检测性能
-% load ('.\Data\p_new_CCIter_ANMF_1N_s0.5.mat')
-% figure(1);
-% hold on
-% plot(SNRout,Pd_SCM_mc,'r','linewidth',2,'markersize',10)
-% plot(SNRout,Pd_CC_mc,'b','linewidth',2,'markersize',10)
-% plot(SNRout,Pd_ML_mc,'g','linewidth',2,'markersize',10)
-% plot(SNRout,Pd_CCIter_mc,'k','linewidth',2,'markersize',10)
-% load ('.\Data\p_new_CCIter_ANMF_2N_s0.5.mat')
-% plot(SNRout,Pd_SCM_mc,'r-*','linewidth',2,'markersize',10)
-% plot(SNRout,Pd_CC_mc,'b-*','linewidth',2,'markersize',10)
-% plot(SNRout,Pd_ML_mc,'g-*','linewidth',2,'markersize',10)
-% plot(SNRout,Pd_CCIter_mc,'k-*','linewidth',2,'markersize',10)
-% h_leg = legend('ANMF with SCM, K=N',...
-% 'ANMF with CC, K=N','ANMF with ML, K=N','ANMF with KA-ICE, K=N',...
-% 'ANMF with SCM, K=2N',...
-% 'ANMF with CC, K=2N','ANMF with ML, K=2N','ANMF with KA-ICE, K=2N');
-% % xlabel('SNR/dB','FontSize',20)
-% xlabel({'\fontsize{30}SNR';'\fontsize{40}e'})
-% ylabel('PD','FontSize',FontSize)
-% axis([-5,25,0,1])
-% set(gca,'FontSize',FontSize)
-% set(gcf,'Position',[700 0 1200 1000])
-% set(h_leg,'Location','SouthEast')
-% grid on
-% box on
+load ('.\Data\p_new_CCIter_ANMF_1N_s0.5.mat')
+figure(1);
+hold on
+plot(SNRout,Pd_SCM_mc,'r','linewidth',2,'markersize',10)
+plot(SNRout,Pd_CC_mc,'b','linewidth',2,'markersize',10)
+plot(SNRout,Pd_ML_mc,'g','linewidth',2,'markersize',10)
+plot(SNRout,Pd_CCIter_mc,'k','linewidth',2,'markersize',10)
+load ('.\Data\p_new_CCIter_ANMF_2N_s0.5.mat')
+plot(SNRout,Pd_SCM_mc,'r-*','linewidth',2,'markersize',10)
+plot(SNRout,Pd_CC_mc,'b-*','linewidth',2,'markersize',10)
+plot(SNRout,Pd_ML_mc,'g-*','linewidth',2,'markersize',10)
+plot(SNRout,Pd_CCIter_mc,'k-*','linewidth',2,'markersize',10)
+h_leg = legend('ANMF with SCM, K=N',...
+'ANMF with CC, K=N','ANMF with ML, K=N','ANMF with KA-ICE, K=N',...
+'ANMF with SCM, K=2N',...
+'ANMF with CC, K=2N','ANMF with ML, K=2N','ANMF with KA-ICE, K=2N');
+% xlabel('SNR/dB','FontSize',20)
+xlabel({'\fontsize{30}SNR';'\fontsize{40}e'})
+ylabel('PD','FontSize',FontSize)
+axis([-5,25,0,1])
+set(gca,'FontSize',FontSize)
+set(gcf,'Position',[700 0 1200 1000])
+set(h_leg,'Location','SouthEast')
+grid on
+box on
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%IPIX%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % % % % % % % % % % % % % % % % 检测性能
 % load ('.\Data\R_8_new_CCIter_IPIX_19980223_170435_1N.mat')
@@ -117,18 +117,18 @@ linewidth = 2;
 clc
 clear
 close all
-load ('.\Data\19980223_170435_IPIX.mat')
+load ('.\Data\19980223_170435_IPIX.mat')%19980204_224024_IPIX%19980223_170435_IPIX
 [M,L] = size(sig);
 LL = 1:L;
 MM = linspace(-0.5,0.5,M);
 [X,Y]=meshgrid(LL,MM);
 MTD = abs(fftshift(fft(sig,[],1)));
 [x,y] = max(MTD);
-
+[~,max_Range] = max(x);
 figure()
-plot3(8,MM(y(8)),1,'ro','markersize',10,'MarkerFaceColor','r')
+plot3(max_Range,MM(y(max_Range)),1,'ro','markersize',10,'MarkerFaceColor','r')
 str = [' Range cell: %.f \n Normalized Doppler: %.6f \n Normalized amplitude: %.3f'];
-text(8,MM(y(8)),1,sprintf(str,8,MM(y(8)),1),...
+text(max_Range,MM(y(max_Range)),1,sprintf(str,max_Range,MM(y(max_Range)),1),...
     'VerticalAlignment','bottom','FontSize',25)
 hold on
 mesh(X,Y,MTD/max(max(MTD)));

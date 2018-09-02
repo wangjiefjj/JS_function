@@ -1,9 +1,9 @@
-function [ alpha,beta ] = fun_IG_ML(r)
+function [ lambda,mu ] = fun_IG_ML(r)
 %%《Maximum Likelihood Estimation forCompound-Gaussian Clutter with Inverse GammaTexture》
 %%(15) (14) 
 %%复合高斯invert Gamma 纹理参数ML估计
-% alpha:形状参数,lambda
-% beta：尺度参数,mu
+% lambda:形状参数,lambda
+% mu：尺度参数,mu
 Ns = length(r);
 beta_t = 1.:0.001:5; %%%IPIX
 r2 = abs(r).^2;
@@ -15,10 +15,10 @@ for i = 1:length(beta_t)
     L_beta = abs(L_beta);
     if L_beta<L_beta_min
         L_beta_min = L_beta;
-        beta = beta_t(i);
+        mu = beta_t(i);
     end
 end
-t3 = sum(r2./(beta*r2+1));
-alpha = Ns/(beta*t3)-1;
+t3 = sum(r2./(mu*r2+1));
+lambda = Ns/(mu*t3)-1;
 end
 
