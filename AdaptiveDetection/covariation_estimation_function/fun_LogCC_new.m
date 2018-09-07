@@ -10,32 +10,38 @@ for i = 1:L
 end
 t1 = 0;
 t2 = 0;
-if opt == 4 
+% if opt == 4 || opt == 5
     logm_R = logm(fun_RLogEMean(X,opt));
-else
-    logm_R = fun_Logm(fun_RLogEMean(X,opt)); 
-end
+% else
+%     logm_R = fun_Logm(fun_RLogEMean(X,opt)); 
+% end
 
-if opt == 4
+% if opt == 4  || opt == 5
     for i = 1:L
         t11 = logm(Ri(:,:,i)) - logm_R;
         t1 = t1 + norm(t11,'fro')^2;
         t22 = logm(R_KA) - logm(Ri(:,:,i));
         t2 = t2 + norm(t22,'fro')^2;
     end
-else
-   for i = 1:L
-        t11 = fun_Logm(Ri(:,:,i)) - logm_R;
-        t1 = t1 + norm(t11,'fro')^2;
-        t22 = fun_Logm(R_KA) - logm(Ri(:,:,i));
-        t2 = t2 + norm(t22,'fro')^2;
-    end 
-end
+% else
+%    for i = 1:L
+%         t11 = fun_Logm(Ri(:,:,i)) - logm_R;
+%         t1 = t1 + norm(t11,'fro')^2;
+%         t22 = fun_Logm(R_KA) - logm(Ri(:,:,i));
+%         t2 = t2 + norm(t22,'fro')^2;
+%     end 
+% end
 
 alpha = min(1,t1/t2);
-R = alpha * logm(R_KA) + (1-alpha)*logm_R;
-if opt == 4
+% logm_R = logm(fun_RLogEMean(X,3));
+% if opt == 4 || opt == 5
+    R = alpha * logm(R_KA) + (1-alpha)*logm_R;
+% else
+%    R = alpha * fun_Logm(R_KA) + (1-alpha)*logm_R; 
+% end
+
+% if opt == 4  || opt == 5
     R = expm(R);
-else
-    R = fun_Expm(R);
-end
+% else
+%     R = fun_Expm(R);
+% end

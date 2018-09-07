@@ -10,14 +10,14 @@ lambda = 3;
 mu = 1;
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
-sigma_t = 0.9;
+sigma_t = 0.1;
 %%%%假设参数设置
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
-Sample_num = 10;
+Sample_num = 4;
 Sample_num_half = Sample_num/2;
 N = Na*Np;
-SNRout= 10; % 输出SNR
+SNRout= 5; % 输出SNR
 cos2=0.9;
 PFA=1e-2;% PFA=1e-4;
 SNRnum=10.^(SNRout/10);
@@ -43,7 +43,7 @@ elseif str_train=='p'
     alpha=sqrt(SNRnum*mu/(lambda-1));     
 end
 %%原始杂波加目标图
-MC = 10
+MC = 1000
 theta_sig = 0.2%-0.5:0.1:0.5;
 theta_t = 0.2;
 index1 = find( abs(theta_sig - theta_t)<1e-5);
@@ -52,11 +52,13 @@ TSV_SCM = zeros(length(theta_sig),L);
 TSV_CC = zeros(length(theta_sig),L);
 TSV_ML = zeros(length(theta_sig),L);
 TSV_NSCM = zeros(length(theta_sig),L);
+TSV_E = zeros(length(theta_sig),L);
 TSV_ECC = zeros(length(theta_sig),L);
 TSV_LogM = zeros(length(theta_sig),L);
 TSV_LogCC = zeros(length(theta_sig),L);
 TSV_P = zeros(length(theta_sig),L);
 TSV_PCC = zeros(length(theta_sig),L);
+TSV_SFP = zeros(length(theta_sig),L);
 h = waitbar(0,'Please wait...');
 for i_s = 1:length(theta_sig)
     for mc = 1:MC
@@ -64,9 +66,9 @@ for i_s = 1:length(theta_sig)
         Data = fun_TrainData(str_train,N,LL,rouR,lambda,mu,opt_train);%%产生的训练数据,协方差矩阵为rouR的高斯杂波
         s = exp(-1i*2*pi*nn*theta_t).'/sqrt(N); %%%%%% 目标导向矢量
         p = exp(-1i*2*pi*nn*theta_sig(i_s)).'/sqrt(N); %%%%%% 系统导向矢量
-        x0 = Data(:,L+L/2-1); % 接收信号仅包括杂波和噪声
+        x0 = Data(:,L+L-25); % 接收信号仅包括杂波和噪声
         x0= alpha*s+x0;%+pp;    %%%%%%%  重要  %%%%%%%%%%%%%
-        Data(:,L+L/2-1) = x0;
+        Data(:,L+L-25) = x0;
         for i = L:2*L-1
             Train = [Data(:,i-Sample_num_half:i-1),Data(:,i+1:i+Sample_num_half)];
             CUT = Data(:,i);
@@ -75,11 +77,13 @@ for i_s = 1:length(theta_sig)
             R_CC = fun_CC(Train,R_SCM,R_KA);
             R_ML = fun_MLalpha(Train,R_SCM,R_KA,x0);
             R_NSCM = fun_NSCMN(Train);
+            R_E = fun_RPowerEMean(Train,1,4);
             R_ECC = fun_CCIter2(Train,R_NSCM,R_KA);
             R_LogM = fun_RLogEMean(Train,4);
             R_LogCC = fun_LogCC_new(Train,R_KA,4);
             R_P = fun_RPowerEMean(Train,-1,4);
             R_PCC = fun_PowerCC(Train,R_KA,-1,4);  
+            R_SFP = fun_SFP(Train,1);
             %%检验统计量
             %%%%
             TSV(i_s,i-L+1) = TSV(i_s,i-L+1)+fun_ANMF(rouR,CUT,p)/MC;
@@ -104,11 +108,13 @@ for i_s = 1:length(theta_sig)
             end
             TSV_NSCM(i_s,i-L+1) = TSV_NSCM(i_s,i-L+1)+t_NSCM/MC;%TestStatisticValue
             %%%%
+            TSV_E(i_s,i-L+1) = TSV_E(i_s,i-L+1)+fun_ANMF(R_E,CUT,p)/MC;
             TSV_ECC(i_s,i-L+1) = TSV_ECC(i_s,i-L+1)+fun_ANMF(R_ECC,CUT,p)/MC;
             TSV_LogM(i_s,i-L+1) = TSV_LogM(i_s,i-L+1)+fun_ANMF(R_LogM,CUT,p)/MC;
             TSV_LogCC(i_s,i-L+1) = TSV_LogCC(i_s,i-L+1)+fun_ANMF(R_LogCC,CUT,p)/MC;
             TSV_P(i_s,i-L+1) = TSV_P(i_s,i-L+1)+fun_ANMF(R_P,CUT,p)/MC;
             TSV_PCC(i_s,i-L+1) = TSV_PCC(i_s,i-L+1)+fun_ANMF(R_PCC,CUT,p)/MC; 
+            TSV_SFP(i_s,i-L+1) = TSV_SFP(i_s,i-L+1)+fun_ANMF(R_SFP,CUT,p)/MC; 
         end
     end
 end

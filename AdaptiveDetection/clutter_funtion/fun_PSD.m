@@ -18,8 +18,8 @@ PSD = zeros(N,1);
 iR = inv(R);
 for i = 1:N+1
     p = exp(1j*2*pi*nn*ft(i));
-    p = p./(p'*p/M);
-    PSD(i) = abs(p'*iR*p);
+    p = p/sqrt(M);
+    PSD(i) = 1/abs(p'*iR*p);
 end
 % PSD = 10*log(PSD./max(abs(PSD)));
 end
