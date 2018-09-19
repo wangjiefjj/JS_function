@@ -1,5 +1,4 @@
 
-*.mat
 *.fig
 *.CDF
 *.dat
@@ -13,3 +12,4 @@
 *.mexw64
 *.c
 *.asv
+*.mat
