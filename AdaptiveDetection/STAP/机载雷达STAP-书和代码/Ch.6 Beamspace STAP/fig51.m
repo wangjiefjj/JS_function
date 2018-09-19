@@ -350,7 +350,7 @@ for n=1:length(Ks)
           Wab0(:,p+1)    = aux1(:);
           Wab30(:,p+1)  = aux2(:);
      end 
-   
+
      for m=1:M1
           wmab0(:,m,n)   = kron(eye(M),Gab0)*Wab0*F0(:,m);
           wmab30(:,m,n) = kron(eye(M),Gab30)*Wab30*F30(:,m);

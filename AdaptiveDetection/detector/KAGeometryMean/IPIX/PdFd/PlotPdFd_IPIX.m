@@ -12,7 +12,7 @@ FontSize = 20;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%¸´ºÏ¸ßË¹0.1%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(1)
 hold on
-load PdFd_4Second19980223_170435_IPIX.mat
+load PdFd_2_4Second19980223_170435_IPIX.mat
 plot(fd,Pd_ECC_mc,'r-*','linewidth',linewide1,'markersize',mkft)
 plot(fd,Pd_PCC_mc,'g-*','linewidth',linewide1,'markersize',mkft)
 plot(fd,Pd_LogCC_mc,'b-*','linewidth',linewide1,'markersize',mkft)

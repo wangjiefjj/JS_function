@@ -32,12 +32,13 @@ RR = zeros(N,N);
 parfor i =1:1e3
     Train = fun_TrainData(str_train,N,L,Sigma,lambda,mu,opt_train);%%产生的训练数据,协方差矩阵为rouR的高斯杂波
     [x0,tau] = fun_TrainData(str_train,N,1,Sigma,lambda,mu,opt_train); 
-    R_KA = zeros(size(Sigma));
+%     R_KA = zeros(size(Sigma));
     t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
     R_KA = Sigma.*(t*t');   
+%     R_KA = eye(N);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%
     R_LogM = fun_RLogEMean(Train,4);
-%     [R_CC,alpha_cc(i)]=fun_CC(Train,R_NSCM,R_KA);
+    [R_CC,alpha_cc(i)]=fun_CC(Train,fun_SCMN(Train),R_KA);
 %     [R_ML,alpha_ML(i)]=fun_MLalpha(Train,R_NSCM,R_KA,x0);
 %     [R_ECC,alpha_ecc(i)]=fun_PowerCC(Train,R_KA,1,4);
     [R_LogCC,alpha_lecc(i)]=fun_LogCC_new(Train,R_KA,4);
@@ -67,7 +68,7 @@ m_errorRSFP = mean(error_RSFP)/norm(Sigma,'fro');
 mean_alpha_lecc = mean(alpha_lecc);
 mean_alpha_ecc = mean(alpha_ecc);
 mean_alpha_pcc = mean(alpha_pcc);
-% mean_alpha_cc = mean(alpha_cc);
+mean_alpha_cc = mean(alpha_cc);
 % mean_alpha_ML = mean(alpha_ML);
 TANMF_LogM=sort(ANMF_LogM,'descend');
 

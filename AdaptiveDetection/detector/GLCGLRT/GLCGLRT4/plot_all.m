@@ -7,44 +7,44 @@ fn='Times New Roman';
 linewide1=2;
 mkft = 10;
 %%%%%%%%%%%%%%%不同失配情况下的结果%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% figure(1)
-% hold on
-% load Pd_CLGLRT4_2Kmu1lambda3s0.1o1_p.mat
-% plot(SNRout,Pd_CLGLRT_mc,'k-o','linewidth',linewide1,'markersize',mkft);
-% plot(SNRout,Pd_KGLRTCC_mc,'g-o','linewidth',linewide1,'markersize',mkft);
-% 
-% % load Pd_CLGLRT4_2Kmu1lambda3s0.2o1_p.mat
-% % plot(SNRout,Pd_CLGLRT_mc,'k-*','linewidth',linewide1,'markersize',mkft);
-% % plot(SNRout,Pd_KGLRTCC_mc,'g-*','linewidth',linewide1,'markersize',mkft);
-% 
-% % load Pd_CLGLRT4_2Kmu1lambda3s0.3o1_p.mat
-% % plot(SNRout,Pd_CLGLRT_mc,'k-v','linewidth',linewide1,'markersize',mkft);
-% % plot(SNRout,Pd_KGLRTCC_mc,'g-v','linewidth',linewide1,'markersize',mkft);
-% % load Pd_CLGLRT4_2Kmu1lambda3s0.4o1_p.mat
-% % plot(SNRout,Pd_CLGLRT_mc,'k-h','linewidth',linewide1,'markersize',mkft);
-% % plot(SNRout,Pd_KGLRTCC_mc,'g-h','linewidth',linewide1,'markersize',mkft);
-% 
-% load Pd_CLGLRT4_2Kmu1lambda3s0.5o1_p.mat
-% plot(SNRout,Pd_CLGLRT_mc,'k-<','linewidth',linewide1,'markersize',mkft);
-% plot(SNRout,Pd_KGLRTCC_mc,'g-<','linewidth',linewide1,'markersize',mkft);
-% plot(SNRout,Pd_KGLRT_mc,'b-<','linewidth',linewide1,'markersize',mkft);
-% plot(SNRout,Pd_KGLRTNSCM_mc,'c-<','linewidth',linewide1,'markersize',mkft);
+figure(1)
+hold on
+load Pd_CLGLRT4_2Kmu1lambda3s0.1o1_p.mat
+plot(SNRout,Pd_CLGLRT_mc,'k-o','linewidth',linewide1,'markersize',mkft);
+plot(SNRout,Pd_KGLRTCC_mc,'g-o','linewidth',linewide1,'markersize',mkft);
+
+% load Pd_CLGLRT4_2Kmu1lambda3s0.2o1_p.mat
+% plot(SNRout,Pd_CLGLRT_mc,'k-*','linewidth',linewide1,'markersize',mkft);
+% plot(SNRout,Pd_KGLRTCC_mc,'g-*','linewidth',linewide1,'markersize',mkft);
+
+% load Pd_CLGLRT4_2Kmu1lambda3s0.3o1_p.mat
+% plot(SNRout,Pd_CLGLRT_mc,'k-v','linewidth',linewide1,'markersize',mkft);
+% plot(SNRout,Pd_KGLRTCC_mc,'g-v','linewidth',linewide1,'markersize',mkft);
+% load Pd_CLGLRT4_2Kmu1lambda3s0.4o1_p.mat
+% plot(SNRout,Pd_CLGLRT_mc,'k-h','linewidth',linewide1,'markersize',mkft);
+% plot(SNRout,Pd_KGLRTCC_mc,'g-h','linewidth',linewide1,'markersize',mkft);
+
+load Pd_CLGLRT4_2Kmu1lambda3s0.5o1_p.mat
+plot(SNRout,Pd_CLGLRT_mc,'k-<','linewidth',linewide1,'markersize',mkft);
+plot(SNRout,Pd_KGLRTCC_mc,'g-<','linewidth',linewide1,'markersize',mkft);
+plot(SNRout,Pd_KGLRT_mc,'b-<','linewidth',linewide1,'markersize',mkft);
+plot(SNRout,Pd_KGLRTNSCM_mc,'c-<','linewidth',linewide1,'markersize',mkft);
+h_leg = legend('GLC-GLRT,\sigma^2=0.1','1S-GLRT with CC,\sigma^2=0.1',...
+       'GLC-GLRT,\sigma^2=0.5','1S-GLRT with CC,\sigma^2=0.5',...
+       '1S-GLRT with SCM','1S-GLRT with NSCM');
 % h_leg = legend('GLC-GLRT,\sigma^2=0.1','1S-GLRT with CC,\sigma^2=0.1',...
+%        'GLC-GLRT,\sigma^2=0.2','1S-GLRT with CC,\sigma^2=0.2',...
+%        'GLC-GLRT,\sigma^2=0.3','1S-GLRT with CC,\sigma^2=0.3',...
+%        'GLC-GLRT,\sigma^2=0.4','1S-GLRT with CC,\sigma^2=0.4',...
 %        'GLC-GLRT,\sigma^2=0.5','1S-GLRT with CC,\sigma^2=0.5',...
 %        '1S-GLRT with SCM','1S-GLRT with NSCM');
-% % h_leg = legend('GLC-GLRT,\sigma^2=0.1','1S-GLRT with CC,\sigma^2=0.1',...
-% %        'GLC-GLRT,\sigma^2=0.2','1S-GLRT with CC,\sigma^2=0.2',...
-% %        'GLC-GLRT,\sigma^2=0.3','1S-GLRT with CC,\sigma^2=0.3',...
-% %        'GLC-GLRT,\sigma^2=0.4','1S-GLRT with CC,\sigma^2=0.4',...
-% %        'GLC-GLRT,\sigma^2=0.5','1S-GLRT with CC,\sigma^2=0.5',...
-% %        '1S-GLRT with SCM','1S-GLRT with NSCM');
-% xlabel('SNR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-% ylabel('Pd','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-% set(gca,'FontSize',labeltsize)
-% set(gcf,'Position',[700 0 1200 1000])
-% set(h_leg,'Location','SouthEast')
-% grid on
-% box on
+xlabel('SNR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('Pd','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+set(gca,'FontSize',labeltsize)
+set(gcf,'Position',[700 0 1200 1000])
+set(h_leg,'Location','SouthEast')
+grid on
+box on
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%非高斯环境下数据量的关系%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(2)

@@ -28,7 +28,7 @@ plot(PFA,Pd_R_Mlti_mc(:,1),'m-.*','linewidth',linewide1,'markersize',mkft)
 % figure(1)
 % hold on
 % load ROC_4Second_s0.1_p.mat
-Pd_P_Mlti_mc(1:2,2) = Pd_P_Mlti_mc(1:2,2)+0.2;
+% Pd_P_Mlti_mc(1:2,2) = Pd_P_Mlti_mc(1:2,2)+0.2;
 plot(PFA,Pd_ECC_Mlti_mc(:,2),'r-*','linewidth',linewide1,'markersize',mkft)
 plot(PFA,Pd_PCC_Mlti_mc(:,2),'g-*','linewidth',linewide1,'markersize',mkft)
 plot(PFA,Pd_LogCC_Mlti_mc(:,2),'b-*','linewidth',linewide1,'markersize',mkft)
@@ -58,6 +58,7 @@ figure(2)
 hold on
 load ROC_4Second_s0.9_p.mat
 plot(PFA,Pd_ECC_Mlti_mc(:,1),'r-*','linewidth',linewide1,'markersize',mkft)
+load ROC_PCC4Second_s0.9_p.mat
 plot(PFA,Pd_PCC_Mlti_mc(:,1),'g-*','linewidth',linewide1,'markersize',mkft)
 load ROC_LogCC4Second_s0.9_p.mat
 plot(PFA,Pd_LogCC_Mlti_mc(:,1),'b-*','linewidth',linewide1,'markersize',mkft)
@@ -73,8 +74,11 @@ plot(PFA,Pd_R_Mlti_mc(:,1),'m-.*','linewidth',linewide1,'markersize',mkft)
 % hold on
 load ROC_4Second_s0.9_p.mat
 plot(PFA,Pd_ECC_Mlti_mc(:,2),'r-*','linewidth',linewide1,'markersize',mkft)
+load ROC_PCC4Second_s0.9_p.mat
 plot(PFA,Pd_PCC_Mlti_mc(:,2),'g-*','linewidth',linewide1,'markersize',mkft)
+load ROC_LogCC4Second_s0.9_p.mat
 plot(PFA,Pd_LogCC_Mlti_mc(:,2),'b-*','linewidth',linewide1,'markersize',mkft)
+load ROC_4Second_s0.9_p.mat
 plot(PFA,Pd_E_Mlti_mc(:,2),'r-.','linewidth',linewide1,'markersize',mkft)
 plot(PFA,Pd_P_Mlti_mc(:,2),'g-.','linewidth',linewide1,'markersize',mkft)
 plot(PFA,Pd_LogM_Mlti_mc(:,2),'b-.','linewidth',linewide1,'markersize',mkft)
