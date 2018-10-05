@@ -32,14 +32,14 @@ end
     ht_t=exp(-1j*2*pi*(mu/2*(t).^2));
     ht=conj(fliplr(ht_t));
     ht_fft=fftshift(fft(ht));%fftshift
-Createnum = 2000;
+Createnum = 10000;
 trainLabels = zeros(Createnum/2,1);
 testLabels =  zeros(Createnum/2,1);
 trainData = zeros(64,64,Createnum/2);
 testData = zeros(64,64,Createnum/2);
-SNR=-20;
 h = waitbar(0,'Please wait...');
 for i_Createnum = 1:Createnum
+    SNR(i_Createnum)=round(rand()*(-20));
     waitbar(i_Createnum/Createnum,h,sprintf([num2str(i_Createnum/Createnum*100),'%%']));
     if i_Createnum<=Createnum/2 %%训练样本
         if rand()>0.5 %有目标
@@ -60,7 +60,7 @@ for i_Createnum = 1:Createnum
     end
     for i=1:pusle_num
         echo(i,:)=A1*exp(-1j*2*pi*(mu/2*(t+delt_t1(i)).^2)+-1j*2*pi*(fc)*(delt_t1(i)));
-        echo(i,:)=awgn(echo(i,:),SNR);%%加噪声
+        echo(i,:)=awgn(echo(i,:),SNR(i_Createnum));%%加噪声
         echo_fft(i,:)=(fft(echo(i,:)));%fftshift
         pc_result(i,:)=(ifft(echo_fft(i,:).*ht_fft));%ifftshift
         pc_result_fft(i,:)=(fft(pc_result(i,:)));%fftshift%快时间FFT
@@ -79,12 +79,13 @@ for i_Createnum = 1:Createnum
     end
 end
 close(h)
-if SNR>=0
-    str=['MTDData','_',num2str(abs(SNR)),'dB_V',num2str(Vr_start1),'.mat'];
-else
-    str=['MTDData','_fu',num2str(abs(SNR)),'dB_V',num2str(Vr_start1),'.mat'];
-end
-save(str,'trainData','testData','trainLabels','testLabels')
+% if SNR>=0
+%     str=['MTDData','_',num2str(abs(SNR)),'dB_V',num2str(Vr_start1),'.mat'];
+% else
+%     str=['MTDData','_fu',num2str(abs(SNR)),'dB_V',num2str(Vr_start1),'.mat'];
+% end
+str = ['randSNR']
+save(str,'trainData','testData','trainLabels','testLabels','SNR')
 
 
 % % % 脉压后原始回波
