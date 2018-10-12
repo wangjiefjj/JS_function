@@ -15,6 +15,8 @@ if nargin<3
 elseif nargin<4
     fd = 0;
     sigma2=1;
+elseif nargin<5
+    sigma2=1;    
 end
 L = length(rho);
 for l = 1:L

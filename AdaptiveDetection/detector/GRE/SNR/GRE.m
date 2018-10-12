@@ -8,7 +8,7 @@ Np=4;
 N=Na*Np;
 optc = 'g';
 opt_train = 1;%%1:SIRP,2:部分均匀
-L=round(2*N); 
+L=round(10*N); 
 cos2=1;%%%失配
 PFA=1e-3;% PFA=1e-4;
 %%各种比
@@ -40,7 +40,7 @@ rc =  exp(-1i*2*pi*nn*fc-2*(nn*pi*sigmaf).^2);
 Rc = CNRnum * toeplitz(rc);
 %%干扰协方差
 fj = -0.2;
-jam = exp(-1i*2*pi*nn*fs);
+jam = exp(-1i*2*pi*nn*fj);
 Rj = JNRnum * jam*jam';
 %%检测单元协方差test
 Rt = eye(N) + Rc + Rj;
@@ -80,8 +80,8 @@ counter_srao=0;
 counter_swald=0;
 
 %% 信噪比
-% alpha=sqrt(SNRnum*N/abs(vt'*vt));
-alpha=sqrt(SNRnum/abs(vt'/Rt*vt)); % 根据SNR=|alpha|^2*s'*R^(-1)*s求得|alpha|
+alpha=sqrt(SNRnum*N/abs(vt'*vt));
+% alpha=sqrt(SNRnum/abs(vt'/Rt*vt)); % 根据SNR=|alpha|^2*s'*R^(-1)*s求得|alpha|
 %% 检测概率 
 Pd_SGLRT_mc = zeros(1,length(SNRout));
 Pd_SRAO_mc = zeros(1,length(SNRout));
@@ -123,3 +123,4 @@ xlabel('SNR/dB','FontSize',20)
 ylabel('Pd','FontSize',20)
 set(gca,'FontSize',20)
 grid on
+box on

@@ -6,6 +6,6 @@ S = Train*Train';
 x = S^(-0.5)*x0;
 H = S^(-0.5)*H;
 P_H = H/(H'*H)*H';
-Tswald = (x'*P_H*x);
+Tswald = abs(x'*P_H*x);
 end
 

@@ -11,10 +11,10 @@ end
 S = Train*Train';
 Sp = 0.5*(S + J*conj(S)*J);
 Y = [0.5*(x0+J*conj(x0)),0.5*(x0-J*conj(x0))];
-S0 = Sp + Y*Y';
-x_ba = S0^(-0.5)*x0;
-p_ba = S0^(-0.5)*H;
-P_p = p_ba / (p_ba'*p_ba) * p_ba';
-Tprao = abs(x_ba'*P_p*x_ba);
+y = Sp^(-0.5)*x0;
+H = Sp^(-0.5)*H;
+P_H = H / (H'*H) * H';
+P_pH = eye(N)-P_H;
+Tprao = abs(y'*P_H*y/(1+y'*y)/(1+y'*P_pH*y));
 end
 
