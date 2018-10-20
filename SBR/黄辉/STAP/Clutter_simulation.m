@@ -17,7 +17,7 @@ entironment_parameter.ss=2;                   %海情参数：1 2 3 4 5级海情
 u=398600.8e9;
 SBR_parameter.H=800e3;                %载机高度(m)
 re=6378e3;                                 %地球半径
-SBR_parameter.V=fun_Vp(SBR_parameter.H)%sqrt(u/(airborne_parameter.H+re))           %平台速度（m/s)
+SBR_parameter.V=fun_Vp(SBR_parameter.H);%sqrt(u/(airborne_parameter.H+re))           %平台速度（m/s)
 %%%%%%%%%%%%%%%%%%%%%%信号参数%%%%%%%%%%%%%%%%%%%%%%%
 signal_parameter.fz=1.25;           %载频（GHz）
 signal_parameter.lambda=0.3/signal_parameter.fz;              %波长(m)

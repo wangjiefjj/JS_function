@@ -6,8 +6,8 @@ function [ Tanmf ] = fun_ANMF( R,x0,p )%%ACE
 % iR = inv(R);
 % tmp=abs(x0'*iR*x0);
 % Tanmf = Tamf/tmp;
-t1 = abs(p'*inv(R)*x0)^2 ;
-t2 = abs(p'*inv(R)*p) * abs(x0'*inv(R)*x0);
-Tanmf = (t1)/(t2);
+t1 = (p'*inv(R)*x0)^2 ;
+t2 = (p'*inv(R)*p) * (x0'*inv(R)*x0);
+Tanmf = abs(t1/t2);
 end
 

@@ -7,7 +7,9 @@ if nargin == 1
 end
 [N,~] = size(X);
 % 
-if opt == 1
+if opt==0
+    Rx = X*X';
+elseif opt == 1
 %%°∂Covariance matrix estimation via geometric
 %%barycenters and its application to radar training data selection°∑  
     X = X/sqrt(X'*X/N);%%πÈ“ªªØ
@@ -46,8 +48,16 @@ elseif opt == 5
    Rx = fun_SFP(X,1)  ;
 elseif opt == 6
    Rx = fun_SFP(X,2) ;
-elseif opt == 7
-   Rx = fun_NSCMN(X)+eye(N);   
+elseif opt == 7  %%%persymmetric
+    J = zeros(N,N);
+    for i = 1:N
+        J(i,N-i+1) = 1;
+    end
+    S = fun_NSCMN(X);
+    Rx = 0.5*(S + J*conj(S)*J);  
+elseif opt == 8 %%symmetric
+    S = fun_NSCMN(X);
+    Rx = real(S);  
 end
 end
 

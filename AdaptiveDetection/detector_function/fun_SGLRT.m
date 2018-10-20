@@ -5,6 +5,6 @@ S = Train*Train';
 x = S^(-0.5)*x0;
 H = S^(-0.5)*H;
 P_H = H/(H'*H)*H';
-Tsglrt = abs(x'*P_H*x)/abs(1+x'*x-x'*P_H*x);
+Tsglrt = (x'*P_H*x)/(1+x'*x-x'*P_H*x);
 end
 

@@ -23,11 +23,14 @@ ap = (Y'*iSp*H)/(H'*iSp*H);
 % s0 = 1+(x0'*iSp*x0);
 %%<GRE关系下的Persymmetric  GLRT 检测器 >%%%%%%%%%%%%%%%%%%%%%
 %%1
-s0 = det(eye(2)+Y'*iSp*Y);
-s1 = det(eye(2)+Y'*iSp*Y-Y'*iSp*H*inv(H'*iSp*H)*H'*iSp*Y);
-%%2
-% s0 = det(iSp*S+x0'*iSp*x0);
-% s1 = det(iSp*S+x0'*iSp*x0-x0'*iSp*p*inv(p'*iSp*p)*p'*iSp*x0);
+Y = Sp^(-0.5)*Y;
+H = Sp^(-0.5)*H;
+P_H = H*(H'*H)^(-1)*H';
+P_pH = eye(N)-P_H;
+s0 = det(eye(2)+Y'*Y);
+s1 = det(eye(2)+Y'*P_pH*Y);
+% s0 = det(eye(2)+Y'*Y);
+% s1 = det(eye(2)+Y'*iSp*Y-Y'*iSp*H*inv(H'*iSp*H)*H'*iSp*Y);
 %%%%%%%%
 % Pp = Rp'*iSp*p*inv(p'*iSp*p)*p'*iSp*Rp;
 % s0 = det(eye(2)+Rp'*iSp*Rp);

@@ -9,7 +9,7 @@ Num=361;
 R=fun_GenerateSimpleR(Na,Np,Num,CNR);
 figure()
 mesh(abs(R))
-Eig_R=eig(R);
+Eig_R=svd(R);
 figure;plot(db(Eig_R),'b-x')
 iR=inv(R);
 Num=128;

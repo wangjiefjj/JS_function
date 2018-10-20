@@ -8,8 +8,8 @@ d = diag(D);
 MinZm=1e6;
 M=0;
 for m = 1:N-1
-    sigma_w = mean(d(fun_g(d,m,N)+1:end));
-%     sigma_w = mean(d(m+1:end));
+%     sigma_w = mean(d(fun_g(d,m,N)+1:end));
+    sigma_w = mean(d(m+1:end));
     mZm = m*var(d(1:m))+m*sigma_w;
     if mZm<MinZm
         MinZm = mZm;
@@ -17,12 +17,12 @@ for m = 1:N-1
     end
 end
 
-sigma_w = mean(d(fun_g(d,M,N)+1:end));
-% sigma_w = mean(d(M+1:end));
+% sigma_w = mean(d(fun_g(d,M,N)+1:end));
+sigma_w = mean(d(M+1:end));
 R_MESS = V(:,1:M)*diag(d(1:M))*V(:,1:M)'+sigma_w*eye(N);
 end
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%用到的函数%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%计算噪声电平
 function v=fun_v(d,m,N)
     v = 0;

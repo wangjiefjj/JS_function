@@ -3,7 +3,7 @@ clear
 close all
 %%参数设置
 n = 0.5; %几倍的样本
-str_train = 'p';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
+str_train = 'g';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
 lambda = 3;
 mu = 1;
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
@@ -15,6 +15,7 @@ Np = 4;     % 脉冲数
 N = Na*Np;
 SNRout=-5:1:25; % 输出SNR
 CNR = 30; %%杂噪比
+CNRnum=10.^(CNRout/10);
 cos2=0.9;
 PFA=1e-3;% PFA=1e-4;
 SNRnum=10.^(SNRout/10);
@@ -24,25 +25,18 @@ L=round(n*N);
 theta_sig = 0.2;
 nn = 0:N-1;
 s = exp(-1i*2*pi*nn*theta_sig).'/sqrt(N); %%%%%% 系统导向矢量
-rouR = fun_rho(rou,N,1); %%真实的杂波协方差
-rouR_half=rouR^0.5;
-irouR=inv(rouR);
+%%杂波协方差
+Rc = fun_rho(rou,N,1,0.1);
+R = CNRnum*Rc+eye(N);
 tic
 % h = waitbar(1,'Please wait...');
 parfor i = 1:MonteCarloPfa
 
     warning('off')
 %%%%%%%%%训练数据产生%%%%%%%%%%%%%%
-    Train = fun_TrainData(str_train,N,L,rouR,lambda,mu,opt_train);%%产生的训练数据,协方差矩阵为rouR的高斯杂波
+    Train = fun_TrainData(str_train,N,L,R,lambda,mu,opt_train);%%产生的训练数据,协方差矩阵为rouR的高斯杂波
 %     Train = awgn(Train,CNR);
-    x0 = fun_TrainData(str_train,N,1,rouR,lambda,mu,opt_train); % 接收信号仅包括杂波和噪声
-%     x0 = awgn(Train,CNR);
-% % % %     RKA
-    t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
-%     R_KA = zeros(size(rouR));
-%     R_KA = rouR.*(t*t');
-    R_KA2 = zeros(size(rouR));
-    R_KA2 = (mu/(lambda-1))*rouR.*(t*t');    
+    x0 = fun_TrainData(str_train,N,1,R,lambda,mu,opt_train); % 接收信号仅包括杂波和噪声  
 % % % %     协方差估计
     R_CC = fun_CC(Train,fun_SCMN(Train),R_KA2);
 %     R_E = fun_RPowerEMean(Train,1,3);

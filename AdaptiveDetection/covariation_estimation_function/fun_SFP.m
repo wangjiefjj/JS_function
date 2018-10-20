@@ -18,7 +18,7 @@ elseif opt == 2 %%<Regularized -Estimators of Scatter Matrix>(20)Ê½
 end
 
 R = eye(N,N);
-for iter = 1:1
+for iter = 1:10
     Rt = zeros(N,N);
     R0 = R;
     %%fixed Point ·½·¨<<Generalized Robust Shrinkage Estimator and Its
