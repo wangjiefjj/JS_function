@@ -3,7 +3,7 @@ function [Tparglrt] = fun_Partial_GER_GLRT(Train,x0,H)
 %   此处显示详细说明
 %%部分均匀+GER下的GLRT
 [N,L] = size(Train);
-S = Train*Train';
+S = fun_NSCM(Train);
 H = S^(-0.5)*H;
 x0 = S^(-0.5)*x0;
 theta = (H'*H)\(H'*x0);

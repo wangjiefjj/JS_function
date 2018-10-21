@@ -3,16 +3,16 @@ clear
 close all
 % 
 %%
-Na=4;     
+Na=2;     
 Np=4;     
 N=Na*Np;
-optc = 'g';
-opt_train = 1;%%1:SIRP,2:部分均匀
+optc = 'p';
+opt_train = 2;%%1:SIRP,2:部分均匀
 L=round(2*N); 
 cos2=1;%%%失配
 PFA=1e-3;% PFA=1e-4;
 %%各种比
-SNRout = -10:10; % 输出信噪比SNR
+SNRout = 0:30; % 输出信噪比SNR
 CNRout = 15; %杂噪比
 JNRout = 15; %干噪比
 SNRnum=10.^(SNRout/10);
@@ -71,10 +71,11 @@ parfor i=1:MonteCarloPfa
     x = fun_TrainData(optc,N,1,Rt ,3,1,opt_train);
     %%
     R_SCM = fun_SCMN(Train);
+    R_NSCM = fun_NSCMN(Train);
     %% 检测器
     Tparglrt(i)=fun_Partial_GER_GLRT(Train,x,H);                   %%%%%% KGLRT
     Tsglrt(i)=fun_SGLRT(Train,x,H);                   %%%%%% KGLRT
-    Tanmf(i)=fun_ANMF(R_SCM,x,H)
+    Tanmf(i)=fun_ANMF(R_NSCM,x,H)
 end
 toc
 
@@ -110,11 +111,12 @@ for m=1:length(SNRout)
         x = fun_TrainData(optc,N,1,Rt,3,1,opt_train);
         x=alpha(m)*s_real+x;%+pp;    %%%%%%%  閲嶈  %%%%%%%%%%%%%
        %%
-       R_SCM = fun_SCMN(Train);
+        R_SCM = fun_SCMN(Train);
+        R_NSCM = fun_NSCMN(Train);
        %% 检测器
         Tparglrt=fun_Partial_GER_GLRT(Train,x,H);                   %%%%%% SGLRT
         Tsglrt = fun_SGLRT(Train,x,H);               %%%SGLRT
-        Tanmf=fun_ANMF(R_SCM,x,H)
+        Tanmf=fun_ANMF(R_NSCM,x,H)
        %% 比较
         if Tparglrt>Th_PARGLRT;         counter_parglrt=counter_parglrt+1;          end 
         if Tsglrt>Th_SGLRT;         counter_sglrt=counter_sglrt+1;          end 
@@ -137,3 +139,4 @@ xlabel('SNR/dB','FontSize',20)
 ylabel('Pd','FontSize',20)
 set(gca,'FontSize',20)
 grid on
+box on

@@ -5,10 +5,10 @@ close all
 % Read_Display_Data
 Data_process
 load(matFile) 
-lambda =  1.5025; %21,1.5025, 19980205_170935%8,2.4072, 19980223_170435
-mu = 3.0570;      %21,3.0570, 19980205_170935%8,1.3600, 19980223_170435
+lambda =  2.4072; %21,1.5025, 19980205_170935%8,2.4072, 19980223_170435
+mu = 1.3600;      %21,3.0570, 19980205_170935%8,1.3600, 19980223_170435
 %%%%参数设置
-n = 1;      %几倍的样本%%%%假设参数设置
+n = 2;      %几倍的样本%%%%假设参数设置
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
 N = Na*Np;
@@ -171,7 +171,7 @@ set(gca,'FontSize',20)
 set(h_leg,'Location','SouthEast')
 axis([min(SNRout),max(SNRout),0,1])
 grid on
-str = [num2str(Range),'_','_IPIX_',cdfFile_t,num2str(n),'N','.mat'];
+str = ['IPIX_',cdfFile_t,num2str(n),'N','.mat'];
 save (str); 
 
 
