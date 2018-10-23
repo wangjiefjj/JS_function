@@ -9,7 +9,7 @@ mu = 1;
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
 sigma_t = sqrt([0.01,0.1,0.5,0.9]);
 L_s = length(sigma_t);
-L_R = 1000;
+L_R = 10000;
 rou = 0.95;  %%协方差矩阵生成的迟滞因子
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
@@ -41,11 +41,13 @@ end
 close(h)
 for i = 1:L_s
     figure(i)
-    
+    hold on
     subplot(5,1,1)
     plot(alpha(i,:),'b','LineWidth',1)%k-.
     ylabel('\alpha','FontSize',10)
+    axis([1,L_R,0,1])
     h_leg=legend('CC');
+    axis([1,L_R,0,1])
     set(h_leg,'Location','NorthEast')
     grid on
     box on
@@ -53,6 +55,7 @@ for i = 1:L_s
     subplot(5,1,2)
     plot(alpha_ML(i,:),'c','LineWidth',1)%k:
     ylabel('\alpha','FontSize',10)
+    axis([1,L_R,0,1])
     h_leg=legend('ML');
     set(h_leg,'Location','NorthEast')
     grid on
@@ -61,6 +64,7 @@ for i = 1:L_s
     subplot(5,1,3)
     plot(alpha_T(i,:),'r','LineWidth',1)
     ylabel('\alpha','FontSize',10)
+    axis([1,L_R,0,1])
     h_leg=legend('T-KA');
     set(h_leg,'Location','NorthEast')
     grid on
@@ -69,6 +73,7 @@ for i = 1:L_s
     subplot(5,1,4)
     plot(alpha_S(i,:),'y','LineWidth',1)
     ylabel('\alpha','FontSize',10)
+    axis([1,L_R,0,1])
     h_leg=legend('S-KA');
     set(h_leg,'Location','NorthEast')
     grid on
@@ -77,13 +82,13 @@ for i = 1:L_s
     subplot(5,1,5)
     plot(alpha_P(i,:),'g','LineWidth',1)
     ylabel('\alpha','FontSize',10)
-    h_leg=legend('P-KA');
+    h_leg=legend('KA-P');
     set(h_leg,'Location','NorthEast')
     grid on
     box on
     xlabel('Range Index','FontSize',10)
 end
-str = [str_train,'_','Alpha_each','_',num2str(n),'N','.mat'];
-save (str); 
+% str = [str_train,'_','Alpha_each','_',num2str(n),'N','.mat'];
+% save (str); 
 
 

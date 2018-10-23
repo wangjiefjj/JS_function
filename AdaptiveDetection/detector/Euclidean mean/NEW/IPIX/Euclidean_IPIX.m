@@ -5,8 +5,8 @@ close all
 % Read_Display_Data
 Data_process
 load(matFile) 
-lambda =  2.4072; %21,1.5025, 19980205_170935%8,2.4072, 19980223_170435
-mu = 1.3600;      %21,3.0570, 19980205_170935%8,1.3600, 19980223_170435
+lambda =  1.1967; %17,1.1967, 19980204_224024 %8,2.4072, 19980223_170435
+mu = 1.3180;      %17,1.3180, 19980204_224024 %8,1.3600, 19980223_170435
 %%%%参数设置
 n = 2;      %几倍的样本%%%%假设参数设置
 Na = 2;     % 阵元数
@@ -25,7 +25,7 @@ theta_sig = 0.1;
 nn = 0:N-1;
 s = exp(-1i*2*pi*nn*theta_sig).'/sqrt(N); %%%%%% 系统导向矢量
 Zhh = sig;
-before = 80+N-1; %%去前几帧作为先验协方差
+before = 100+N-1; %%去前几帧作为先验协方差
 tic
 % h = waitbar(0,'Please wait...');
 parfor i = 1:MonteCarloPfa
@@ -38,6 +38,7 @@ parfor i = 1:MonteCarloPfa
     R_KA = zeros(N,N);
     for ii = 1:before-N+1
         x_tt = Zhh(index_t1-before+ii-1:index_t1-before+ii+N-2,Range);
+        x_tt = x_tt/norm(x_tt);
         R_KA = R_KA+x_tt*x_tt'/(before-N+1);
     end
     Train1 = Zhh(index_t1:index_t1+7,Range-L/2+1:Range-1);
@@ -164,7 +165,7 @@ plot(SNRout,Pd_ECCT_mc,'k','linewidth',2)
 plot(SNRout,Pd_ECCS_mc,'K-*','linewidth',2)
 plot(SNRout,Pd_ECCP_mc,'k-o','linewidth',2)
 h_leg = legend('ANMF with SCM','ANMF with CC','ANMF with ML',...
-    'ANMF with ECCT','ANMF with ECCS','ANMF with ECCP');
+    'ANMF with T-KA','ANMF with S-KA','ANMF with P-KA');
 xlabel('SNR/dB','FontSize',20)
 ylabel('Pd','FontSize',20)
 set(gca,'FontSize',20)

@@ -2,13 +2,13 @@ clc
 clear 
 close all
 %%%%参数设置
-n = 2; %几倍的样本
-str_train = 'p';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
+n = 1; %几倍的样本
+str_train = 'g';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
 lambda = 3;
 mu = 1;
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
 rou = 0.95;  %%协方差矩阵生成的迟滞因子
-sigma_t =sqrt(0.9);
+sigma_t =sqrt(0.5);
 %%%%假设参数设置
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
@@ -34,15 +34,16 @@ parfor i =1:iter
 %     warning off
     i;
     Train = fun_TrainData(str_train,N,L,rouR,lambda,mu,opt_train);%%产生的训练数据,协方差矩阵为rouR的高斯杂波
-    x0 = fun_TrainData(str_train,N,1,rouR,lambda,mu,opt_train); 
+    [x0,tau0] = fun_TrainData(str_train,N,1,rouR,lambda,mu,opt_train); 
     %     %%先验协方差
     R_KA = zeros(N,N);
     t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
     R_KA =  (rouR).*(t*t');
+    R_KA2 = (rouR).*(t*t');
     %%%%协方差估计%%%%%%%%%%%%%%%%%%%%%%    
     R_SCM = (fun_SCMN(Train));  
-    R_CC = fun_CC(Train,R_SCM,R_KA);
-    R_ML = fun_MLalpha(Train,R_SCM,R_KA,x0);
+    R_CC = fun_CC(Train,R_SCM,R_KA2);
+    R_ML = fun_MLalpha(Train,R_SCM,R_KA2,x0);
     R_ECCT = fun_PowerCC(Train,R_KA,1,4);
     R_ECCS = fun_PowerCC(Train,R_KA,1,8);
     R_ECCP = fun_PowerCC(Train,R_KA,1,7);
@@ -75,5 +76,5 @@ plot(ft,mean_SINR_ECCP,'k-o');
 h_leg = legend('R','SCM','CC','ML','ECCT','ECCS','ECCP');
 grid on
 box on
-str = [str_train,'_','SINR','_',num2str(n),'N','_s',num2str(sigma_t^2),'.mat'];
-save (str); 
+% str = [str_train,'_','SINR','_',num2str(n),'N','_s',num2str(sigma_t^2),'.mat'];
+% save (str); 

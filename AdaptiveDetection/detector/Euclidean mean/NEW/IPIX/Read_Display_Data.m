@@ -2,11 +2,15 @@
 %***************************IPIX 雷达数据处理**********************************
 Global_varity;
 cdfFile_t = cdfFile;
-cdfFile_t(17:27)=[];
+if length(cdfFile)>17
+    cdfFile_t(17:27)=[];
+else
+    cdfFile_t(4:7)=[];
+end
 [nc nrange nsweep ntxpol nadc cdfFileName] = ipixinfo(cdfFile,[cdfFile_t,'.txt']);
 [I, Q, meanIQ, stdIQ, inbal,adc_data]=ipixload(nc,'hh',0,'auto');
 sig = I + 1j*Q; 
-filename = strcat(cdfFile_t,'IPIX.mat');
+filename = strcat(cdfFile_t,'_IPIX.mat');
 save(filename,'sig');
 % sig = sig/max(abs(sig));
 % sig = sum(sig,2);

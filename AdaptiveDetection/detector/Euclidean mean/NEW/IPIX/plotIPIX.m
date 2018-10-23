@@ -19,14 +19,16 @@ plot(SNRout,Pd_ECCP_mc,'g-x','linewidth',linewide1,'MarkerSize',mkft)
 plot(SNRout,Pd_ECCS_mc,'b-x','linewidth',linewide1,'MarkerSize',mkft)
 plot(SNRout,Pd_ECCT_mc,'r-x','linewidth',linewide1,'MarkerSize',mkft)
 h_leg = legend('ANMF with SCM','ANMF with CC','ANMF with ML',...
-    'ANMF with ECCP','ANMF with ECCS','ANMF with ECCT');
+    'ANMF with KA-P','ANMF with KA-S','ANMF with KA-T');
 xlabel('SNR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('PD','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gca,'FontSize',labeltsize)
-set(gcf,'Position',[700 0 1200 1000])
+set(gcf,'Position',[300 0 1200 1000])
 set(h_leg,'Location','SouthEast')
 grid on
 box on
+str=['IPIX_PD1N.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(2)
 hold on
@@ -38,11 +40,13 @@ plot(SNRout,Pd_ECCP_mc,'g-x','linewidth',linewide1,'MarkerSize',mkft)
 plot(SNRout,Pd_ECCS_mc,'b-x','linewidth',linewide1,'MarkerSize',mkft)
 plot(SNRout,Pd_ECCT_mc,'r-x','linewidth',linewide1,'MarkerSize',mkft)
 h_leg = legend('ANMF with SCM','ANMF with CC','ANMF with ML',...
-    'ANMF with ECCP','ANMF with ECCS','ANMF with ECCT');
+    'ANMF with KA-P','ANMF with KA-S','ANMF with KA-T');
 xlabel('SNR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('PD','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gca,'FontSize',labeltsize)
-set(gcf,'Position',[700 0 1200 1000])
+set(gcf,'Position',[300 0 1200 1000])
 set(h_leg,'Location','SouthEast')
 grid on
 box on
+str=['IPIX_PD2N.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
