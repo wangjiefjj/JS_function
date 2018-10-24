@@ -1,7 +1,7 @@
 function [ Rx ] = fun_Positive( X,opt )
 %FUN_POSITIVE 此处显示有关此函数的摘要
 %   此处显示详细说明
-% 计算hermite正定矩阵（HPD)。
+% 计算hermite正定矩阵（HPD)，7,8不是正定是结构话协方差
 if nargin == 1
     opt = 1;
 end
@@ -45,9 +45,9 @@ elseif opt == 4
    X = X/sqrt(X'*X/N);%%归一化
    Rx = fun_corrcoef(X) ;
 elseif opt == 5
-   Rx = fun_SFP(X,1)  ;
+   Rx = fun_SFP(X,1);
 elseif opt == 6
-   Rx = fun_SFP(X,2) ;
+   Rx = fun_SFP(X,2);
 elseif opt == 7  %%%persymmetric
     J = zeros(N,N);
     for i = 1:N

@@ -5,7 +5,7 @@ FontSize = 20;
 markersize =10;
 linewidth = 2;
 %%%%%%%%%%%%IPIXæ‡¿Î∂‡∆’¿’Õº%%%%%%%%%%%%
-load ('19980204_224024_IPIX.mat')%19980204_224024_IPIX%19980223_170435_IPIX
+load ('19980223_170435_IPIX.mat')%19980204_224024_IPIX%19980223_170435_IPIX
 [M,L] = size(sig);
 LL = 1:L;
 MM = linspace(-0.5,0.5,M);

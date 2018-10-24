@@ -9,11 +9,11 @@ mkft = 10;
 load p_Alpha_1N.mat
 figure(1);
 hold on
-plot(sigma_t.^2,m_alpha,'b-o','linewidth',linewide1,'MarkerSize',mkft)
-plot(sigma_t.^2,m_alpha_ML,'g-o','linewidth',linewide1,'MarkerSize',mkft)
-plot(sigma_t.^2,m_alpha_P,'g-x','linewidth',linewide1,'MarkerSize',mkft)
-plot(sigma_t.^2,m_alpha_S,'b-x','linewidth',linewide1,'MarkerSize',mkft)
-plot(sigma_t.^2,m_alpha_T,'r-x','linewidth',linewide1,'MarkerSize',mkft)
+plot(sigma_t.^2,m_alpha,'c-o','linewidth',linewide1,'MarkerSize',mkft)
+plot(sigma_t.^2,m_alpha_ML,'m-o','linewidth',linewide1,'MarkerSize',mkft)
+plot(sigma_t.^2,m_alpha_P,'g->','linewidth',linewide1,'MarkerSize',mkft)
+plot(sigma_t.^2,m_alpha_S,'b-o','linewidth',linewide1,'MarkerSize',mkft)
+plot(sigma_t.^2,m_alpha_T,'r-*','linewidth',linewide1,'MarkerSize',mkft)
 h_leg = legend('CC','ML','KA-P','KA-S','KA-T');
 xlabel('\sigma^2','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\alpha','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
@@ -29,11 +29,11 @@ print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 load p_Alpha_2N.mat
 figure(2);
 hold on
-plot(sigma_t.^2,m_alpha,'b-o','linewidth',linewide1,'MarkerSize',mkft)
-plot(sigma_t.^2,m_alpha_ML,'g-o','linewidth',linewide1,'MarkerSize',mkft)
-plot(sigma_t.^2,m_alpha_P,'g-x','linewidth',linewide1,'MarkerSize',mkft)
-plot(sigma_t.^2,m_alpha_S,'b-x','linewidth',linewide1,'MarkerSize',mkft)
-plot(sigma_t.^2,m_alpha_T,'r-x','linewidth',linewide1,'MarkerSize',mkft)
+plot(sigma_t.^2,m_alpha,'c-o','linewidth',linewide1,'MarkerSize',mkft)
+plot(sigma_t.^2,m_alpha_ML,'m-o','linewidth',linewide1,'MarkerSize',mkft)
+plot(sigma_t.^2,m_alpha_P,'g->','linewidth',linewide1,'MarkerSize',mkft)
+plot(sigma_t.^2,m_alpha_S,'b-o','linewidth',linewide1,'MarkerSize',mkft)
+plot(sigma_t.^2,m_alpha_T,'r-*','linewidth',linewide1,'MarkerSize',mkft)
 h_leg = legend('CC','ML','KA-P','KA-S','KA-T');
 xlabel('\sigma^2','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\alpha','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
@@ -49,11 +49,11 @@ print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 load g_Alpha_1N.mat
 figure(3);
 hold on
-plot(sigma_t.^2,m_alpha,'b-o','linewidth',linewide1,'MarkerSize',mkft)
-plot(sigma_t.^2,m_alpha_ML,'g-o','linewidth',linewide1,'MarkerSize',mkft)
-plot(sigma_t.^2,m_alpha_P,'g-x','linewidth',linewide1,'MarkerSize',mkft)
-plot(sigma_t.^2,m_alpha_S,'b-x','linewidth',linewide1,'MarkerSize',mkft)
-plot(sigma_t.^2,m_alpha_T,'r-x','linewidth',linewide1,'MarkerSize',mkft)
+plot(sigma_t.^2,m_alpha,'c-o','linewidth',linewide1,'MarkerSize',mkft)
+plot(sigma_t.^2,m_alpha_ML,'m-o','linewidth',linewide1,'MarkerSize',mkft)
+plot(sigma_t.^2,m_alpha_P,'g->','linewidth',linewide1,'MarkerSize',mkft)
+plot(sigma_t.^2,m_alpha_S,'b-o','linewidth',linewide1,'MarkerSize',mkft)
+plot(sigma_t.^2,m_alpha_T,'r-*','linewidth',linewide1,'MarkerSize',mkft)
 h_leg = legend('CC','ML','KA-P','KA-S','KA-T');
 xlabel('\sigma^2','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\alpha','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
@@ -69,11 +69,11 @@ print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 load g_Alpha_2N.mat
 figure(4);
 hold on
-plot(sigma_t.^2,m_alpha,'b-o','linewidth',linewide1,'MarkerSize',mkft)
-plot(sigma_t.^2,m_alpha_ML,'g-o','linewidth',linewide1,'MarkerSize',mkft)
-plot(sigma_t.^2,m_alpha_P,'g-x','linewidth',linewide1,'MarkerSize',mkft)
-plot(sigma_t.^2,m_alpha_S,'b-x','linewidth',linewide1,'MarkerSize',mkft)
-plot(sigma_t.^2,m_alpha_T,'r-x','linewidth',linewide1,'MarkerSize',mkft)
+plot(sigma_t.^2,m_alpha,'c-o','linewidth',linewide1,'MarkerSize',mkft)
+plot(sigma_t.^2,m_alpha_ML,'m-o','linewidth',linewide1,'MarkerSize',mkft)
+plot(sigma_t.^2,m_alpha_P,'g->','linewidth',linewide1,'MarkerSize',mkft)
+plot(sigma_t.^2,m_alpha_S,'b-o','linewidth',linewide1,'MarkerSize',mkft)
+plot(sigma_t.^2,m_alpha_T,'r-*','linewidth',linewide1,'MarkerSize',mkft)
 h_leg = legend('CC','ML','KA-P','KA-S','KA-T');
 xlabel('\sigma^2','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\alpha','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
