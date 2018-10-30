@@ -8,8 +8,8 @@ clc
 clear 
 close all
 %%%%参数设置
-n = 2; %几倍的样本
-str_train = 'g';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
+n = 10; %几倍的样本
+str_train = 'p';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
 lambda = 3;
 mu = 1;
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
@@ -88,7 +88,7 @@ for i = 1:MonteCarloPfa
     
     R_CC = fun_CC(Train,R_SCMN,R_KA);
     iR_CC = inv(R_CC);
-    R_AML = fun_SAML(Train);
+    R_SAML = fun_SAML(Train);
     
     %%%检测器%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%% 1S-GLRT SCM
@@ -97,14 +97,11 @@ for i = 1:MonteCarloPfa
     Tglrtcc(i) = fun_1SGLRT(R_CC,x0,s,mu);
     %%%%%% 1S-GLRT NSCM
     Tglrtnscm(i) = fun_1SGLRT(R_NSCMN,x0,s,mu);
-    %%%%%% AML
-    Tglrtaml(i) = fun_1SGLRT(R_AML,x0,s,mu);
+    %%%%%% SAML
+    Tglrtaml(i) = fun_1SGLRT(R_SAML,x0,s,mu);
     %%%%%% CLGLRT
 %     Tclglrt(i) = fun_CLGLRT2(lambda,mu,R_KA,R_SCMN,x0,s);
     Tclglrt(i) = fun_CLGLRT3(lambda,mu,R_KA,R_SCMN,x0,s);
-%     MAM(:,:,1) = R_KA;
-%     MAM(:,:,2) = R_SCMN;
-%     Tclglrt(i) = fun_MAM_GLRT(MAM,x0,s,lambda,mu);
 end
 toc
 % close(h)
@@ -117,20 +114,20 @@ TKGLRTNSCM=sort(Tglrtnscm,'descend');
 Th_KGLRT=(TKGLRT(floor(MonteCarloPfa*PFA-1))+TKGLRT(floor(MonteCarloPfa*PFA)))/2;
 Th_CLGLRT=(TCLGLRT(floor(MonteCarloPfa*PFA-1))+TCLGLRT(floor(MonteCarloPfa*PFA)))/2;
 Th_KGLRTCC=(TKGLRTCC(floor(MonteCarloPfa*PFA-1))+TKGLRTCC(floor(MonteCarloPfa*PFA)))/2;
-Th_GLRTAML = (TGLRTAML(floor(MonteCarloPfa*PFA-1))+TGLRTAML(floor(MonteCarloPfa*PFA)))/2;
+Th_GLRTSAML = (TGLRTAML(floor(MonteCarloPfa*PFA-1))+TGLRTAML(floor(MonteCarloPfa*PFA)))/2;
 Th_KGLRTNSCM=(TKGLRTNSCM(floor(MonteCarloPfa*PFA-1))+TKGLRTNSCM(floor(MonteCarloPfa*PFA)))/2;
 %%%%%%%%%%%%%%%%%%%%%检测概率%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 counter_glrt=0;
 counter_clglrt=0;
 counter_glrtcc=0;
-counter_glrtaml = 0;
+counter_glrtsaml = 0;
 counter_glrtnscm=0;
 
 Pd_KGLRT_mc = zeros(1,length(SNRout));
 Pd_CLGLRT_mc = zeros(1,length(SNRout));
 Pd_KGLRTCC_mc = zeros(1,length(SNRout));
-Pd_AML_mc = zeros(1,length(SNRout));
+Pd_SAML_mc = zeros(1,length(SNRout));
 Pd_KGLRTNSCM_mc = zeros(1,length(SNRout));
 % alpha=sqrt(SNRnum/abs(s_real'*irouR*s_real)); % 根据SNR=|alpha|^2*s'*R^(-1)*s求得|alpha|
 alpha=sqrt(SNRnum/abs(s'*irouR*s)); % 根据SNR=|alpha|^2*s'*R^(-1)*s求得|alpha|
@@ -160,7 +157,7 @@ for m=1:length(SNRout)
         R_CC = fun_CC(Train,R_SCMN,R_KA);
         iR_CC = inv(R_CC);
         
-        R_AML = fun_SAML(Train);
+        R_SAML = fun_SAML(Train);
         
         x0=alpha(m)*s+x0;%+pp;    %%%%%%%  重要  %%%%%%%%%%%%%
         %%%检测器%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -170,8 +167,8 @@ for m=1:length(SNRout)
         Tglrtcc = fun_1SGLRT(R_CC,x0,s,mu);
         %%%%%% 1SGLRTNSCM
         Tglrtnscm = fun_1SGLRT(R_NSCMN,x0,s,mu);
-        %%%%%% AML
-        Tglrtaml = fun_1SGLRT(R_AML,x0,s,mu);
+        %%%%%% SAML
+        Tglrtaml = fun_1SGLRT(R_SAML,x0,s,mu);
         %%%%%% GLCGLRT
 %         Tclglrt = fun_CLGLRT2(lambda,mu,R_KA,R_SCMN,x0,s);
         Tclglrt = fun_CLGLRT3(lambda,mu,R_KA,R_SCMN,x0,s);
@@ -182,13 +179,13 @@ for m=1:length(SNRout)
         if Tglrt>Th_KGLRT;          counter_glrt=counter_glrt+1;        end                
         if Tclglrt>Th_CLGLRT;       counter_clglrt=counter_clglrt+1;    end   
         if Tglrtcc>Th_KGLRTCC;      counter_glrtcc=counter_glrtcc+1;    end
-        if Tglrtaml>Th_GLRTAML;             counter_glrtaml=counter_glrtaml+1;          end
+        if Tglrtaml>Th_GLRTSAML;             counter_glrtsaml=counter_glrtsaml+1;          end
         if Tglrtnscm>Th_KGLRTNSCM;  counter_glrtnscm=counter_glrtnscm+1;      end
     end  
     Pd_KGLRT_mc(m)=counter_glrt/MonteCarloPd;           counter_glrt=0;
     Pd_CLGLRT_mc(m)=counter_clglrt/MonteCarloPd;        counter_clglrt=0;
     Pd_KGLRTCC_mc(m)=counter_glrtcc/MonteCarloPd;       counter_glrtcc=0; 
-    Pd_AML_mc(m) = counter_glrtaml/MonteCarloPd;           counter_glrtaml=0;
+    Pd_SAML_mc(m) = counter_glrtsaml/MonteCarloPd;           counter_glrtsaml=0;
     Pd_KGLRTNSCM_mc(m)=counter_glrtnscm/MonteCarloPd;    counter_glrtnscm=0;
 end
 close(h)
@@ -199,7 +196,7 @@ plot(SNRout,Pd_CLGLRT_mc,'k.-','linewidth',2)
 plot(SNRout,Pd_KGLRTCC_mc,'g-s','linewidth',2)
 plot(SNRout,Pd_KGLRT_mc,'b-+','linewidth',2)
 plot(SNRout,Pd_KGLRTNSCM_mc,'c-o','linewidth',2)
-plot(SNRout,Pd_AML_mc,'r->','linewidth',2)
+plot(SNRout,Pd_SAML_mc,'r->','linewidth',2)
 h_leg = legend('CLGLRT','KGLRTCC','KGLRT','KGLRTNSCM','1S-GLRT with AML');
 xlabel('SNR/dB','FontSize',20)
 ylabel('Pd','FontSize',20)
@@ -207,8 +204,7 @@ set(gca,'FontSize',20)
 set(h_leg,'Location','SouthEast')
 grid on
 % % str=['Pd_CLGLRT_',num2str(N),'N','_',num2str(n),'K','mu',num2str(mu),'lambda',num2str(lambda),'s',num2str(sigma_t),'o',num2str(opt_train),'_',str_train,'.mat'];
-% str=['Pd_CLGLRT4_3_',num2str(n),'K','mu',num2str(mu),...
-%      'lambda', num2str(lambda),'s',num2str(sigma_t),...
-%      'o',num2str(opt_train),'_',str_train,'.mat'];
-% save(str,'lambda','mu','sigma_t','SNRout','Pd_CLGLRT_mc','Pd_KGLRT_mc',...
-%          'Pd_KGLRTCC_mc','Pd_KGLRTNSCM_mc');
+str=['Pd_CLGLRT4_2_',num2str(n),'K','mu',num2str(mu),...
+     'lambda', num2str(lambda),'s',num2str(sigma_t),...
+     'o',num2str(opt_train),'_',str_train,'.mat'];
+save(str);

@@ -77,7 +77,7 @@ parfor i = 1:MonteCarloPfa
     Tglrtcc(i) = fun_1SGLRT(R_CC,x0,s,mu);
 %     %%%%%% 1S-GLRT NSCM
     Tglrtnscm(i) = fun_1SGLRT(R_NSCMN,x0,s,mu);
-    %%%%%% sAML
+    %%%%%% SAML
     Tglrtsaml(i) = fun_1SGLRT(R_SAML,x0,s,mu);
     %%%%%% CLGLRT
     Tclglrt(i) = fun_CLGLRT3(lambda,mu,R_KA,R_SCMN,x0,s);

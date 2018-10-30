@@ -20,7 +20,7 @@ plot(SNRout,Pd_ECCS_mc,'b-o','linewidth',linewide1,'MarkerSize',mkft)
 plot(SNRout,Pd_ECCT_mc,'r-*','linewidth',linewide1,'MarkerSize',mkft)
 h_leg = legend('ANMF with SCM','ANMF with CC','ANMF with ML',...
     'ANMF with KA-P','ANMF with KA-S','ANMF with KA-T');
-xlabel('SNR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+xlabel('SCR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('PD','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[300 0 1200 1000])
@@ -41,7 +41,7 @@ plot(SNRout,Pd_ECCS_mc,'b-o','linewidth',linewide1,'MarkerSize',mkft)
 plot(SNRout,Pd_ECCT_mc,'r-*','linewidth',linewide1,'MarkerSize',mkft)
 h_leg = legend('ANMF with SCM','ANMF with CC','ANMF with ML',...
     'ANMF with KA-P','ANMF with KA-S','ANMF with KA-T');
-xlabel('SNR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+xlabel('SCR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('PD','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[300 0 1200 1000])

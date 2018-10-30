@@ -12,8 +12,8 @@ end
 sig_test_t = sig(2:N+1,:);
 [X,Y]=meshgrid(1:L,linspace(-0.5,0.5,M));
 MTD = abs(fftshift(fft(sig,[],1)));
-% figure()
-% mesh(X,Y,MTD);
+figure()
+mesh(X,Y,MTD);
 R_KA = zeros(N,N);
 L_KA = 7500;
 for i = 1:L_KA

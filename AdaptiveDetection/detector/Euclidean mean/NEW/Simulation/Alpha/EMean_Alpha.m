@@ -14,7 +14,7 @@ rou = 0.95;  %%协方差矩阵生成的迟滞因子
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
 N = Na*Np;
-R = fun_rho(rou,N,1);
+R = fun_rho(rou,N,1,0.05);
 L=round(n*N); 
 h = waitbar(0,'Please wait...');
 for i_s = 1:L_s
@@ -59,7 +59,7 @@ xlabel('\sigma^2','FontSize',10)
 ylabel('\alpha','FontSize',10)
 set(gca,'FontSize',10)
 set(h_leg,'Location','SouthEast')
-str = [str_train,'_','Alpha','_',num2str(n),'N','.mat'];
-save (str); 
+% str = [str_train,'_','Alpha','_',num2str(n),'N','.mat'];
+% save (str); 
 
 

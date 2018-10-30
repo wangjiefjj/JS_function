@@ -10,7 +10,7 @@ end
 [nc nrange nsweep ntxpol nadc cdfFileName] = ipixinfo(cdfFile,[cdfFile_t,'.txt']);
 [I, Q, meanIQ, stdIQ, inbal,adc_data]=ipixload(nc,'hh',0,'auto');
 sig = I + 1j*Q; 
-filename = strcat(cdfFile_t,'_IPIX.mat');
+filename = strcat(cdfFile_t,'IPIX.mat');
 save(filename,'sig');
 % sig = sig/max(abs(sig));
 % sig = sum(sig,2);

@@ -20,7 +20,7 @@ C_max = 0;
 for alpha = 0.01:0.01:1 %%（24）的两项用（39）和（42）替换
     eta = (1-alpha)/alpha/N; %(36)
     t1= M*log(alpha)+log(det(R_KA))+log(det(eye(N,N)+eta*A));
-    t2 = trace(x0' * (1/alpha * (R_KA_inv - eta * P * inv(eye(N,N)+eta*A) * P')) * x0);
+    t2 = (x0' * (1/alpha * (R_KA_inv - eta * P * inv(eye(N,N)+eta*A) * P')) * x0);
     C_t= -t1-t2;
     if (C_t)>(C_max)
         alpha_max = alpha;

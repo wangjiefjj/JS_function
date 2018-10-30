@@ -6,6 +6,10 @@ cdfFile_t(17:27)=[];
 [nc nrange nsweep ntxpol nadc cdfFileName] = ipixinfo(cdfFile,[cdfFile_t,'.txt']);
 [I, Q, meanIQ, stdIQ, inbal,adc_data]=ipixload(nc,'hh',0,'auto');
 sig = I + 1j*Q; 
+[M,N]=size(sig);
+if M<N
+    sig=sig.';
+end
 filename = strcat(cdfFile_t,'IPIX.mat');
 save(filename,'sig');
 % sig = sig/max(abs(sig));
