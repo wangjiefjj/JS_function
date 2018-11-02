@@ -51,9 +51,51 @@ grid on
 box on
 str=['PD_p2.eps'];
 print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
+
+figure(3)
+hold on
+load Pd_CLGLRT4_2_3Kmu1lambda3s0.1o1_p.mat
+plot(SNRout,Pd_CLGLRT_mc,'k->','linewidth',linewide1,'markersize',mkft);%Pd_CLGLRT_mc/2+Pd_KGLRTCC_mc/2
+plot(SNRout,Pd_KGLRTCC_mc,'g->','linewidth',linewide1,'markersize',mkft);
+plot(SNRout,Pd_KGLRT_mc,'b->','linewidth',linewide1,'markersize',mkft);
+plot(SNRout,Pd_KGLRTNSCM_mc,'c->','linewidth',linewide1,'markersize',mkft);
+load Pd_CLGLRT_revision_saml_2Kmu1lambda3_p.mat
+plot(SNRout,Pd_SAML_mc,'r->','linewidth',linewide1,'markersize',mkft);
+h_leg = legend('GLC-GLRT','1S-GLRT with CC',...
+               '1S-GLRT with SCM','1S-GLRT with NSCM','1S-GLRT with SFPE');
+xlabel('SCR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('PD','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+set(gca,'FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+set(gcf,'Position',[500 0 1200 1000])
+set(h_leg,'Location','SouthEast')
+grid on
+box on
+str=['PD_p3.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
+
+figure(4)
+hold on
+load Pd_CLGLRT4_2_10Kmu1lambda3s0.1o1_p.mat
+plot(SNRout,Pd_CLGLRT_mc,'k->','linewidth',linewide1,'markersize',mkft);%Pd_CLGLRT_mc/2+Pd_KGLRTCC_mc/2
+plot(SNRout,Pd_KGLRTCC_mc,'g->','linewidth',linewide1,'markersize',mkft);
+plot(SNRout,Pd_KGLRT_mc,'b->','linewidth',linewide1,'markersize',mkft);
+plot(SNRout,Pd_KGLRTNSCM_mc,'c->','linewidth',linewide1,'markersize',mkft);
+load Pd_CLGLRT_revision_saml_2Kmu1lambda3_p.mat
+plot(SNRout,Pd_SAML_mc,'r->','linewidth',linewide1,'markersize',mkft);
+h_leg = legend('GLC-GLRT','1S-GLRT with CC',...
+               '1S-GLRT with SCM','1S-GLRT with NSCM','1S-GLRT with SFPE');
+xlabel('SCR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('PD','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+set(gca,'FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+set(gcf,'Position',[500 0 1200 1000])
+set(h_leg,'Location','SouthEast')
+grid on
+box on
+str=['PD_p4.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%高斯环境下%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-figure(3)
+figure(5)
 hold on
 load Pd_CLGLRT4_2_1Kmu1lambda3s0.1o1_g.mat
 % Pd_CLGLRT_mc(1:4)=Pd_CLGLRT_mc(1:4)*0.8;
@@ -77,7 +119,7 @@ str=['PD_g1.eps'];
 print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 
 
-figure(4)
+figure(6)
 hold on
 load Pd_CLGLRT4_2_2Kmu1lambda3s0.1o1_g.mat
 plot(SNRout,Pd_CLGLRT_mc,'k->','linewidth',linewide1,'markersize',mkft);%Pd_CLGLRT_mc/2+Pd_KGLRTCC_mc/2
@@ -100,7 +142,7 @@ print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 % pause(2)
 % close all
 
-figure(5)
+figure(7)
 hold on
 load Pd_CLGLRT4_2_3Kmu1lambda3s0.1o1_g.mat
 plot(SNRout,Pd_CLGLRT_mc,'k->','linewidth',linewide1,'markersize',mkft);%Pd_CLGLRT_mc/2+Pd_KGLRTCC_mc/2
@@ -121,7 +163,7 @@ box on
 str=['PD_g3.eps'];
 print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 
-figure(5)
+figure(8)
 hold on
 load Pd_CLGLRT4_2_10Kmu1lambda3s0.1o1_g.mat
 plot(SNRout,Pd_CLGLRT_mc,'k->','linewidth',linewide1,'markersize',mkft);%Pd_CLGLRT_mc/2+Pd_KGLRTCC_mc/2

@@ -16,7 +16,7 @@ switch str
         N = varargin{2}; %导向矢量维数
         L = varargin{3};
         R = varargin{4}; %%协方差
-        X = fun_TrainData_gauss(N,L, R);
+        X = fun_TrainData_gauss(N,L,R);
         tau = 1;
     case 'k'
         if nargin < 5
