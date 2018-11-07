@@ -1,10 +1,10 @@
-%%选择数据的最佳模型
+%%选择数据的最佳模型，特别慢
 clc
 clear
 close all
-Class=2; %%
+Class=1; %%
 rho=2;  %%GIC的参数 
-MC = 1000;
+MC = 500;
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
 fc = 0;
 %%%%假设参数设置
@@ -13,18 +13,17 @@ Np = 4;     % 脉冲数
 N = Na*Np;
 lambda = 1;%%%越小非高斯越严重
 mu = 1;
-% n =1.1:0.3:8; %几倍的样本
-% L=round(n*N);SNRout=10;
 SNRout=10;
 SNRnum=10.^(SNRout/10);
 CNRout=30;
 CNRnum=10.^(CNRout/10); 
 L = N+1:1:4*N;
+% L=16;
 theta_sig = 0.2;
 nn = 0:N-1;
 p = exp(-1i*2*pi*nn*theta_sig).'/sqrt(N); %%%%%% 系统导向矢量
 a = sqrt(SNRnum);
-
+%%
 if Class==1%%均匀
     str_train = 'g';
     %%杂波协方差
@@ -60,6 +59,7 @@ elseif Class == 3%%SIRP
 end
 iRc1 = inv(Rc1);
 iRc2 = inv(Rc2);
+%%
 tic
 h = waitbar(1,'Please wait...');
 for i_L = 1:length(L)
@@ -79,148 +79,125 @@ for i_L = 1:length(L)
     count_ABIC3 = 0;
     count_GIC3 = 0;
     count_AICc3 = 0;
-    %%参数个数
-    %只用辅助数据时
-    H1_num1 = N^2;
-    H2_num1 = N^2+1;
-    H3_num1 = N^2+L(i_L);
-    %主辅数据时
-    H1_num2 = N^2+1;
-    H2_num2 = N^2+3;
-    H3_num2 = N^2+L(i_L)+2;
-    %主数据时
-    H1_num3 = N^2+1;
-    H2_num3 = N^2+2;
-    H3_num3 = N^2+2;
     parfor i = 1:MC
         warning off
+        %%
         %%产生数据
         [Train,tauk] = fun_TrainData(str_train,N,L(i_L),Rc1,lambda,mu,opt_train);%%产生的训练数据,协方差矩阵为rouR的高斯杂波
         [x0,tau0] = fun_TrainData(str_train,N,1,Rc2,lambda,mu,opt_train); % 接收信号仅包括杂波和噪声
         x0 =x0+a*p;
-        %%s函数计算 
-        %只用辅助数据时
-        s_H1_1 = -abs(fun_s_H1(Train,p,1));
-        s_H2_1 = -abs(fun_s_H2(Train,p,1));
-        [s_H3_1] = -abs(fun_s_H3(Train,p,1));
-        %主辅数据时
-        s_H1_2 = -abs(fun_s_H1([Train,x0],p,2));
-        s_H2_2 = -abs(fun_s_H2([Train,x0],p,2));
-        s_H3_2 = -abs(fun_s_H3([Train,x0],p,2));
-        %只用主数据时
-        s_H1_3 = -abs(fun_s_H1([Train,x0],p,3));
-        s_H2_3 = -abs(fun_s_H2([Train,x0],p,3));
-        s_H3_3 = -abs(fun_s_H3([Train,x0],p,3));
-        
+        %%
         %%模型选择准则%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %只用辅助数据时%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %%AIC%%%%%%%%%
-        H1_AIC_1 = fun_AIC(s_H1_1,H1_num1);
-        H2_AIC_1 = fun_AIC(s_H2_1,H2_num1);
-        H3_AIC_1 = fun_AIC(s_H3_1,H3_num1);
+        H1_AIC_1 = fun_Mos('AIC',Train,p,'H1',1);
+        H2_AIC_1 = fun_Mos('AIC',Train,p,'H2',1);
+        H3_AIC_1 = fun_Mos('AIC',Train,p,'H3',1);
         Class_AIC1 =[H1_AIC_1,H2_AIC_1,H3_AIC_1];
         [~,Class_AIC_num1] = min(Class_AIC1);
         if Class_AIC_num1 == Class  
             count_AIC1 = count_AIC1+1;  
         end
         %%GIC%%%%%%
-        H1_GIC_1 = fun_GIC(s_H1_1,H1_num1,rho);
-        H2_GIC_1 = fun_GIC(s_H2_1,H2_num1,rho);
-        H3_GIC_1 = fun_GIC(s_H3_1,H3_num1,rho);
+        H1_GIC_1 = fun_Mos('GIC',Train,p,'H1',1,rho);
+        H2_GIC_1 = fun_Mos('GIC',Train,p,'H2',1,rho);
+        H3_GIC_1 = fun_Mos('GIC',Train,p,'H3',1,rho);
         Class_GIC1 =[H1_GIC_1,H2_GIC_1,H3_GIC_1];
         [~,Class_GIC_num1] = min(Class_GIC1);
         if Class_GIC_num1 == Class  
             count_GIC1 = count_GIC1+1;  
         end
         %%AICc%%%%%%%
-        H1_AICc_1 = fun_AICc(s_H1_1,H1_num1,N,L(i_L));
-        H2_AICc_1 = fun_AICc(s_H2_1,H2_num1,N,L(i_L));
-        H3_AICc_1 = fun_AICc(s_H3_1,H3_num1,N,L(i_L));
+        H1_AICc_1 = fun_Mos('AICc',Train,p,'H1',1,N,L(i_L));
+        H2_AICc_1 = fun_Mos('AICc',Train,p,'H2',1,N,L(i_L));
+        H3_AICc_1 = fun_Mos('AICc',Train,p,'H3',1,N,L(i_L));
         Class_AICc1 =[H1_AICc_1,H2_AICc_1,H3_AICc_1];
         [~,Class_AICc_num1] = min(Class_AICc1);
         if Class_AICc_num1 == Class  
             count_AICc1 = count_AICc1+1;  
         end
         %%ABIC%%%%%%%
-        H1_ABIC_1 = fun_ABIC(s_H1_1,H1_num1,L(i_L));
-        H2_ABIC_1 = fun_ABIC(s_H2_1,H2_num1,L(i_L));
-        H3_ABIC_1 = fun_ABIC(s_H3_1,H3_num1,L(i_L));
+        H1_ABIC_1 = fun_Mos('ABIC',Train,p,'H1',1,L(i_L));
+        H2_ABIC_1 = fun_Mos('ABIC',Train,p,'H2',1,L(i_L));
+        H3_ABIC_1 = fun_Mos('ABIC',Train,p,'H3',1,L(i_L));
         Class_ABIC1 =[H1_ABIC_1,H2_ABIC_1,H3_ABIC_1];
         [~,Class_ABIC_num1] = min(Class_ABIC1);
         if Class_ABIC_num1 == Class  
             count_ABIC1 = count_ABIC1+1;  
         end
+        %%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %主辅数据时%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %%AIC%%%%%%%%%%%%%%%%
-        AIC_H1_2 = fun_AIC(s_H1_2,H1_num2);
-        AIC_H2_2 = fun_AIC(s_H2_2,H2_num2);
-        AIC_H3_2 = fun_AIC(s_H3_2,H3_num2);
+        AIC_H1_2 = fun_Mos('AIC',[Train,x0],p,'H1',2);
+        AIC_H2_2 = fun_Mos('AIC',[Train,x0],p,'H2',2);
+        AIC_H3_2 = fun_Mos('AIC',[Train,x0],p,'H3',2);
         Class_AIC2 =[AIC_H1_2,AIC_H2_2,AIC_H3_2];
         [~,Class_AIC_num2] = min(Class_AIC2);
         if Class_AIC_num2 == Class  
             count_AIC2 = count_AIC2+1;  
         end
         %%GIC%%%%%%%%%%%%%%
-        H1_GIC_2 = fun_GIC(s_H1_2,H1_num2,rho);
-        H2_GIC_2 = fun_GIC(s_H2_2,H2_num2,rho);
-        H3_GIC_2 = fun_GIC(s_H3_2,H3_num2,rho);
+        H1_GIC_2 = fun_Mos('GIC',[Train,x0],p,'H1',2,rho);
+        H2_GIC_2 = fun_Mos('GIC',[Train,x0],p,'H2',2,rho);
+        H3_GIC_2 = fun_Mos('GIC',[Train,x0],p,'H3',2,rho);
         Class_GIC2 =[H1_GIC_2,H2_GIC_2,H3_GIC_2];
         [~,Class_GIC_num2] = min(Class_GIC2);
         if Class_GIC_num2 == Class  
             count_GIC2 = count_GIC2+1;  
         end
         %%AICc%%%%%%%
-        H1_AICc_2 = fun_AICc(s_H1_2,H1_num2,N,L(i_L));
-        H2_AICc_2 = fun_AICc(s_H2_2,H2_num2,N,L(i_L));
-        H3_AICc_2 = fun_AICc(s_H3_2,H3_num2,N,L(i_L));
+        H1_AICc_2 = fun_Mos('AICc',[Train,x0],p,'H1',2,N,L(i_L));
+        H2_AICc_2 = fun_Mos('AICc',[Train,x0],p,'H2',2,N,L(i_L));
+        H3_AICc_2 = fun_Mos('AICc',[Train,x0],p,'H3',2,N,L(i_L));
         Class_AICc2 =[H1_AICc_2,H2_AICc_2,H3_AICc_2];
         [~,Class_AICc_num2] = min(Class_AICc2);
         if Class_AICc_num2 == Class  
             count_AICc2 = count_AICc2+1;  
         end
         %%ABIC%%%%%%%
-        H1_ABIC_2 = fun_ABIC(s_H1_2,H1_num2,L(i_L));
-        H2_ABIC_2 = fun_ABIC(s_H2_2,H2_num2,L(i_L));
-        H3_ABIC_2 = fun_ABIC(s_H3_2,H3_num2,L(i_L));
+        H1_ABIC_2 = fun_Mos('ABIC',[Train,x0],p,'H1',2,L(i_L));
+        H2_ABIC_2 = fun_Mos('ABIC',[Train,x0],p,'H2',2,L(i_L));
+        H3_ABIC_2 = fun_Mos('ABIC',[Train,x0],p,'H3',2,L(i_L));
         Class_ABIC2 =[H1_ABIC_2,H2_ABIC_2,H3_ABIC_2];
         [~,Class_ABIC_num2] = min(Class_ABIC2);
         if Class_ABIC_num2 == Class  
             count_ABIC2 = count_ABIC2+1;  
         end
+        %%
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %主数据时%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %%AIC%%%%%%%%%%%%%%%%
-        AIC_H1_3 = fun_AIC(s_H1_3,H1_num3);
-        AIC_H2_3 = fun_AIC(s_H2_3,H2_num3);
-        AIC_H3_3 = fun_AIC(s_H3_3,H3_num3);
+        AIC_H1_3 = fun_Mos('AIC',[Train,x0],p,'H1',3);
+        AIC_H2_3 = fun_Mos('AIC',[Train,x0],p,'H2',3);
+        AIC_H3_3 = fun_Mos('AIC',[Train,x0],p,'H3',3);
         Class_AIC3 =[AIC_H1_3,AIC_H2_3,AIC_H3_3];
         [~,Class_AIC_num3] = min(Class_AIC3);
         if Class_AIC_num3 == Class  
             count_AIC3 = count_AIC3+1;  
         end
         %%GIC%%%%%%%%%%%%%%
-        H1_GIC_3 = fun_GIC(s_H1_3,H1_num3,rho);
-        H2_GIC_3 = fun_GIC(s_H2_3,H2_num3,rho);
-        H3_GIC_3 = fun_GIC(s_H3_3,H3_num3,rho);
+        H1_GIC_3 = fun_Mos('GIC',[Train,x0],p,'H1',3,rho);
+        H2_GIC_3 = fun_Mos('GIC',[Train,x0],p,'H2',3,rho);
+        H3_GIC_3 = fun_Mos('GIC',[Train,x0],p,'H3',3,rho);
         Class_GIC3 =[H1_GIC_3,H2_GIC_3,H3_GIC_3];
         [~,Class_GIC_num3] = min(Class_GIC3);
         if Class_GIC_num3 == Class  
             count_GIC3 = count_GIC3+1;  
         end
         %%AICc%%%%%%%
-        H1_AICc_3 = fun_AICc(s_H1_3,H1_num3,N,L(i_L));
-        H2_AICc_3 = fun_AICc(s_H2_3,H2_num3,N,L(i_L));
-        H3_AICc_3 = fun_AICc(s_H3_3,H3_num3,N,L(i_L));
+        H1_AICc_3 = fun_Mos('AICc',[Train,x0],p,'H1',3,N,L(i_L));
+        H2_AICc_3 = fun_Mos('AICc',[Train,x0],p,'H2',3,N,L(i_L));
+        H3_AICc_3 = fun_Mos('AICc',[Train,x0],p,'H3',3,N,L(i_L));
         Class_AICc3 =[H1_AICc_3,H2_AICc_3,H3_AICc_3];
         [~,Class_AICc_num3] = min(Class_AICc3);
         if Class_AICc_num3 == Class  
             count_AICc3 = count_AICc3+1;  
         end
         %%ABIC%%%%%%%
-        H1_ABIC_3 = fun_ABIC(s_H1_3,H1_num3,L(i_L));
-        H2_ABIC_3 = fun_ABIC(s_H2_3,H2_num3,L(i_L));
-        H3_ABIC_3 = fun_ABIC(s_H3_3,H3_num3,L(i_L));
+        H1_ABIC_3 = fun_Mos('ABIC',[Train,x0],p,'H1',3,L(i_L));
+        H2_ABIC_3 = fun_Mos('ABIC',[Train,x0],p,'H2',3,L(i_L));
+        H3_ABIC_3 = fun_Mos('ABIC',[Train,x0],p,'H3',3,L(i_L));
         Class_ABIC3 =[H1_ABIC_3,H2_ABIC_3,H3_ABIC_3];
         [~,Class_ABIC_num3] = min(Class_ABIC3);
         if Class_ABIC_num3 == Class  

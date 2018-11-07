@@ -37,7 +37,7 @@ Rc = Rc+eye(N);
 % irouR = inv(rouR);
 tic
 % h = waitbar(1,'Please wait...');
-%%%!!!!!用高斯杂波生成门限%%%%%%%%%%%%%%%%%%%%
+%%门限
 parfor i = 1:MonteCarloPfa
 %     warning('off')
 %%%%%%%%%%%训练数据产生%%%%%%%%%%%%%%
@@ -49,29 +49,34 @@ parfor i = 1:MonteCarloPfa
     R_AML = fun_AML(Train);
     %%%检测器%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%% KGLRT
+    Tkglrt(i) = fun_KGLRT(R_SCM,x0,p);
+    %%%%% AMF
     Tamf(i) = fun_AMF(R_SCM,x0,p);
-    %%%%% ANMF_NSCM
-    Tanmf_NSCM(i) = fun_ANMF(R_SCM,x0,p);
+    %%%%% ANMF_SCM
+    Tanmf_SCM(i) = fun_ANMF(R_SCM,x0,p);
     %%%%% ANMF_AML
     Tanmf_AML(i) = fun_ANMF(R_AML,x0,p);
 end
 % close(h)
 toc
+TKGLRT=sort(Tkglrt,'descend');
 TAMF=sort(Tamf,'descend');
-TANMF_NSCM=sort(Tanmf_NSCM,'descend');
+TANMF_SCM=sort(Tanmf_SCM,'descend');
 TANMF_AML=sort(Tanmf_AML,'descend');
 
-
+Th_KGLRT = (TKGLRT(floor(MonteCarloPfa*PFA-1))+TKGLRT(floor(MonteCarloPfa*PFA)))/2;
 Th_AMF = (TAMF(floor(MonteCarloPfa*PFA-1))+TAMF(floor(MonteCarloPfa*PFA)))/2;
-Th_NSCM=(TANMF_NSCM(floor(MonteCarloPfa*PFA-1))+TANMF_NSCM(floor(MonteCarloPfa*PFA)))/2;
+Th_NSCM=(TANMF_SCM(floor(MonteCarloPfa*PFA-1))+TANMF_SCM(floor(MonteCarloPfa*PFA)))/2;
 Th_AML=(TANMF_AML(floor(MonteCarloPfa*PFA-1))+TANMF_AML(floor(MonteCarloPfa*PFA)))/2;
 
 %%%%%%%%%%%%%%%%%%%%%检测概率%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+counter_kglrt=0;
 counter_amf=0;
 counter_nscm=0;
 counter_aml=0;
 
+Pd_KGLRT_mc = zeros(1,length(SNRout));
 Pd_AMF_mc = zeros(1,length(SNRout));
 Pd_NSCM_mc = zeros(1,length(SNRout));
 Pd_AML_mc = zeros(1,length(SNRout));
@@ -93,16 +98,20 @@ for m=1:length(SNRout)
         x0=alpha(m)*p+x0;%+pp;    %%%%%%%  重要  %%%%%%%%%%%%%
         %%%检测器%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %%%%% KGLRT
+        Th_kglrt = fun_KGLRT(R_SCM,x0,p);
+        %%%%% AMF
         Th_amf = fun_AMF(R_SCM,x0,p);
-        %%%%% ANMF_NSCM
-        Th_nscm = fun_ANMF(R_SCM,x0,p);
+        %%%%% ANMF_SCM
+        Th_scm = fun_ANMF(R_SCM,x0,p);
         %%%%% ANMF_AML
         Thaml = fun_ANMF(R_AML,x0,p);
-        %%%判断%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%         
+        %%%判断%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
+        if Th_kglrt>Th_KGLRT;          counter_kglrt=counter_kglrt+1;        end      
         if Th_amf>Th_AMF;          counter_amf=counter_amf+1;        end                
-        if Th_nscm>Th_NSCM;       counter_nscm=counter_nscm+1;    end
+        if Th_scm>Th_NSCM;       counter_nscm=counter_nscm+1;    end
         if Thaml>Th_AML;       counter_aml=counter_aml+1;    end
     end   
+    Pd_KGLRT_mc(m)=counter_kglrt/MonteCarloPd;           counter_kglrt=0;
     Pd_AMF_mc(m)=counter_amf/MonteCarloPd;           counter_amf=0;
     Pd_NSCM_mc(m)=counter_nscm/MonteCarloPd;        counter_nscm=0;
     Pd_AML_mc(m)=counter_aml/MonteCarloPd;        counter_aml=0;
@@ -111,10 +120,11 @@ toc
 close(h)
 figure(1);
 hold on
+plot(SNRout,Pd_KGLRT_mc,'r','linewidth',2)
 plot(SNRout,Pd_AMF_mc,'g','linewidth',2)
 plot(SNRout,Pd_NSCM_mc,'K-*','linewidth',2)
 plot(SNRout,Pd_AML_mc,'k','linewidth',2)
-h_leg = legend('AMF','NSCM','AML');
+h_leg = legend('KGLRT','AMF','ANMF-SCM','ANMF-AML');
 xlabel('SNR/dB','FontSize',20)
 ylabel('Pd','FontSize',20)
 set(gca,'FontSize',20)

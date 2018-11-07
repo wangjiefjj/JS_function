@@ -16,7 +16,7 @@ SNRout=10;
 SNRnum=10.^(SNRout/10);
 CNRout=30;
 CNRnum=10.^(CNRout/10);
-L = round(1.1*N);
+L = 20;
 theta_sig = 0.2;
 nn = 0:N-1;
 p = exp(-1i*2*pi*nn*theta_sig).'/sqrt(N); %%%%%% 系统导向矢量
@@ -33,14 +33,14 @@ for Class = 1:3
         Rc2 = Rc1;
         opt_train = 0;
     elseif Class == 2%%部分均匀
-        str_train = 'p';
+        str_train = 'g';
         opt_train = 2;
         %%杂波协方差
         sigmaf = 0.03; %%杂波谱展宽
         rc =  exp(-1i*2*pi*nn*fc-2*(nn*pi*sigmaf).^2);
         Rc1 = CNRnum * toeplitz(rc);
         Rc1 = Rc1+ eye(N) ;%+ eye(N)
-        Rc2 = Rc1;
+        Rc2 = 0.1*Rc1;
     elseif Class == 3%%SIRP
         str_train = 'p';
         %%%IG的选项，1为每个距离单元IG纹理都不同

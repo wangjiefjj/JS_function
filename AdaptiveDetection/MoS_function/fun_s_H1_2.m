@@ -3,6 +3,7 @@ function [s] = fun_s_H1_2(Data,p,opt)
 %%Data:数据，
 %%p:导向适量
 %%opt：1时，数据仅有辅助数据，2时，数据为主副数据都有
+%%用Sigma 而不是R
 if nargin<3
     opt=1;
 end
