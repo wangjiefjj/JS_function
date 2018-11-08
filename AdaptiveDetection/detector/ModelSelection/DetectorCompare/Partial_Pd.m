@@ -33,7 +33,7 @@ sigmaf = 0.03; %%тс╡╗фву╧©М
 rc =  exp(-1i*2*pi*nn*fc-2*(nn*pi*sigmaf).^2);
 Rc1 = CNRnum*toeplitz(rc);
 Rc1 = Rc1 + eye(N);%+ eye(N)
-Rc2 = 0.1*Rc1;
+Rc2 = 2*Rc1;
 tic
 % h = waitbar(1,'Please wait...');
 %%%цеоч%%%%%
