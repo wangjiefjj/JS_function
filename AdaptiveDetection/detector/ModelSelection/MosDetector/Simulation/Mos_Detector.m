@@ -6,11 +6,11 @@ clc
 clear
 close all
 %%%%参数设置
-n = 2; %几倍的样本
+n = 1.5; %几倍的样本
 %%%%假设参数设置
 SNRout=0:1:35; % 输出SNR
 SNRnum=10.^(SNRout/10);
-CNRout=20;
+CNRout=30;
 CNRnum=10.^(CNRout/10);
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数

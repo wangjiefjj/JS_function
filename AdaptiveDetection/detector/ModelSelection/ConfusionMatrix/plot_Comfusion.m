@@ -8,7 +8,7 @@ linewide1=3;
 mkft = 15;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-load Confusion_L16.mat
+load Confusion_L20.mat
 %% 
 %% 综合来看ABIC 和 GIC rho=2  比较好 
 %%Classification results for H1 hypothesis assuming

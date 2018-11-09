@@ -2,7 +2,7 @@
 clc
 clear
 close all
-Class=2; %%
+Class=1; %%
 rho=2;  %%GIC的参数 
 MC = 1000;
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
@@ -28,6 +28,8 @@ a = sqrt(SNRnum);
 if Class==1%%均匀
     str_train = 'g';
     %%杂波协方差
+%     Rc1 = fun_rho(rou,N,1,fc);
+%     Rc1 = CNRnum * Rc1
     sigmaf = 0.03; %%杂波谱展宽
     rc =  exp(-1i*2*pi*nn*fc-2*(nn*pi*sigmaf).^2);
     Rc1 = CNRnum * toeplitz(rc);
