@@ -26,7 +26,8 @@ set(gcf,'Position',[500 0 1200 1000])
 set(h_leg,'Location','SouthEast')
 grid on
 box on
-str=['SecondaryOnly'];
+str=['H1_SecondaryOnly','.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%
 %%主辅数据
 load Homogenous_Accuracy_2.mat
@@ -46,7 +47,8 @@ set(gcf,'Position',[500 0 1200 1000])
 set(h_leg,'Location','SouthEast')
 grid on
 box on
-str=['PrimarySecondary.eps'];
+str=['H1_PrimarySecondary.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%
 %%主数据
 load Homogenous_Accuracy_2.mat
@@ -66,7 +68,8 @@ set(gcf,'Position',[500 0 1200 1000])
 set(h_leg,'Location','SouthEast')
 grid on
 box on
-str=['PrimaryOnly.eps'];
+str=['H1_PrimaryOnly.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%%%%%%%%%%%%%%%%%%%%Partial%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %%副数据
@@ -87,7 +90,8 @@ set(gcf,'Position',[500 0 1200 1000])
 set(h_leg,'Location','SouthEast')
 grid on
 box on
-str=['SecondaryOnly.eps'];
+str=['H2_SecondaryOnly.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%
 %%主副数据
 load Partial_Accuracy_2.mat
@@ -107,7 +111,8 @@ set(gcf,'Position',[500 0 1200 1000])
 set(h_leg,'Location','SouthEast')
 grid on
 box on
-str=['PrimarySecondary.eps'];
+str=['H2_PrimarySecondary.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%
 %%主数据
 load Partial_Accuracy_2.mat
@@ -127,7 +132,8 @@ set(gcf,'Position',[500 0 1200 1000])
 set(h_leg,'Location','SouthEast')
 grid on
 box on
-str=['PrimaryOnly.eps'];
+str=['H2_PrimaryOnly.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%%%%%%%%%%%%%%%%%%%%SIRP%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %%辅助数据
@@ -148,7 +154,8 @@ set(gcf,'Position',[500 0 1200 1000])
 set(h_leg,'Location','SouthEast')
 grid on
 box on
-str=['SecondaryOnly.eps'];
+str=['H3_SecondaryOnly.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%
 %%主副数据
 load SIRP_Accuracy_2.mat
@@ -168,7 +175,8 @@ set(gcf,'Position',[500 0 1200 1000])
 set(h_leg,'Location','SouthEast')
 grid on
 box on
-str=['PrimarySecondary.eps'];
+str=['H3_PrimarySecondary.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%
 %%主数据
 load SIRP_Accuracy_2.mat
@@ -188,4 +196,5 @@ set(gcf,'Position',[500 0 1200 1000])
 set(h_leg,'Location','SouthEast')
 grid on
 box on
-str=['PrimaryOnly.eps'];
+str=['H3_PrimaryOnly.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径

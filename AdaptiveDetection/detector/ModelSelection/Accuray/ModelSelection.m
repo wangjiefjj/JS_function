@@ -2,7 +2,7 @@
 clc
 clear
 close all
-Class=1; %%
+Class=2; %%
 rho=2;  %%GIC的参数 
 MC = 1000;
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
@@ -19,7 +19,7 @@ SNRout=10;
 SNRnum=10.^(SNRout/10);
 CNRout=30;
 CNRnum=10.^(CNRout/10); 
-L = N+1:1:4*N;
+L = 1*N+1:1:4*N;
 theta_sig = 0.2;
 nn = 0:N-1;
 p = exp(-1i*2*pi*nn*theta_sig).'/sqrt(N); %%%%%% 系统导向矢量

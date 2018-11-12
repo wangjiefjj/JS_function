@@ -33,8 +33,8 @@ set(gca,'FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gcf,'Position',[100 0 1200 1000])
 grid on
 box on
-% str=['ConfusionL12_H1.eps'];
-% print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
+str=['ConfusionL20_H1.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%
 %%Classification results for H2 hypothesis assuming
 %%真实环境为H2时判断为：H1，H2，H3
@@ -58,8 +58,8 @@ set(gca,'FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gcf,'Position',[300 0 1200 1000])
 grid on
 box on
-% str=['ConfusionL12_H2.eps'];
-% print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
+str=['ConfusionL20_H2.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%
 %%Classification results for H3 hypothesis assuming
 %%真实环境为H3时判断为：H1，H2，H3
@@ -84,8 +84,8 @@ set(h_leg,'Location','NorthWest')
 set(gcf,'Position',[500 0 1200 1000])
 grid on
 box on
-% str=['ConfusionL12_H3.eps'];
-% print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
+str=['ConfusionL20_H3.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %%%bar3，似乎不好使
