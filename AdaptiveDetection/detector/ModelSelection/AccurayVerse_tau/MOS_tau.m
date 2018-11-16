@@ -30,7 +30,7 @@ opt_train = 2;
 Rc1 = fun_rho(rou,N,1,fc);
 Rc1 = CNRnum * Rc1;
 Rc1 = Rc1+ eye(N) ;%+ eye(N)
-tau = [0.1:0.1:0.9,2:10];
+tau = [0.1:0.1:1.9,2:10];
 str=['Partial_tau_L',num2str(L),'_rho',num2str(rho),'.mat'];
 tic
 h = waitbar(1,'Please wait...');
@@ -237,7 +237,7 @@ hold on
 plot(tau,Accuracy_AIC2,'r-s','LineWidth',2)
 plot(tau,Accuracy_GIC2,'g-o','LineWidth',2)
 plot(tau,Accuracy_AICc2,'b-*','LineWidth',2)
-plot(tau,Accuracy_ABIC2,'k-.','LineWidth',2)
+plot(tau,Accuracy_ABIC2,'k-.>','LineWidth',2)
 title('主辅数据')
 h_leg2 = legend('AIC','GIC','AICc','ABIC');
 xlabel('\tau')
@@ -251,7 +251,7 @@ hold on
 plot(tau,Accuracy_AIC3,'r-s','LineWidth',2)
 plot(tau,Accuracy_GIC3,'g-o','LineWidth',2)
 plot(tau,Accuracy_AICc3,'b-*','LineWidth',2)
-plot(tau,Accuracy_ABIC3,'k-.','LineWidth',2)
+plot(tau,Accuracy_ABIC3,'k-.>','LineWidth',2)
 title('主数据')
 h_leg2 = legend('AIC','GIC','AICc','ABIC');
 xlabel('\tau')

@@ -33,7 +33,7 @@ Rc1 = fun_rho(rou,N,1,fc);
 Rc1 = CNRnum * Rc1;
 Rc1 = Rc1+ eye(N) ;%+ eye(N)
 Rc2 = Rc1;
-str=['SIRP_SNR_L',num2str(L),'_rho',num2str(rho),'.mat'];
+str=['SIRP_lambda_L',num2str(L),'_rho',num2str(rho),'.mat'];
  a = sqrt(SCNRnum/abs(p'/Rc2*p));
 tic
 h = waitbar(1,'Please wait...');
@@ -261,4 +261,4 @@ set(gca,'FontSize',10)
 set(h_leg2,'Location','SouthEast')
 grid on
 box on
-% save(str)
+save(str)
