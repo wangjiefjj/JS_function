@@ -8,26 +8,27 @@ linewide1=3;
 mkft = 15;
 %%%%%%%%%%%%%%%%%%%%%Homogenous%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%%辅助数据
-load Homogenous_Accuracy_2.mat
-figure();
-hold on
-plot(L,Accuracy_AIC1,'r-o','linewidth',linewide1,'MarkerSize',mkft)
-plot(L,Accuracy_AICc1,'g-x','linewidth',linewide1,'MarkerSize',mkft)
-plot(L,Accuracy_ABIC1,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
-plot(L,Accuracy_GIC1,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
-load Homogenous_Accuracy_4.mat
-plot(L,Accuracy_GIC1,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
-xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Accuracy','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-set(gca,'FontSize',labeltsize)
-set(gcf,'Position',[500 0 1200 1000])
-set(h_leg,'Location','SouthEast')
-grid on
-box on
-str=['H1_SecondaryOnly','.eps'];
-print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
+% %%辅助数据
+% load Homogenous_Accuracy_2.mat
+% figure();
+% hold on
+% plot(L,Accuracy_AIC1,'r-o','linewidth',linewide1,'MarkerSize',mkft)
+% plot(L,Accuracy_AICc1,'g-x','linewidth',linewide1,'MarkerSize',mkft)
+% plot(L,Accuracy_ABIC1,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
+% plot(L,Accuracy_GIC1,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
+% load Homogenous_Accuracy_4.mat
+% plot(L,Accuracy_GIC1,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
+% h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
+% xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+% ylabel('Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+% axis([9,32,0,1])
+% set(gca,'FontSize',labeltsize)
+% set(gcf,'Position',[500 0 1200 1000])
+% set(h_leg,'Location','SouthEast')
+% grid on
+% box on
+% str=['H1_SecondaryOnly','.eps'];
+% print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%
 %%主辅数据
 load Homogenous_Accuracy_2.mat
@@ -41,7 +42,8 @@ load Homogenous_Accuracy_4.mat
 plot(L,Accuracy_GIC2,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
 xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Accuracy','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+axis([9,32,0,1])
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[500 0 1200 1000])
 set(h_leg,'Location','SouthEast')
@@ -62,7 +64,8 @@ load Homogenous_Accuracy_4.mat
 plot(L,Accuracy_GIC3,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
 xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Accuracy','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+axis([9,32,0,1])
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[500 0 1200 1000])
 set(h_leg,'Location','SouthEast')
@@ -72,26 +75,27 @@ str=['H1_PrimaryOnly.eps'];
 print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%%%%%%%%%%%%%%%%%%%%Partial%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%%副数据
-load Partial_Accuracy_2.mat
-figure();
-hold on
-plot(L,Accuracy_AIC1,'r-o','linewidth',linewide1,'MarkerSize',mkft)
-plot(L,Accuracy_AICc1,'g-x','linewidth',linewide1,'MarkerSize',mkft)
-plot(L,Accuracy_ABIC1,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
-plot(L,Accuracy_GIC1,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
-load Partial_Accuracy_4.mat
-plot(L,Accuracy_GIC1,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
-xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Accuracy','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-set(gca,'FontSize',labeltsize)
-set(gcf,'Position',[500 0 1200 1000])
-set(h_leg,'Location','SouthEast')
-grid on
-box on
-str=['H2_SecondaryOnly.eps'];
-print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
+% %%副数据
+% load Partial_Accuracy_2.mat
+% figure();
+% hold on
+% plot(L,Accuracy_AIC1,'r-o','linewidth',linewide1,'MarkerSize',mkft)
+% plot(L,Accuracy_AICc1,'g-x','linewidth',linewide1,'MarkerSize',mkft)
+% plot(L,Accuracy_ABIC1,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
+% plot(L,Accuracy_GIC1,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
+% load Partial_Accuracy_4.mat
+% plot(L,Accuracy_GIC1,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
+% h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
+% xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+% ylabel('Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+% axis([9,32,0,1])
+% set(gca,'FontSize',labeltsize)
+% set(gcf,'Position',[500 0 1200 1000])
+% set(h_leg,'Location','SouthEast')
+% grid on
+% box on
+% str=['H2_SecondaryOnly.eps'];
+% print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%
 %%主副数据
 load Partial_Accuracy_2.mat
@@ -105,7 +109,8 @@ load Partial_Accuracy_4.mat
 plot(L,Accuracy_GIC2,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
 xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Accuracy','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+axis([9,32,0,1])
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[500 0 1200 1000])
 set(h_leg,'Location','SouthEast')
@@ -126,7 +131,9 @@ load Partial_Accuracy_4.mat
 plot(L,Accuracy_GIC3,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
 xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Accuracy','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+axis([9,32,0,1])
+axis([9,32,0,1])
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[500 0 1200 1000])
 set(h_leg,'Location','SouthEast')
@@ -136,26 +143,27 @@ str=['H2_PrimaryOnly.eps'];
 print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%%%%%%%%%%%%%%%%%%%%SIRP%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%%辅助数据
-load SIRP_Accuracy_2.mat
-figure();
-hold on
-plot(L,Accuracy_AIC1,'r-o','linewidth',linewide1,'MarkerSize',mkft)
-plot(L,Accuracy_AICc1,'g-x','linewidth',linewide1,'MarkerSize',mkft)
-plot(L,Accuracy_ABIC1,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
-plot(L,Accuracy_GIC1,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
-load SIRP_Accuracy_4.mat
-plot(L,Accuracy_GIC1,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
-xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Accuracy','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-set(gca,'FontSize',labeltsize)
-set(gcf,'Position',[500 0 1200 1000])
-set(h_leg,'Location','SouthEast')
-grid on
-box on
-str=['H3_SecondaryOnly.eps'];
-print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
+% %%辅助数据
+% load SIRP_Accuracy_2.mat
+% figure();
+% hold on
+% plot(L,Accuracy_AIC1,'r-o','linewidth',linewide1,'MarkerSize',mkft)
+% plot(L,Accuracy_AICc1,'g-x','linewidth',linewide1,'MarkerSize',mkft)
+% plot(L,Accuracy_ABIC1,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
+% plot(L,Accuracy_GIC1,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
+% load SIRP_Accuracy_4.mat
+% plot(L,Accuracy_GIC1,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
+% h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
+% xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+% ylabel('Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+% axis([9,32,0,1])
+% set(gca,'FontSize',labeltsize)
+% set(gcf,'Position',[500 0 1200 1000])
+% set(h_leg,'Location','SouthEast')
+% grid on
+% box on
+% str=['H3_SecondaryOnly.eps'];
+% print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%
 %%主副数据
 load SIRP_Accuracy_2.mat
@@ -169,7 +177,8 @@ load SIRP_Accuracy_4.mat
 plot(L,Accuracy_GIC2,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
 xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Accuracy','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+axis([9,32,0,1])
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[500 0 1200 1000])
 set(h_leg,'Location','SouthEast')
@@ -190,7 +199,8 @@ load SIRP_Accuracy_4.mat
 plot(L,Accuracy_GIC3,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
 xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Accuracy','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+axis([9,32,0,1])
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[500 0 1200 1000])
 set(h_leg,'Location','SouthEast')

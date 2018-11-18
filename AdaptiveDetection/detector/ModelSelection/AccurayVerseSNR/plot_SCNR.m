@@ -42,7 +42,7 @@ load Hom_SNR_L20_rho4.mat
 plot(SCNRout,Accuracy_GIC2,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
 xlabel('SCNR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Accuracy','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([-20,20,0,1])
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[500 0 1200 1000])
@@ -64,7 +64,7 @@ load Hom_SNR_L20_rho4.mat
 plot(SCNRout,Accuracy_GIC3,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
 xlabel('SCNR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Accuracy','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([-20,20,0,1])
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[500 0 1200 1000])
@@ -108,7 +108,7 @@ load Partial_SNR_L20_rho4.mat
 plot(SCNRout,Accuracy_GIC2,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
 xlabel('SCNR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Accuracy','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([-20,20,0,1])
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[500 0 1200 1000])
@@ -130,7 +130,7 @@ load Partial_SNR_L20_rho4.mat
 plot(SCNRout,Accuracy_GIC3,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
 xlabel('SCNR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Accuracy','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([-20,20,0,1])
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[500 0 1200 1000])
@@ -174,7 +174,7 @@ load SIRP_SNR_L20_rho4.mat
 plot(SCNRout,Accuracy_GIC2,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
 xlabel('SCNR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Accuracy','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([-20,20,0,1])
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[500 0 1200 1000])
@@ -196,7 +196,7 @@ load SIRP_SNR_L20_rho4.mat
 plot(SCNRout,Accuracy_GIC3,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
 xlabel('SCNR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Accuracy','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([-20,20,0,1])
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[500 0 1200 1000])
