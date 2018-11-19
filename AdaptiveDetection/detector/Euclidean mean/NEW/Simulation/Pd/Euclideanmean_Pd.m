@@ -60,7 +60,7 @@ parfor i = 1:MonteCarloPfa
     Tnmf(i) = fun_ANMF(rouR,x0,s);
     %%%%% ANMF_SCM
     Tanmf_SCM(i) = fun_ANMF(R_SCM,x0,s);
-    %%%%% ANMF_CCIter
+    %%%%% ANMF_ECC
     Tanmf_ECCT(i) = fun_ANMF(R_ECCT,x0,s);
     Tanmf_ECCS(i) = fun_ANMF(R_ECCS,x0,s);
     Tanmf_ECCP(i) = fun_ANMF(R_ECCP,x0,s);

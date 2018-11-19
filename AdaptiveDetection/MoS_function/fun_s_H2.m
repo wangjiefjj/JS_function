@@ -15,10 +15,16 @@ else
 end
 [N,K]=size(X);
 %%计算协方差和纹理
+% J = zeros(N,N);
+% for i = 1:N
+%         J(i,N-i+1) = 1;
+% end
 Sigma = 1/K*(X*X');
+% Sigma = 0.5*(Sigma + J*conj(Sigma)*J); 
 for i = 1:10
     tau = abs(trace(X'/Sigma*X)/N/K);
     Sigma = 1/K/tau*(X*X');
+%     Sigma = 0.5*(Sigma + J*conj(Sigma)*J); 
 end
 % Sigma = Sigma+(1/tau)*eye(N);
 %%计算s

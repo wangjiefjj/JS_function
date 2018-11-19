@@ -15,7 +15,12 @@ else
 end
 [N,K]=size(X);
 %%计算协方差和纹理
-Sigma = 1/K*(X*X')+eye(N);
+% J = zeros(N,N);
+% for i = 1:N
+%         J(i,N-i+1) = 1;
+% end
+Sigma = 1/K*(X*X');%+eye(N)
+% Sigma = 0.5*(Sigma + J*conj(Sigma)*J); 
 for i = 1:10
     S = 0;
     tauk = diag(X'/Sigma*X)/N;
@@ -23,6 +28,7 @@ for i = 1:10
         S = S+ X(:,k)*X(:,k)'/tauk(k)/K;   
     end
     Sigma = S;
+%     Sigma = 0.5*(Sigma + J*conj(Sigma)*J); 
 end
 % Sigma = Sigma;
 %%计算s
