@@ -4,8 +4,8 @@ clc
 clear
 close all
 Class=1; %%
-rho=2;  %%GIC的参数 
-MC = 1000;
+rho=4;  %%GIC的参数 
+MC = 10000;
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
 fc = 0;
 %%%%假设参数设置
@@ -275,6 +275,7 @@ title('主辅数据')
 h_leg2 = legend('AIC','GIC','AICc','ABIC');
 xlabel('K')
 ylabel('Accuracy')
+axis([min(SCNRout),max(SCNRout),0,1])
 set(gca,'FontSize',10)
 set(h_leg2,'Location','SouthEast')
 grid on
@@ -289,8 +290,10 @@ title('主数据')
 h_leg2 = legend('AIC','GIC','AICc','ABIC');
 xlabel('K')
 ylabel('Accuracy')
+axis([min(SCNRout),max(SCNRout),0,1])
 set(gca,'FontSize',10)
 set(h_leg2,'Location','SouthEast')
+
 grid on
 box on
 save(str)
