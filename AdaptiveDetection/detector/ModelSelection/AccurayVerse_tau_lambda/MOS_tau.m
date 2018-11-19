@@ -4,8 +4,8 @@ clc
 clear
 close all
 Class=2; %%
-rho=2;  %%GIC的参数 
-MC = 1000;
+rho=4;  %%GIC的参数 
+MC = 10000;
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
 fc = 0;
 %%%%假设参数设置

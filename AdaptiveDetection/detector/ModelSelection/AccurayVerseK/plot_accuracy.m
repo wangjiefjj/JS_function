@@ -31,14 +31,14 @@ mkft = 15;
 % print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%
 %%主辅数据
-load Homogenous_Accuracy_2.mat
+load Hom_Accuracy_2.mat
 figure();
 hold on
 plot(L,Accuracy_AIC2,'r-o','linewidth',linewide1,'MarkerSize',mkft)
 plot(L,Accuracy_AICc2,'g-x','linewidth',linewide1,'MarkerSize',mkft)
 plot(L,Accuracy_ABIC2,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(L,Accuracy_GIC2,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
-load Homogenous_Accuracy_4.mat
+load Hom_Accuracy_4.mat
 plot(L,Accuracy_GIC2,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
 xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
@@ -53,14 +53,14 @@ str=['H1_PrimarySecondary.eps'];
 print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%
 %%主数据
-load Homogenous_Accuracy_2.mat
+load Hom_Accuracy_2.mat
 figure();
 hold on
 plot(L,Accuracy_AIC3,'r-o','linewidth',linewide1,'MarkerSize',mkft)
 plot(L,Accuracy_AICc3,'g-x','linewidth',linewide1,'MarkerSize',mkft)
 plot(L,Accuracy_ABIC3,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(L,Accuracy_GIC3,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
-load Homogenous_Accuracy_4.mat
+load Hom_Accuracy_4.mat
 plot(L,Accuracy_GIC3,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
 xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
