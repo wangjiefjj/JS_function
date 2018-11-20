@@ -1,10 +1,10 @@
-%%选择数据的最佳模型
+%%选择数据的最佳模型，协方差估计适用广对称先验
 clc
 clear
 close all
-Class=1; %%
+Class=3; %%
 rho=2;  %%GIC的参数 
-MC = 1000;
+MC = 10000;
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
 fc = 0;
 %%%%假设参数设置
@@ -35,7 +35,7 @@ if Class==1%%均匀
     Rc1 = Rc1+ eye(N) ;%
     Rc2 = Rc1;
     opt_train = 0;
-    str=['Hom_Accuracy','_',num2str(rho),'.mat'];
+    str=['Hom_Per_Accuracy','_',num2str(rho),'.mat'];
 elseif Class == 2%%部分均匀
     str_train = 'g';
     opt_train = 2;
@@ -47,7 +47,7 @@ elseif Class == 2%%部分均匀
 %     Rc1 = CNRnum * toeplitz(rc);
     Rc1 = Rc1+ eye(N) ;%+ eye(N)
     Rc2 = 0.1*Rc1;
-    str=['Partial_Accuracy','_',num2str(rho),'.mat'];
+    str=['Partial_Per_Accuracy','_',num2str(rho),'.mat'];
 elseif Class == 3%%SIRP
     str_train = 'p';
     %%%IG的选项，1为每个距离单元IG纹理都不同
@@ -61,7 +61,7 @@ elseif Class == 3%%SIRP
 %     Rc1 = CNRnum * toeplitz(rc);
     Rc1 = Rc1+ eye(N) ;%+ eye(N)
     Rc2 = Rc1;
-    str=['SIRP_Accuracy','_',num2str(rho),'.mat'];
+    str=['SIRP_Per_Accuracy','_',num2str(rho),'.mat'];
 end
 iRc1 = inv(Rc1);
 iRc2 = inv(Rc2);
@@ -87,17 +87,17 @@ for i_L = 1:length(L)
     count_AICc3 = 0;
     %%参数个数
     %只用辅助数据时
-    H1_num1 = N^2;
-    H2_num1 = N^2+1;
-    H3_num1 = N^2+L(i_L);
+    H1_num1 = N*(N+1)/2;
+    H2_num1 = N*(N+1)/2+1;
+    H3_num1 = N*(N+1)/2+L(i_L);
     %主辅数据时
-    H1_num2 = N^2+1;
-    H2_num2 = N^2+3;
-    H3_num2 = N^2+L(i_L)+2;
+    H1_num2 = N*(N+1)/2+1;
+    H2_num2 = N*(N+1)/2+3;
+    H3_num2 = N*(N+1)/2+L(i_L)+2;
     %主数据时
-    H1_num3 = N^2+1;
-    H2_num3 = N^2+2;
-    H3_num3 = N^2+2;
+    H1_num3 = N*(N+1)/2+1;
+    H2_num3 = N*(N+1)/2+2;
+    H3_num3 = N*(N+1)/2+2;
     parfor i = 1:MC
         warning off
         %%产生数据
@@ -106,17 +106,17 @@ for i_L = 1:length(L)
         x0 =x0+a*p;
         %%s函数计算 
         %只用辅助数据时
-        s_H1_1 = -abs(fun_s_H1(Train,p,1));
-        s_H2_1 = -abs(fun_s_H2(Train,p,1));
-        [s_H3_1] = -abs(fun_s_H3(Train,p,1));
+        s_H1_1 = -abs(fun_s_H1_per(Train,p,1));
+        s_H2_1 = -abs(fun_s_H2_per(Train,p,1));
+        [s_H3_1] = -abs(fun_s_H3_per(Train,p,1));
         %主辅数据时
-        s_H1_2 = -abs(fun_s_H1([Train,x0],p,2));
-        s_H2_2 = -abs(fun_s_H2([Train,x0],p,2));
-        s_H3_2 = -abs(fun_s_H3([Train,x0],p,2));
+        s_H1_2 = -abs(fun_s_H1_per([Train,x0],p,2));
+        s_H2_2 = -abs(fun_s_H2_per([Train,x0],p,2));
+        s_H3_2 = -abs(fun_s_H3_per([Train,x0],p,2));
         %只用主数据时
-        s_H1_3 = -abs(fun_s_H1([Train,x0],p,3));
-        s_H2_3 = -abs(fun_s_H2([Train,x0],p,3));
-        s_H3_3 = -abs(fun_s_H3([Train,x0],p,3));
+        s_H1_3 = -abs(fun_s_H1_per([Train,x0],p,3));
+        s_H2_3 = -abs(fun_s_H2_per([Train,x0],p,3));
+        s_H3_3 = -abs(fun_s_H3_per([Train,x0],p,3));
         
         %%模型选择准则%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %只用辅助数据时%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -292,4 +292,4 @@ set(gca,'FontSize',10)
 set(h_leg2,'Location','SouthEast')
 grid on
 box on
-% save(str)
+save(str)
