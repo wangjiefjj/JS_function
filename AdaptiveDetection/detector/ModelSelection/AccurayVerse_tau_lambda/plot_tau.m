@@ -18,7 +18,7 @@ plot(tau,Accuracy_GIC2*100,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 load Partial_tau_L20_rho4.mat
 plot(tau,Accuracy_GIC2*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
-xlabel('\tau','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+xlabel('\tau/\tau_{0}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('Recognition Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([0,10,0,100])
 set(gca,'FontSize',labeltsize)
@@ -39,7 +39,7 @@ plot(tau,Accuracy_GIC3*100,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 load Partial_tau_L20_rho4.mat
 plot(tau,Accuracy_GIC3*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
-xlabel('\tau','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+xlabel('\tau/\tau_{0}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('Recognition Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([0,10,0,100])
 set(gca,'FontSize',labeltsize)
