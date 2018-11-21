@@ -42,6 +42,7 @@ if opt == 1
 elseif opt==2
     a = (p'/Sigma*x0)/(p'/Sigma*p);
     tau0 = (x0-a*p)'/Sigma*(x0-a*p)/N;
+%     tau0 = 1;
     s = -N*(K+1)*log(pi)-sum(N*log(tauk))-N*log(tau0)...   
         -(K+1)*log(det(Sigma))-S...            
         -(x0-a*p)'/Sigma*(x0-a*p)/tau0;
@@ -49,6 +50,7 @@ elseif opt==2
 elseif opt == 3
     a = (p'/Sigma*x0)/(p'/Sigma*p);
     tau0 = ((x0-a*p)'/Sigma*(x0-a*p))/N;
+%     tau0 = 1;
     s = -N*log(pi)-N*log(tau0)...   
         -log(det(Sigma))-(x0-a*p)'/Sigma*(x0-a*p)/tau0;
     m = N^2+2; 
