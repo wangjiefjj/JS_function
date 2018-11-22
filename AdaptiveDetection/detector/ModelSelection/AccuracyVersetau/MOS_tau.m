@@ -3,9 +3,9 @@
 clc
 clear
 close all
-Class=2; %%不能改
+Class=3;
 rho=4;  %%GIC的参数 
-MC = 1000;
+MC = 10000;
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
 fc = 0;
 %%%%假设参数设置
@@ -20,7 +20,7 @@ SCNRout=0;
 SCNRnum=10.^(SCNRout/10);
 CNRout=30;
 CNRnum=10.^(CNRout/10); 
-L = 40;
+L = 20;
 theta_sig = 0.2;
 nn = 0:N-1;
 p = exp(-1i*2*pi*nn*theta_sig).'/sqrt(N); %%%%%% 系统导向矢量
@@ -31,7 +31,13 @@ Rc1 = fun_rho(rou,N,1,fc);
 Rc1 = CNRnum * Rc1;
 Rc1 = Rc1+ eye(N) ;%+ eye(N)
 tau = [0.1:0.1:1.9,2:10];
-str=['Partial_tau_L',num2str(L),'_rho',num2str(rho),'.mat'];
+if Class==1
+    str=['Hom_tau_L',num2str(L),'_rho',num2str(rho),'.mat'];
+elseif Class==2
+    str=['Partial_tau_L',num2str(L),'_rho',num2str(rho),'.mat'];
+elseif Class==3
+    str=['SIRP_tau_L',num2str(L),'_rho',num2str(rho),'.mat'];
+end
 tic
 h = waitbar(1,'Please wait...');
 for i_tau = 1:length(tau)

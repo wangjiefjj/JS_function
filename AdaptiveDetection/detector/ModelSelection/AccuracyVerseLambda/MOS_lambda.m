@@ -3,9 +3,9 @@
 clc
 clear
 close all
-Class=3; %%不能改
-rho=2;  %%GIC的参数 
-MC = 1000;
+Class=2; %%不能改
+rho=4;  %%GIC的参数 
+MC = 10000;
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
 fc = 0;
 %%%%假设参数设置
@@ -20,7 +20,7 @@ SCNRout=0;
 SCNRnum=10.^(SCNRout/10);
 CNRout=30;
 CNRnum=10.^(CNRout/10); 
-L = 40;
+L = 20;
 theta_sig = 0.2;
 nn = 0:N-1;
 p = exp(-1i*2*pi*nn*theta_sig).'/sqrt(N); %%%%%% 系统导向矢量
@@ -33,8 +33,14 @@ Rc1 = fun_rho(rou,N,1,fc);
 Rc1 = CNRnum * Rc1;
 Rc1 = Rc1+ eye(N) ;%+ eye(N)
 Rc2 = Rc1;
-str=['SIRP_lambda_L',num2str(L),'_rho',num2str(rho),'.mat'];
- a = sqrt(SCNRnum/abs(p'/Rc2*p));
+if Class==1
+    str=['Hom_lambda_L',num2str(L),'_rho',num2str(rho),'.mat'];
+elseif Class==2
+    str=['Partial_lambda_L',num2str(L),'_rho',num2str(rho),'.mat'];
+elseif Class==3
+    str=['SIRP_lambda_L',num2str(L),'_rho',num2str(rho),'.mat'];
+end
+a = sqrt(SCNRnum/abs(p'/Rc2*p));
 tic
 h = waitbar(1,'Please wait...');
 for i_lambda = 1:length(lambda)   
