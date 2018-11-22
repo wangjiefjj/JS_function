@@ -9,7 +9,9 @@ end
 [M,L] = size(sig);
 
 figure()
-mesh(abs(sig))
+imagesc(abs(sig))
+xlabel('Range Bin')
+ylabel('Pulse Number ')
 sig_test_t = sig(2:N+1,:);
 
 [X,Y]=meshgrid(1:L,linspace(-0.5,0.5,M));

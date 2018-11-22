@@ -7,7 +7,7 @@ Data_process
 % matFile='19980204_224024_IPIX.mat';
 load(matFile) 
 Range = 19;
-offset=50000; %%前10000个就是0，后10000个就是50000
+offset=20000; %%前10000个就是0，后10000个就是50000
 % lambda =  2.4072;
 % mu = 1.3600;
 %%%%参数设置
@@ -31,11 +31,8 @@ Zhh = sig;
 H1_num = N^2+1;
 H2_num = N^2+3;
 H3_num = N^2+L+2;
-% H1_num = N*(N+1)/2+1;
-% H2_num = N*(N+1)/2+3;
-% H3_num = N*(N+1)/2+L+2;
 tic
-parfor i=1:10000-N+1
+parfor i=1:40000-N+1
     %%%%%%%%%%%训练数据产生%%%%%%%%%%%%%%
 %     Train = fun_TrainData(str_train,N,L,Rc1,lambda,mu,opt_train);%%产生的训练数据,协方差矩阵为rouR的高斯杂波
 %     [x0,tau0] = fun_TrainData(str_train,N,1,Rc2,lambda,mu,opt_train); % 接收信号仅包括杂波和噪声
@@ -98,5 +95,5 @@ ylabel('Percentage')
 % set(gcf,'Position',[100 0 1200 1000])
 grid on
 box on
-str=['IPIX_recognition_Rang_',num2str(Range),'_',num2str(offset)];
-save(str);
+% str=['IPIX_recognition_Rang_',num2str(Range),'_',num2str(offset)];
+% save(str);

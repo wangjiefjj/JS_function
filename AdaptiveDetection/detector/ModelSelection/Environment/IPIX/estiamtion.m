@@ -6,8 +6,8 @@ close all
 Data_process
 load(matFile)
 tic
-t = [9:19-1,20:29];
-parfor i = 1:10000%nsweep
+t = [9:29];
+parfor i = 1:40000%nsweep
     r = sig(i,t);
     [lambda(i),mu(i)] = fun_IG_ML(r);
 end
