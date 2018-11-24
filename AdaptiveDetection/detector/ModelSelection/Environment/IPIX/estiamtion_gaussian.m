@@ -3,13 +3,13 @@ clear
 close all
 %%%%%%估计参数
 % Read_Display_Data
-Data_process
-load(matFile)
 tic
-t = [9:29];
+N=10000;
+L=21;
+R = fun_rho(0.9,N,1,0.1);
+[Train,tauk] = fun_TrainData('g',N,L,R);%%产生的训练数据,协方差矩阵为rouR的高斯杂波
 parfor i = 1:10000%nsweep
-    r = sig(i,t);
-    [lambda(i),mu(i)] = fun_IG_ML(r);
+    [lambda(i),mu(i)] = fun_IG_ML(Train(i,:));
 end
 mean(lambda)
 mean(mu)
