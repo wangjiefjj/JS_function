@@ -3,8 +3,8 @@
 clc
 clear
 close all
-Class=2; %%不能改
-rho=4;  %%GIC的参数 
+Class=1; %%不能改
+rho=2;  %%GIC的参数 
 MC = 10000;
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
 fc = 0;
@@ -12,7 +12,7 @@ fc = 0;
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
 N = Na*Np;
-lambda = 1:0.1:3;%%%越小非高斯越严重
+lambda = 0.1:0.1:3;%%%越小非高斯越严重
 mu = 1;
 % n =1.1:0.3:8; %几倍的样本
 % L=round(n*N);SNRout=10;
