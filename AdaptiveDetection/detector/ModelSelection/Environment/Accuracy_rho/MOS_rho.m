@@ -3,7 +3,7 @@
 clc
 clear
 close all
-Class=1; %%
+Class=3; %%
 rho_GIC=4;  %%GIC的参数 
 MC = 10000;
 rho = 0.5:0.05:0.95;  %%协方差矩阵生成的迟滞因子
@@ -32,11 +32,10 @@ for i_rho = 1:length(rho)
         str_train = 'g';
      %%杂波协方差
         Rc1 = fun_rho(rho(i_rho),N,1,fc);
-        Rc1 = CNRnum * Rc1;
     %     sigmaf = 0.03; %%杂波谱展宽
     %     rc =  exp(-1i*2*pi*nn*fc-2*(nn*pi*sigmaf).^2);
     %     Rc1 = CNRnum * toeplitz(rc);
-        Rc1 = Rc1+ eye(N) ;%
+        Rc1 = Rc1+ 1/CNRnum * eye(N) ;%
         Rc2 = Rc1;
         opt_train = 0;
         str=['Hom_rho_L',num2str(L),'_rho',num2str(rho_GIC),'.mat'];
@@ -44,13 +43,12 @@ for i_rho = 1:length(rho)
         str_train = 'g';
         opt_train = 2;
      %%杂波协方差
-        Rc1 = fun_rho(rho(i_rho),N,1,fc);
-        Rc1 = CNRnum * Rc1;
+        Rc2 = fun_rho(rho(i_rho),N,1,fc);
     %     sigmaf = 0.03; %%杂波谱展宽
     %     rc =  exp(-1i*2*pi*nn*fc-2*(nn*pi*sigmaf).^2);
     %     Rc1 = CNRnum * toeplitz(rc);
-        Rc1 = Rc1+ eye(N) ;%+ eye(N)
-        Rc2 = 0.1*Rc1;
+        Rc2 = Rc2+ 1/CNRnum * eye(N) ;%+ eye(N)
+        Rc1 = 10*Rc2;
         str=['Partial_rho_L',num2str(L),'_rho',num2str(rho_GIC),'.mat'];
     elseif Class == 3%%SIRP
         str_train = 'p';
@@ -59,11 +57,10 @@ for i_rho = 1:length(rho)
         opt_train = 1;     
      %%杂波协方差
         Rc1 = fun_rho(rho(i_rho),N,1,fc);
-        Rc1 = CNRnum * Rc1;
     %     sigmaf = 0.03; %%杂波谱展宽
     %     rc =  exp(-1i*2*pi*nn*fc-2*(nn*pi*sigmaf).^2);
     %     Rc1 = CNRnum * toeplitz(rc);
-        Rc1 = Rc1+ eye(N) ;%+ eye(N)
+        Rc1 = Rc1+ 1/CNRnum * eye(N) ;%+ eye(N)
         Rc2 = Rc1;
         str=['SIRP_rho_L',num2str(L),'_rho',num2str(rho_GIC),'.mat'];
     end

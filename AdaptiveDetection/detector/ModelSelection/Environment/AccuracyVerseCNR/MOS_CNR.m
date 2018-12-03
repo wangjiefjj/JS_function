@@ -5,7 +5,7 @@ clear
 close all
 Class=3; %%
 rho=4;  %%GIC的参数 
-MC = 10000;
+MC = 1000;
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
 fc = 0;
 %%%%假设参数设置
@@ -16,58 +16,57 @@ lambda = 1;%%%越小非高斯越严重
 mu = 1;
 % n =1.1:0.3:8; %几倍的样本
 % L=round(n*N);SNRout=10;
-SCNRout=-20:20;
+SCNRout=0;
 SCNRnum=10.^(SCNRout/10);
-CNRout=30;
+CNRout=0:2:30;
 CNRnum=10.^(CNRout/10); 
 L = 20;
 theta_sig = 0.2;
 nn = 0:N-1;
 p = exp(-1i*2*pi*nn*theta_sig).'/sqrt(N); %%%%%% 系统导向矢量
-
-if Class==1%%均匀
+tic
+h = waitbar(1,'Please wait...');
+for i_CNR = 1:length(CNRnum)
+    waitbar(i_CNR/length(CNRnum),h,sprintf([num2str(i_CNR/length(CNRnum)*100),'%%']));
+    if Class==1%%均匀
      str_train = 'g';
      %%杂波协方差
      Rc1 = fun_rho(rho,N,1,fc);
      %     sigmaf = 0.03; %%杂波谱展宽
      %     rc =  exp(-1i*2*pi*nn*fc-2*(nn*pi*sigmaf).^2);
      %     Rc1 = CNRnum * toeplitz(rc);
-     Rc1 = Rc1+ 1/CNRnum * eye(N) ;%
+     Rc1 = Rc1+ 1/CNRnum(i_CNR) * eye(N) ;%
      Rc2 = Rc1;
      opt_train = 0;
-    str=['Hom_SNR_L',num2str(L),'_rho',num2str(rho),'.mat'];
-elseif Class == 2%%部分均匀
-    str_train = 'g';
-    opt_train = 2;
-    %%杂波协方差
-    Rc2 = fun_rho(rou,N,1,fc);
-%     sigmaf = 0.03; %%杂波谱展宽
-%     rc =  exp(-1i*2*pi*nn*fc-2*(nn*pi*sigmaf).^2);
-%     Rc1 = CNRnum * toeplitz(rc);
-    Rc2 = Rc2+ 1/CNRnum * eye(N) ;%+ eye(N)
-    Rc1 = 10*Rc2;
-    str=['Partial_SNR_L',num2str(L),'_rho',num2str(rho),'.mat'];
-elseif Class == 3%%SIRP
-    str_train = 'p';
-    %%%IG的选项，1为每个距离单元IG纹理都不同
-    %2每个单元纹理值一样，为部分均匀环境
-    opt_train = 1;     
-    %%杂波协方差
-    Rc1 = fun_rho(rou,N,1,fc);
-%     sigmaf = 0.03; %%杂波谱展宽
-%     rc =  exp(-1i*2*pi*nn*fc-2*(nn*pi*sigmaf).^2);
-%     Rc1 = CNRnum * toeplitz(rc);
-    Rc1 = Rc1+ 1/CNRnum * eye(N) ;%+ eye(N)
-    Rc2 = Rc1;
-    str=['SIRP_SNR_L',num2str(L),'_rho',num2str(rho),'.mat'];
-end
-iRc1 = inv(Rc1);
-iRc2 = inv(Rc2);
-a = sqrt(SCNRnum/abs(p'/Rc2*p));
-tic
-h = waitbar(1,'Please wait...');
-for i_a = 1:length(a)
-    waitbar(i_a/length(a),h,sprintf([num2str(i_a/length(a)*100),'%%']));
+    str=['Hom_CNR_L',num2str(L),'_rho',num2str(rho),'.mat'];
+    elseif Class == 2%%部分均匀
+        str_train = 'g';
+        opt_train = 2;
+        %%杂波协方差
+        Rc2 = fun_rho(rou,N,1,fc);
+    %     sigmaf = 0.03; %%杂波谱展宽
+    %     rc =  exp(-1i*2*pi*nn*fc-2*(nn*pi*sigmaf).^2);
+    %     Rc1 = CNRnum * toeplitz(rc);
+        Rc2 = Rc2+ 1/CNRnum(i_CNR) * eye(N) ;%+ eye(N)
+        Rc1 = 10*Rc2;
+        str=['Partial_CNR_L',num2str(L),'_rho',num2str(rho),'.mat'];
+    elseif Class == 3%%SIRP
+        str_train = 'p';
+        %%%IG的选项，1为每个距离单元IG纹理都不同
+        %2每个单元纹理值一样，为部分均匀环境
+        opt_train = 1;     
+        %%杂波协方差
+        Rc1 = fun_rho(rou,N,1,fc);
+    %     sigmaf = 0.03; %%杂波谱展宽
+    %     rc =  exp(-1i*2*pi*nn*fc-2*(nn*pi*sigmaf).^2);
+    %     Rc1 = CNRnum * toeplitz(rc);
+        Rc1 = Rc1+ 1/CNRnum(i_CNR) * eye(N) ;%+ eye(N)
+        Rc2 = Rc1;
+        str=['SIRP_CNR_L',num2str(L),'_rho',num2str(rho),'.mat'];
+    end
+    iRc1 = inv(Rc1);
+    iRc2 = inv(Rc2);
+    a = sqrt(SCNRnum/abs(p'/Rc2*p));
     count_AIC1 = 0;
     count_ABIC1 = 0;
     count_GIC1 = 0;
@@ -90,18 +89,18 @@ for i_a = 1:length(a)
     H3_num1 = N^2+L;
     %主辅数据时
     H1_num2 = N^2+1;
-    H2_num2 = N^2+2;
+    H2_num2 = N^2+3;
     H3_num2 = N^2+L+2;
     %主数据时
     H1_num3 = N^2+1;
-    H2_num3 = N^2+1;
+    H2_num3 = N^2+2;
     H3_num3 = N^2+2;
     parfor i = 1:MC
         warning off
         %%产生数据
         [Train,tauk] = fun_TrainData(str_train,N,L,Rc1,lambda,mu,opt_train);%%产生的训练数据,协方差矩阵为rouR的高斯杂波
         [x0,tau0] = fun_TrainData(str_train,N,1,Rc2,lambda,mu,opt_train); % 接收信号仅包括杂波和噪声
-        x0 =x0+a(i_a)*p;
+        x0 =x0+a*p;
         %%s函数计算 
         %只用辅助数据时
         s_H1_1 = -abs(fun_s_H1(Train,p,1));
@@ -231,20 +230,20 @@ for i_a = 1:length(a)
             count_ABIC3 = count_ABIC3+1;  
         end
     end
-    Accuracy_AIC1(i_a) = count_AIC1/MC;
-    Accuracy_GIC1(i_a) = count_GIC1/MC;
-    Accuracy_AICc1(i_a) = count_AICc1/MC;
-    Accuracy_ABIC1(i_a) = count_ABIC1/MC;
+    Accuracy_AIC1(i_CNR) = count_AIC1/MC;
+    Accuracy_GIC1(i_CNR) = count_GIC1/MC;
+    Accuracy_AICc1(i_CNR) = count_AICc1/MC;
+    Accuracy_ABIC1(i_CNR) = count_ABIC1/MC;
 
-    Accuracy_AIC2(i_a) = count_AIC2/MC;
-    Accuracy_GIC2(i_a) = count_GIC2/MC;
-    Accuracy_AICc2(i_a) = count_AICc2/MC;
-    Accuracy_ABIC2(i_a) = count_ABIC2/MC;
+    Accuracy_AIC2(i_CNR) = count_AIC2/MC;
+    Accuracy_GIC2(i_CNR) = count_GIC2/MC;
+    Accuracy_AICc2(i_CNR) = count_AICc2/MC;
+    Accuracy_ABIC2(i_CNR) = count_ABIC2/MC;
     
-    Accuracy_AIC3(i_a) = count_AIC3/MC;
-    Accuracy_GIC3(i_a) = count_GIC3/MC;
-    Accuracy_AICc3(i_a) = count_AICc3/MC;
-    Accuracy_ABIC3(i_a) = count_ABIC3/MC;
+    Accuracy_AIC3(i_CNR) = count_AIC3/MC;
+    Accuracy_GIC3(i_CNR) = count_GIC3/MC;
+    Accuracy_AICc3(i_CNR) = count_AICc3/MC;
+    Accuracy_ABIC3(i_CNR) = count_ABIC3/MC;
 end
 toc
 close(h)
@@ -264,33 +263,33 @@ close(h)
 % box on
 figure(2)
 hold on
-plot(SCNRout,Accuracy_AIC2,'r-s','LineWidth',2)
-plot(SCNRout,Accuracy_GIC2,'g-o','LineWidth',2)
-plot(SCNRout,Accuracy_AICc2,'b-*','LineWidth',2)
-plot(SCNRout,Accuracy_ABIC2,'k-.','LineWidth',2)
+plot(CNRout,Accuracy_AIC2,'r-s','LineWidth',2)
+plot(CNRout,Accuracy_GIC2,'g-o','LineWidth',2)
+plot(CNRout,Accuracy_AICc2,'b-*','LineWidth',2)
+plot(CNRout,Accuracy_ABIC2,'k-.','LineWidth',2)
 title('主辅数据')
 h_leg2 = legend('AIC','GIC','AICc','ABIC');
-xlabel('K')
+xlabel('CNR')
 ylabel('Accuracy')
-axis([min(SCNRout),max(SCNRout),0,1])
+axis([min(CNRout),max(CNRout),0,1])
 set(gca,'FontSize',10)
 set(h_leg2,'Location','SouthEast')
 grid on
 box on
 figure(3)
 hold on
-plot(SCNRout,Accuracy_AIC3,'r-s','LineWidth',2)
-plot(SCNRout,Accuracy_GIC3,'g-o','LineWidth',2)
-plot(SCNRout,Accuracy_AICc3,'b-*','LineWidth',2)
-plot(SCNRout,Accuracy_ABIC3,'k-.','LineWidth',2)
+plot(CNRout,Accuracy_AIC3,'r-s','LineWidth',2)
+plot(CNRout,Accuracy_GIC3,'g-o','LineWidth',2)
+plot(CNRout,Accuracy_AICc3,'b-*','LineWidth',2)
+plot(CNRout,Accuracy_ABIC3,'k-.','LineWidth',2)
 title('主数据')
 h_leg2 = legend('AIC','GIC','AICc','ABIC');
-xlabel('K')
+xlabel('CNR')
 ylabel('Accuracy')
-axis([min(SCNRout),max(SCNRout),0,1])
+axis([min(CNRout),max(CNRout),0,1])
 set(gca,'FontSize',10)
 set(h_leg2,'Location','SouthEast')
 
 grid on
 box on
-save(str)
+% save(str)

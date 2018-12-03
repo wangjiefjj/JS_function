@@ -34,7 +34,7 @@ mkft = 15;
 load Hom_Accuracy_2.mat
 figure();
 hold on
-plot(L,Accuracy_AIC2*100+10,'r-o','linewidth',linewide1,'MarkerSize',mkft)
+plot(L,Accuracy_AIC2*100,'r-o','linewidth',linewide1,'MarkerSize',mkft)
 plot(L,Accuracy_AICc2*100,'g-x','linewidth',linewide1,'MarkerSize',mkft)
 plot(L,Accuracy_ABIC2*100,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(L,Accuracy_GIC2*100,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
@@ -42,7 +42,7 @@ load Hom_Accuracy_4.mat
 plot(L,Accuracy_GIC2*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
 xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Recognition Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('P_{1,1}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([9,32,0,100])
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[500 0 1200 1000])
@@ -64,7 +64,7 @@ load Hom_Accuracy_4.mat
 plot(L,Accuracy_GIC3*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
 xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Recognition Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('P_{1,1}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([9,32,0,100])
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[500 0 1200 1000])
@@ -109,7 +109,7 @@ load Partial_Accuracy_4.mat
 plot(L,Accuracy_GIC2*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
 xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Recognition Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('P_{2,2}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([9,32,0,100])
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[500 0 1200 1000])
@@ -131,7 +131,7 @@ load Partial_Accuracy_4.mat
 plot(L,Accuracy_GIC3*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
 xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Recognition Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('P_{2,2}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([9,32,0,100])
 axis([9,32,0,100])
 set(gca,'FontSize',labeltsize)
@@ -177,7 +177,7 @@ load SIRP_Accuracy_4.mat
 plot(L,Accuracy_GIC2*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
 xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Recognition Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('P_{3,3}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([9,32,0,100])
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[500 0 1200 1000])
@@ -199,7 +199,7 @@ load SIRP_Accuracy_4.mat
 plot(L,Accuracy_GIC3*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
 xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Recognition Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('P_{3,3}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([9,32,0,100])
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[500 0 1200 1000])

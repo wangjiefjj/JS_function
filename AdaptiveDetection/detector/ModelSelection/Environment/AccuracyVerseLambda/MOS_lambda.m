@@ -3,17 +3,17 @@
 clc
 clear
 close all
-Class=1; %%不能改
-rho=2;  %%GIC的参数 
+Class=3; %%不能改
+rho_GIC=4;  %%GIC的参数 
 MC = 10000;
-rou = 0.90;  %%协方差矩阵生成的迟滞因子
+rho = 0.90;  %%协方差矩阵生成的迟滞因子
 fc = 0;
 %%%%假设参数设置
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
 N = Na*Np;
 lambda = 0.1:0.1:3;%%%越小非高斯越严重
-mu = 1;
+mu = 0.5;
 % n =1.1:0.3:8; %几倍的样本
 % L=round(n*N);SNRout=10;
 SCNRout=0;
@@ -29,16 +29,15 @@ str_train = 'p';
 %2每个单元纹理值一样，为部分均匀环境
 opt_train = 1;     
 %%杂波协方差
-Rc1 = fun_rho(rou,N,1,fc);
-Rc1 = CNRnum * Rc1;
-Rc1 = Rc1+ eye(N) ;%+ eye(N)
+Rc1 = fun_rho(rho,N,1,fc);
+Rc1 = Rc1+1/CNRnum*eye(N);%+ eye(N)
 Rc2 = Rc1;
 if Class==1
-    str=['Hom_lambda_L',num2str(L),'_rho',num2str(rho),'.mat'];
+    str=['Hom_lambda_L',num2str(L),'_rho',num2str(rho_GIC),'.mat'];
 elseif Class==2
-    str=['Partial_lambda_L',num2str(L),'_rho',num2str(rho),'.mat'];
+    str=['Partial_lambda_L',num2str(L),'_rho',num2str(rho_GIC),'.mat'];
 elseif Class==3
-    str=['SIRP_lambda_L',num2str(L),'_rho',num2str(rho),'.mat'];
+    str=['SIRP_lambda_L',num2str(L),'_rho',num2str(rho_GIC),'.mat'];
 end
 a = sqrt(SCNRnum/abs(p'/Rc2*p));
 tic
@@ -67,17 +66,17 @@ for i_lambda = 1:length(lambda)
     H3_num1 = N^2+L;
     %主辅数据时
     H1_num2 = N^2+1;
-    H2_num2 = N^2+3;
+    H2_num2 = N^2+2;
     H3_num2 = N^2+L+2;
     %主数据时
     H1_num3 = N^2+1;
-    H2_num3 = N^2+2;
+    H2_num3 = N^2+1;
     H3_num3 = N^2+2;
     parfor i = 1:MC
         warning off
         %%产生数据
         [Train,tauk] = fun_TrainData(str_train,N,L,Rc1,lambda(i_lambda),mu,opt_train);%%产生的训练数据,协方差矩阵为rouR的高斯杂波
-        [x0,tau0] = fun_TrainData('g',N,1,Rc2,lambda(i_lambda),mu,opt_train); % 接收信号仅包括杂波和噪声
+        [x0,tau0] = fun_TrainData(str_train,N,1,Rc2,lambda(i_lambda),mu,opt_train); % 接收信号仅包括杂波和噪声
         x0 =x0+a*p;
         %%s函数计算 
         %只用辅助数据时
@@ -105,9 +104,9 @@ for i_lambda = 1:length(lambda)
             count_AIC1 = count_AIC1+1;  
         end
         %%GIC%%%%%%
-        H1_GIC_1 = fun_GIC(s_H1_1,H1_num1,rho);
-        H2_GIC_1 = fun_GIC(s_H2_1,H2_num1,rho);
-        H3_GIC_1 = fun_GIC(s_H3_1,H3_num1,rho);
+        H1_GIC_1 = fun_GIC(s_H1_1,H1_num1,rho_GIC);
+        H2_GIC_1 = fun_GIC(s_H2_1,H2_num1,rho_GIC);
+        H3_GIC_1 = fun_GIC(s_H3_1,H3_num1,rho_GIC);
         Class_GIC1 =[H1_GIC_1,H2_GIC_1,H3_GIC_1];
         [~,Class_GIC_num1] = min(Class_GIC1);
         if Class_GIC_num1 == Class  
@@ -143,9 +142,9 @@ for i_lambda = 1:length(lambda)
             count_AIC2 = count_AIC2+1;  
         end
         %%GIC%%%%%%%%%%%%%%
-        H1_GIC_2 = fun_GIC(s_H1_2,H1_num2,rho);
-        H2_GIC_2 = fun_GIC(s_H2_2,H2_num2,rho);
-        H3_GIC_2 = fun_GIC(s_H3_2,H3_num2,rho);
+        H1_GIC_2 = fun_GIC(s_H1_2,H1_num2,rho_GIC);
+        H2_GIC_2 = fun_GIC(s_H2_2,H2_num2,rho_GIC);
+        H3_GIC_2 = fun_GIC(s_H3_2,H3_num2,rho_GIC);
         Class_GIC2 =[H1_GIC_2,H2_GIC_2,H3_GIC_2];
         [~,Class_GIC_num2] = min(Class_GIC2);
         if Class_GIC_num2 == Class  
@@ -181,9 +180,9 @@ for i_lambda = 1:length(lambda)
             count_AIC3 = count_AIC3+1;  
         end
         %%GIC%%%%%%%%%%%%%%
-        H1_GIC_3 = fun_GIC(s_H1_3,H1_num3,rho);
-        H2_GIC_3 = fun_GIC(s_H2_3,H2_num3,rho);
-        H3_GIC_3 = fun_GIC(s_H3_3,H3_num3,rho);
+        H1_GIC_3 = fun_GIC(s_H1_3,H1_num3,rho_GIC);
+        H2_GIC_3 = fun_GIC(s_H2_3,H2_num3,rho_GIC);
+        H3_GIC_3 = fun_GIC(s_H3_3,H3_num3,rho_GIC);
         Class_GIC3 =[H1_GIC_3,H2_GIC_3,H3_GIC_3];
         [~,Class_GIC_num3] = min(Class_GIC3);
         if Class_GIC_num3 == Class  
