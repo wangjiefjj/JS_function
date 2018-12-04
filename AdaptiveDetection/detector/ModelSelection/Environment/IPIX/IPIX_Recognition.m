@@ -7,7 +7,7 @@ Data_process
 % matFile='19980204_224024_IPIX.mat';
 load(matFile) 
 Range = 19;
-offset=0; %%前10000个就是0，后10000个就是50000
+offset=50000; %%前10000个就是0，后10000个就是50000
 % lambda =  2.4072;
 % mu = 1.3600;
 %%%%参数设置
@@ -95,5 +95,5 @@ ylabel('Percentage')
 % set(gcf,'Position',[100 0 1200 1000])
 grid on
 box on
-% str=['IPIX_recognition_Rang_',num2str(Range),'_',num2str(offset)];
-% save(str);
+str=['IPIX_recognition_Rang_',num2str(Range),'_',num2str(offset)];
+save(str);
