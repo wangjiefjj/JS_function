@@ -40,7 +40,7 @@ plot(L,Accuracy_ABIC2*100,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(L,Accuracy_GIC2*100,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 load Hom_Accuracy_4.mat
 plot(L,Accuracy_GIC2*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
+h_leg=legend('AIC','AICc','ABIC','GIC(\eta=2)','GIC(\eta=4)');
 xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\it{P}_{1,1}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([9,32,0,100])
@@ -62,7 +62,7 @@ plot(L,Accuracy_ABIC3*100,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(L,Accuracy_GIC3*100,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 load Hom_Accuracy_4.mat
 plot(L,Accuracy_GIC3*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
+h_leg=legend('AIC','AICc','ABIC','GIC(\eta=2)','GIC(\eta=4)');
 xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\it{P}_{1,1}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([9,32,0,100])
@@ -85,7 +85,7 @@ print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 % plot(L,Accuracy_GIC1,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 % load Partial_Accuracy_4.mat
 % plot(L,Accuracy_GIC1,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-% h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
+% h_leg=legend('AIC','AICc','ABIC','GIC(\eta=2)','GIC(\eta=4)');
 % xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 % ylabel('Recognition Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 % axis([9,32,0,100])
@@ -107,7 +107,7 @@ plot(L,Accuracy_ABIC2*100,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(L,Accuracy_GIC2*100,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 load Partial_Accuracy_4.mat
 plot(L,Accuracy_GIC2*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
+h_leg=legend('AIC','AICc','ABIC','GIC(\eta=2)','GIC(\eta=4)');
 xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\it{P}_{2,2}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([9,32,0,100])
@@ -129,7 +129,7 @@ plot(L,Accuracy_ABIC3*100,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(L,Accuracy_GIC3*100,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 load Partial_Accuracy_4.mat
 plot(L,Accuracy_GIC3*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
+h_leg=legend('AIC','AICc','ABIC','GIC(\eta=2)','GIC(\eta=4)');
 xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\it{P}_{2,2}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([9,32,0,100])
@@ -153,7 +153,7 @@ print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 % plot(L,Accuracy_GIC1,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 % load SIR\it{P}_Accuracy_4.mat
 % plot(L,Accuracy_GIC1,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-% h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
+% h_leg=legend('AIC','AICc','ABIC','GIC(\eta=2)','GIC(\eta=4)');
 % xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 % ylabel('Recognition Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 % axis([9,32,0,100])
@@ -175,7 +175,7 @@ plot(L,Accuracy_ABIC2*100,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(L,Accuracy_GIC2*100,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 load SIRP_Accuracy_4.mat
 plot(L,Accuracy_GIC2*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
+h_leg=legend('AIC','AICc','ABIC','GIC(\eta=2)','GIC(\eta=4)');
 xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\it{P}_{3,3}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([9,32,0,100])
@@ -197,7 +197,7 @@ plot(L,Accuracy_ABIC3*100,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(L,Accuracy_GIC3*100,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 load SIRP_Accuracy_4.mat
 plot(L,Accuracy_GIC3*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
+h_leg=legend('AIC','AICc','ABIC','GIC(\eta=2)','GIC(\eta=4)');
 xlabel('K','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\it{P}_{3,3}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([9,32,0,100])

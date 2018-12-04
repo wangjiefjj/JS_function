@@ -19,7 +19,7 @@ plot(tau,Accuracy_ABIC2*100,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(tau,Accuracy_GIC2*100,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 load Hom_tau_L20_rho4.mat
 plot(tau,Accuracy_GIC2*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
+h_leg=legend('AIC','AICc','ABIC','GIC(\eta=2)','GIC(\eta=4)');
 xlabel('\tau','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\it{P}_{2,1}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([1,10,0,100])
@@ -40,7 +40,7 @@ plot(tau,Accuracy_ABIC3*100,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(tau,Accuracy_GIC3*100,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 load Partial_tau_L20_rho4.mat
 plot(tau,Accuracy_GIC3*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
+h_leg=legend('AIC','AICc','ABIC','GIC(\eta=2)','GIC(\eta=4)');
 xlabel('\tau','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\it{P}_{2,1}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([1,10,0,100])
@@ -63,7 +63,7 @@ plot(tau,Accuracy_ABIC2*100,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(tau,Accuracy_GIC2*100,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 load Partial_tau_L20_rho4.mat
 plot(tau,Accuracy_GIC2*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
+h_leg=legend('AIC','AICc','ABIC','GIC(\eta=2)','GIC(\eta=4)');
 xlabel('\tau','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\it{P}_{2,2}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([1,10,0,100])
@@ -84,7 +84,7 @@ plot(tau,Accuracy_ABIC3*100,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(tau,Accuracy_GIC3*100,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 load Partial_tau_L20_rho4.mat
 plot(tau,Accuracy_GIC3*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
+h_leg=legend('AIC','AICc','ABIC','GIC(\eta=2)','GIC(\eta=4)');
 xlabel('\tau','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\it{P}_{2,2}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([1,10,0,100])
@@ -107,7 +107,7 @@ plot(tau,Accuracy_ABIC2*100,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(tau,Accuracy_GIC2*100,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 load SIRP_tau_L20_rho4.mat
 plot(tau,Accuracy_GIC2*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
+h_leg=legend('AIC','AICc','ABIC','GIC(\eta=2)','GIC(\eta=4)');
 xlabel('\tau','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\it{P}_{2,3}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([1,10,0,100])
@@ -128,7 +128,7 @@ plot(tau,Accuracy_ABIC3*100,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(tau,Accuracy_GIC3*100,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 load SIRP_tau_L20_rho4.mat
 plot(tau,Accuracy_GIC3*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('AIC','AICc','ABIC','GIC(\rho=2)','GIC(\rho=4)');
+h_leg=legend('AIC','AICc','ABIC','GIC(\eta=2)','GIC(\eta=4)');
 xlabel('\tau','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\it{P}_{2,3}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([1,10,0,100])
