@@ -7,12 +7,13 @@ Data_process
 load(matFile)
 tic
 t = [9:29];
+offset = 0;%50000;
 parfor i = 1:10000%nsweep
-    r = sig(i,t);
+    r = sig(i+offset,t);
     [lambda(i),mu(i)] = fun_IG_ML(r);
 end
-mean(lambda)
-mean(mu)
+lambda_m=mean(lambda)
+mu_m=mean(mu)
 toc
 
 % MTD = abs(fftshift(fft(sig,[],1)));

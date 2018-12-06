@@ -30,8 +30,8 @@ str_train = 'p';
 opt_train = 1;     
 %%杂波协方差
 Rc1 = fun_rho(rho,N,1,fc);
-Rc1 = CNRnum * Rc1;
-Rc1 = Rc1+ eye(N) ;%+ eye(N)
+Rc1 = Rc1;
+Rc1 = Rc1+ 1/CNRnum * eye(N) ;%+ eye(N)
 Rc2 = Rc1;
 str=['SIRP_mu_lambda_L',num2str(L),'_',num2str(rho_GIC),'.mat'];
 a = sqrt(SCNRnum/abs(p'/Rc2*p));
@@ -42,11 +42,11 @@ H2_num1 = N^2+1;
 H3_num1 = N^2+L;
 %主辅数据时
 H1_num2 = N^2+1;
-H2_num2 = N^2+3;
+H2_num2 = N^2+2;
 H3_num2 = N^2+L+2;
 %主数据时
 H1_num3 = N^2+1;
-H2_num3 = N^2+2;
+H2_num3 = N^2+1;
 H3_num3 = N^2+2;
 tic
 h = waitbar(1,'Please wait...');

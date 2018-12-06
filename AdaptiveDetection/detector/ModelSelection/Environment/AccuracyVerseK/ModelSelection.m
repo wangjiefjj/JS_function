@@ -2,8 +2,8 @@
 clc
 clear
 close all
-Class=3; %%
-rho=4;  %%GIC的参数 
+Class=2; %%
+rho=2;  %%GIC的参数 
 MC = 1000;
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
 fc = 0.1;
@@ -46,7 +46,7 @@ elseif Class == 2%%部分均匀
 %     rc =  exp(-1i*2*pi*nn*fc-2*(nn*pi*sigmaf).^2);
 %     Rc1 = CNRnum * toeplitz(rc);
     Rc2 = Rc2 + 1/CNRnum*eye(N);%+ eye(N)
-    Rc1 = 0.1*Rc2;
+    Rc1 = 10*Rc2;
     str=['Partial_Accuracy','_',num2str(rho),'.mat'];
 elseif Class == 3%%SIRP
     str_train = 'p';
