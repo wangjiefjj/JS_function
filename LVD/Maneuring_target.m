@@ -21,7 +21,7 @@ pulse_M = Beishu*PRF;
 %%%%%%%%%%%%%%%%%%%目标参数%%%%%%%%%%%%%%%%%%%%%%%%%%%
 R0 = 50*delt_R;
 mu_Lvd = -50;
-f0_Lvd =10000;
+f0_Lvd =100;
 V0 = f0_Lvd*lamda/2;
 a_T = mu_Lvd*lamda/2;
 jerk = 0;
