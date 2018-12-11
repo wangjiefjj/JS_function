@@ -1,11 +1,11 @@
 clc
 clear 
 close all
-labeltsize=20;
+labeltsize=35;
 fw = 'normal'; %%是否加粗斜体之类
 fn='Times New Roman';
-linewide1=2;
-mkft = 10;
+linewide1=3;
+mkft = 15;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Llist = 0.3:0.3:0.99;
@@ -27,11 +27,13 @@ h_leg=legend('P-SGLRT','P-SRAO','P-SWALD');
 xlabel('SNR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('cos^2{\phi}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gca,'FontSize',labeltsize)
-set(gcf,'Position',[700 0 1200 500])
+set(gcf,'Position',[700 0 1200 1000])
 set(h_leg,'Location','NorthWest')
 axis([20,40,0,1])
 grid on
 box on
+str=['Mis3D_1K.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 load 3D_2K.mat
 [X,Y] = meshgrid(SNRout,1-cos2);
@@ -50,8 +52,10 @@ h_leg=legend('P-SGLRT','P-SRAO','P-SWALD');
 xlabel('SNR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('cos^2{\phi}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gca,'FontSize',labeltsize)
-set(gcf,'Position',[700 0 1200 500])
+set(gcf,'Position',[700 0 1200 1000])
 set(h_leg,'Location','NorthWest')
 axis([20,40,0,1])
 grid on
 box on
+str=['Mis3D_2K.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径

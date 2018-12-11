@@ -1,11 +1,11 @@
 clc
 clear 
 close all
-labeltsize=20;
+labeltsize=35;
 fw = 'normal'; %%是否加粗斜体之类
 fn='Times New Roman';
-linewide1=2;
-mkft = 10;
+linewide1=3;
+mkft = 15;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 load Mis_1K35dB.mat
@@ -21,10 +21,12 @@ h_leg=legend('P-SGLRT','P-SRAO','P-SWALD','SGLRT','SRAO','SWALD');
 xlabel('cos^2{\phi}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('PD','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gca,'FontSize',labeltsize)
-set(gcf,'Position',[700 0 1200 500])
+set(gcf,'Position',[700 0 1200 1000])
 set(h_leg,'Location','NorthEast')
 grid on
 box on
+str=['Mis2D_1K35dB.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 load Mis_2K35dB.mat
 figure(2);
@@ -39,7 +41,9 @@ h_leg=legend('P-SGLRT','P-SRAO','P-SWALD','SGLRT','SRAO','SWALD');
 xlabel('cos^2{\phi}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('PD','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gca,'FontSize',labeltsize)
-set(gcf,'Position',[700 0 1200 500])
+set(gcf,'Position',[700 0 1200 1000])
 set(h_leg,'Location','NorthEast')
 grid on
 box on
+str=['Mis2D_2K35dB.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
