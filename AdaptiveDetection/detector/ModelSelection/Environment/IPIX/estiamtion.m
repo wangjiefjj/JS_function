@@ -7,7 +7,7 @@ Data_process
 load(matFile)
 tic
 t = [9:29];
-offset = 0;%50000;
+offset = 50000;%50000;
 parfor i = 1:10000%nsweep
     r = sig(i+offset,t);
     [lambda(i),mu(i)] = fun_IG_ML(r);

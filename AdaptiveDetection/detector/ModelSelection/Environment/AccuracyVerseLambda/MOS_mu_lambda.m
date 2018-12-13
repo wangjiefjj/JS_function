@@ -4,7 +4,7 @@ clc
 clear
 close all
 Class=3; %%
-rho_GIC=4;  %%GIC的参数 
+rho_GIC=2;  %%GIC的参数 
 MC = 1000;
 rho = 0.90;  %%协方差矩阵生成的迟滞因子
 fc = 0;
@@ -12,8 +12,8 @@ fc = 0;
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
 N = Na*Np;
-lambda = 1:0.1:3;%%%越小非高斯越严重
-mu = 1:0.1:3;
+lambda = 0.25:0.25:3;%%%越小非高斯越严重
+mu = 0.25:0.25:3;
 % n =1.1:0.3:8; %几倍的样本
 % L=round(n*N);SNRout=10;
 SCNRout=0;
@@ -223,21 +223,8 @@ end
 
 toc
 close(h)
-[X,Y]=meshgrid(1:0.1:3,1:0.1:3);
-% figure(1)
-% hold on
-% plot(SNRout,Accuracy_AIC1,'r-s','LineWidth',2)
-% plot(SNRout,Accuracy_GIC1,'g-o','LineWidth',2)
-% plot(SNRout,Accuracy_AICc1,'b-*','LineWidth',2)
-% plot(SNRout,Accuracy_ABIC1,'k-.','LineWidth',2)
-% title('只用辅助数据')
-% h_leg1 = legend('AIC','GIC','AICc','ABIC');
-% xlabel('\mu')
-% ylabel('Accuracy')
-% set(gca,'FontSize',10)
-% set(h_leg1,'Location','SouthEast')
-% grid on
-% box on
+[X,Y]=meshgrid(lambda,mu);
+
 figure(2)
 hold on
 mesh(X,Y,Accuracy_AIC2)
@@ -249,20 +236,6 @@ h_leg2 = legend('AIC','GIC','AICc','ABIC');
 xlabel('\mu')
 ylabel('\lambda')
 zlabel('Accuracy')
-set(gca,'FontSize',10)
-set(h_leg2,'Location','SouthEast')
-grid on
-box on
-figure(3)
-hold on
-plot(mu,Accuracy_AIC3,'r-s','LineWidth',2)
-plot(mu,Accuracy_GIC3,'g-o','LineWidth',2)
-plot(mu,Accuracy_AICc3,'b-*','LineWidth',2)
-plot(mu,Accuracy_ABIC3,'k-.','LineWidth',2)
-title('主数据')
-h_leg2 = legend('AIC','GIC','AICc','ABIC');
-xlabel('\mu')
-ylabel('Accuracy')
 set(gca,'FontSize',10)
 set(h_leg2,'Location','SouthEast')
 grid on

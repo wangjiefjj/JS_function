@@ -3,7 +3,7 @@ clc
 clear
 close all
 rho=2;  %%GIC的参数 
-MC = 5000;
+MC = 1000;
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
 fc = 0;
 %%%%假设参数设置
@@ -40,7 +40,7 @@ for Class = 1:3
         rc =  exp(-1i*2*pi*nn*fc-2*(nn*pi*sigmaf).^2);
         Rc1 = CNRnum * toeplitz(rc);
         Rc1 = Rc1+ eye(N) ;%+ eye(N)
-        Rc2 = 0.1*Rc1;
+        Rc2 = 10*Rc1;
     elseif Class == 3%%SIRP
         str_train = 'p';
         %%%IG的选项，1为每个距离单元IG纹理都不同
@@ -90,7 +90,7 @@ for Class = 1:3
         %%参数个数
         %主辅数据时
         H1_num = N^2+1;
-        H2_num = N^2+3;
+        H2_num = N^2+2;
         H3_num = N^2+L+2;
         %%
         %%模型选择准则%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -189,5 +189,5 @@ for Class = 1:3
     Confusion_ABIC(Class,3) = count_ABIC_H3/MC;
 end
    
-str=['Confusion','_L',num2str(L),'.mat'];
-save(str)
+% str=['Confusion','_L',num2str(L),'.mat'];
+% save(str)

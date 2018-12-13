@@ -15,13 +15,13 @@ else
 end
 [N,K]=size(X);
 %%计算协方差和纹理
-tau = abs(trace(X'*X)/N/K);
-Sigma = 1/K/tau*(X*X');
-% Sigma = eye(N);
-% for i = 1:10
-%     tau = abs(trace(X'/Sigma*X)/N/K);
-%     Sigma = 1/K/tau*(X*X');
-% end
+% tau = abs(trace(X'*X)/N/K);
+% Sigma = 1/K/tau*(X*X');
+Sigma = eye(N);
+for i = 1:10
+    tau = abs(trace(X'/Sigma*X)/N/K);
+    Sigma = 1/K/tau*(X*X');
+end
 %%计算s
 if opt == 1 %%只用辅助数据
     s = -N*K*log(pi)-N*K*log(tau)-K*log(det(Sigma))-trace(X'/Sigma*X)/tau;

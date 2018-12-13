@@ -1,5 +1,5 @@
 function [ lambda,mu ] = fun_IG_ML(r)
-%%《Maximum Likelihood Estimation forCompound-Gaussian Clutter with Inverse GammaTexture》
+%%《Maximum Likelihood Estimation for Compound-Gaussian Clutter with Inverse Gamma Texture》
 %%(15) (14) 
 %%复合高斯invert Gamma 纹理参数ML估计
 % lambda:形状参数,lambda

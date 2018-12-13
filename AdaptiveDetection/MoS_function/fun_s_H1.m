@@ -16,12 +16,6 @@ end
 [N,K]=size(X);
 %%计算协方差
 R = 1/K*(X*X');
-% %% 如果有对称性的话
-% J = zeros(N,N);
-% for i = 1:N
-%         J(i,N-i+1) = 1;
-% end
-% R = 0.5*(R + J*conj(R)*J); 
 %%计算s
 if opt == 1 %%只用辅助数据
     s = -N*K*log(pi)-K*log(det(R))-trace(X'/R*X);

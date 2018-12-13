@@ -6,7 +6,7 @@ Class=2; %%
 rho=2;  %%GIC的参数 
 MC = 1000;
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
-fc = 0.1;
+fc = 0.10;
 %%%%假设参数设置
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
@@ -27,26 +27,24 @@ p = exp(-1i*2*pi*nn*theta_sig).'/sqrt(N); %%%%%% 系统导向矢量
 if Class==1%%均匀
     str_train = 'g';
     %%杂波协方差
-    Rc1 = fun_rho(rou,N,1,fc);
-    Rc1 = Rc1;
+    Rt = fun_rho(rou,N,1,fc);
 %     sigmaf = 0.03; %%杂波谱展宽
-%     rc =  exp(-1i*2*pi*nn*fc-2*(nn*pi*sigmaf).^2);
-%     Rc1 = CNRnum * toeplitz(rc);
-    Rc1 = Rc1+1/CNRnum*eye(N);%
-    Rc2 = Rc1;
+%     Rt = fun_ToeplitzR(N,fc,sigmaf);
+    
+    Rt = Rt + 1/CNRnum*eye(N);%+ eye(N)
+    Rs = Rt;
     opt_train = 0;
     str=['Hom_Accuracy','_',num2str(rho),'.mat'];
 elseif Class == 2%%部分均匀
     str_train = 'g';
     opt_train = 2;
-    %%杂波协方差
-    Rc2 = fun_rho(rou,N,1,fc);
-    Rc2 = Rc2;
+%     %杂波协方差
+    Rt = fun_rho(rou,N,1,fc);
 %     sigmaf = 0.03; %%杂波谱展宽
-%     rc =  exp(-1i*2*pi*nn*fc-2*(nn*pi*sigmaf).^2);
-%     Rc1 = CNRnum * toeplitz(rc);
-    Rc2 = Rc2 + 1/CNRnum*eye(N);%+ eye(N)
-    Rc1 = 10*Rc2;
+%     Rt = fun_ToeplitzR(N,fc,sigmaf);
+
+    Rt = Rt + 1/CNRnum*eye(N);%+ eye(N)
+    Rs = 10*Rt;
     str=['Partial_Accuracy','_',num2str(rho),'.mat'];
 elseif Class == 3%%SIRP
     str_train = 'p';
@@ -54,18 +52,15 @@ elseif Class == 3%%SIRP
     %2每个单元纹理值一样，为部分均匀环境
     opt_train = 1;     
     %%杂波协方差
-    Rc1 = fun_rho(rou,N,1,fc);
-    Rc1 = Rc1;
+    Rt = fun_rho(rou,N,1,fc);
 %     sigmaf = 0.03; %%杂波谱展宽
-%     rc =  exp(-1i*2*pi*nn*fc-2*(nn*pi*sigmaf).^2);
-%     Rc1 = CNRnum * toeplitz(rc);
-    Rc1 = Rc1+1/CNRnum*eye(N);%+ eye(N)
-    Rc2 = Rc1;
+%     Rt = fun_ToeplitzR(N,fc,sigmaf);
+    Rt = Rt + 1/CNRnum*eye(N);%+ eye(N)
+    Rs = Rt;
     str=['SIRP_Accuracy','_',num2str(rho),'.mat'];
 end
-iRc1 = inv(Rc1);
-iRc2 = inv(Rc2);
-a = sqrt(SCNRnum/abs(p'/Rc2*p));
+iRs = inv(Rs);
+iRt = inv(Rt);
 tic
 h = waitbar(1,'Please wait...');
 for i_L = 1:length(L)
@@ -101,8 +96,13 @@ for i_L = 1:length(L)
     parfor i = 1:MC
         warning off
         %%产生数据
-        [Train,tauk] = fun_TrainData(str_train,N,L(i_L),Rc1,lambda,mu,opt_train);%%产生的训练数据,协方差矩阵为rouR的高斯杂波
-        [x0,tau0] = fun_TrainData(str_train,N,1,Rc2,lambda,mu,opt_train); % 接收信号仅包括杂波和噪声
+        [Train,tauk] = fun_TrainData(str_train,N,L(i_L),Rs,lambda,mu,opt_train);%%产生的训练数据,协方差矩阵为rouR的高斯杂波
+        [x0,tau0] = fun_TrainData(str_train,N,1,Rt,lambda,mu,opt_train); % 接收信号仅包括杂波和噪声
+        if Class==3
+            a = sqrt(SCNRnum/abs(p'/(tau0*Rt)*p));
+        else
+            a = sqrt(SCNRnum/abs(p'/(Rt)*p));
+        end
         x0 =x0+a*p;
         %%s函数计算 
         %只用辅助数据时

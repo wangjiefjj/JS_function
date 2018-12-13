@@ -5,9 +5,9 @@ clear
 close all
 Class=3; %%
 rho_GIC=4;  %%GIC的参数 
-MC = 1000;
+MC = 10000;
 rho = 0.1:0.05:0.95;  %%协方差矩阵生成的迟滞因子
-fc = 0;
+fc = 0.1;
 %%%%假设参数设置
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
@@ -292,4 +292,4 @@ set(h_leg2,'Location','SouthEast')
 
 grid on
 box on
-% save(str)
+save(str)
