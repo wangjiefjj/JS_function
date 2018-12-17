@@ -17,9 +17,9 @@ SNRout=10; % 输出SNR
 CNR = 30; %%杂噪比
 cos2=0.9;
 SNRnum=10.^(SNRout/10);
-PFA=1e-3;% PFA=1e-4;
+PFA=1e-1;% PFA=1e-4;
 MonteCarloPfa=1/PFA*100;
-MonteCarloPd=1e3;
+MonteCarloPd=1e2;
 L=round(n*N); 
 nn = 0:N-1;
 rouR = fun_rho(rou,N,1); %%真实的杂波协方差
@@ -30,7 +30,7 @@ for i = 1:1000
     t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
     R_KA1 = R_KA1 + rouR.*(t*t')/1000;
 end
-fd = -0.5:0.05:0.5;
+fd = -0.5:0.1:0.5;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%门限计算%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for i_fd = 1:length(fd)
     i_fd/length(fd)
@@ -233,6 +233,5 @@ h_leg = legend('NMF','ANMF with CC',...
 % grid on
 % grid minor
 % str = ['PdFd_2_',num2str(L),'Second','_',str_train,'.mat'];
-str = ['PdFd_2_',num2str(L),'Second','_s',num2str(sigma_t),'_',str_train,'.mat'];
-% % % % % str = ['Pd_E',num2str(L),'Second','_',str_train,'.mat'];
-save (str); 
+% str = ['PdFd_2_',num2str(L),'Second','_s',num2str(sigma_t),'_',str_train,'.mat'];
+% save (str); 

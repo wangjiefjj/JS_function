@@ -8,7 +8,7 @@ lambda = 3;
 mu = 1;
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
-sigma_t =0.1;
+sigma_t =0.9;
 %%假设参数设置
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
@@ -19,7 +19,7 @@ cos2=0.9;
 SNRnum=10.^(SNRout/10);
 PFA=1e-3;% PFA=1e-4;
 MonteCarloPfa=1/PFA*100;
-MonteCarloPd=1e4;
+MonteCarloPd=1e3;
 L=round(n*N); 
 nn = 0:N-1;
 fd=0.2;
@@ -230,6 +230,7 @@ plot(fc,Pd_SFP_mc,'c-*','linewidth',1)
 h_leg = legend('NMF','ANMF with CC',...
     'ANMF with E','ANMF with ECC','ANMF with LogM','ANMF with LogCC',...
     'ANMF with P','ANMF with PCC','SFP');
-% str = ['PdFd_2_',num2str(L),'Second','_',str_train,'.mat'];
+
+
 str = ['PdFc_',num2str(L),'Second','_s',num2str(sigma_t),'_',str_train,'.mat'];
 save (str); 

@@ -3,9 +3,10 @@ clear
 close all
 %%%%参数设置
 n = 1; %几倍的样本
-str_train = 'g';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
+str_train = 'p';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
 lambda = 3;
 mu = 1;
+tau_m = mu/(lambda-1);
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
 rou = 0.95;  %%协方差矩阵生成的迟滞因子
 sigma_t =sqrt(0.5);
@@ -47,11 +48,11 @@ parfor i = 1:MonteCarloPfa
     %     %%先验协方差
     t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
     R_KA =  (rouR).*(t*t');
-    R_KA2 =  (tau0^2*rouR).*(t*t');
+    R_KA2 =  (tau0*rouR).*(t*t');
     %%%%协方差估计%%%%%%%%%%%%%%%%%%%%%%    
     R_SCM = (fun_SCMN(Train));  
-    R_CC = fun_CC(Train,R_SCM,R_KA);
-    R_ML = fun_MLalpha(Train,R_SCM,R_KA,x0);
+    R_CC = fun_CC(Train,R_SCM,R_KA2);
+    R_ML = fun_MLalpha(Train,R_SCM,R_KA2,x0);
     R_ECCT = fun_PowerCC(Train,R_KA,1,4);
     R_ECCS = fun_PowerCC(Train,R_KA,1,8);
     R_ECCP = fun_PowerCC(Train,R_KA,1,7);
@@ -128,7 +129,7 @@ for m=1:length(SNRout)
         %%先验协方差
         t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
         R_KA =  (rouR).*(t*t');
-        R_KA2 =  (tau0^2*rouR).*(t*t');
+        R_KA2 =  (tau0*rouR).*(t*t');
         %%%%协方差估计%%%%%%%%%%%%%%%%%%%%%%
         R_SCM = (fun_SCMN(Train));    
         R_ECCT = fun_PowerCC(Train,R_KA,1,4);
