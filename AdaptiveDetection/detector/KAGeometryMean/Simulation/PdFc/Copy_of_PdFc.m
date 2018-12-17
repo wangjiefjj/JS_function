@@ -6,9 +6,11 @@ n = 0.5; %几倍的样本
 str_train = 'p';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
 lambda = 3;
 mu = 1;
+tau_m = mu/(lambda-1);
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
-sigma_t =0.9;
+sigma_tt =0.9;
+sigma_t =sqrt(0.1);
 %%假设参数设置
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
@@ -32,9 +34,9 @@ for i_fc = 1:length(fc)
     rouR_half=rouR^0.5;
     irouR=inv(rouR);
     R_KA1 = zeros(size(rouR));
-    for i = 1:1000
+    for i = 1:10000
         t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
-        R_KA1 = R_KA1 + rouR.*(t*t')/1000;
+        R_KA1 = R_KA1 + rouR.*(t*t')/10000;
     end
     Tanmf_R = zeros(1,MonteCarloPfa);
     Tanmf_CC = zeros(1,MonteCarloPfa);
@@ -54,7 +56,7 @@ for i_fc = 1:length(fc)
     %     x0 = awgn(Train,CNR);
     % % % %     RKA
         t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
-        R_KA2 = rouR.*(t*t');    
+        R_KA2 = tau_m*rouR.*(t*t');    
     % % % %     协方差估计
         R_CC = fun_CC(Train,fun_SCMN(Train),R_KA2);
         R_E = fun_RPowerEMean(Train,1,3);
@@ -135,9 +137,9 @@ for i_t = 1:length(fc)
     rouR_half=rouR^0.5;
     irouR=inv(rouR);
     R_KA1 = zeros(size(rouR));
-    for i = 1:1000
+    for i = 1:10000
         t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
-        R_KA1 = R_KA1 + rouR.*(t*t')/1000;
+        R_KA1 = R_KA1 + rouR.*(t*t')/10000;
     end
     counter_R=0;
     counter_CC=0;
@@ -158,7 +160,7 @@ for i_t = 1:length(fc)
 %         x0 = awgn(x0,CNR);
 % % %       RKA
         t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
-        R_KA2 = rouR.*(t*t');        
+        R_KA2 = tau_m*rouR.*(t*t');       
 % %         协方差估计
         R_CC = fun_CC(Train,fun_SCMN(Train),R_KA2);
         R_E = fun_RPowerEMean(Train,1,3);
@@ -232,5 +234,5 @@ h_leg = legend('NMF','ANMF with CC',...
     'ANMF with P','ANMF with PCC','SFP');
 
 
-str = ['PdFc_',num2str(L),'Second','_s',num2str(sigma_t),'_',str_train,'.mat'];
+str = ['PdFc_',num2str(L),'Second','_s',num2str(sigma_tt),'_',str_train,'.mat'];
 save (str); 

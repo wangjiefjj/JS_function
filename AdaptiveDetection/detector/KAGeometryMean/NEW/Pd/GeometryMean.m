@@ -2,14 +2,14 @@ clc
 clear 
 close all
 %%参数设置
-n = 0.5; %几倍的样本
+n = 2; %几倍的样本
 str_train = 'p';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
 lambda = 3;
 mu = 1;
 tau_m = mu/(lambda-1);
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
-sigma_tt = 0.9;
+sigma_tt = 0.1;
 sigma_t =sqrt(sigma_tt);
 %%假设参数设置
 Na = 2;     % 阵元数
