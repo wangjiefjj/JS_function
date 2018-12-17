@@ -18,7 +18,7 @@ t2 = 0;
 
 % if opt == 4  || opt == 5
     for i = 1:L
-        t11 = logm(Ri(:,:,i)) - logm_R;
+        t11 = logm_R - logm(Ri(:,:,i));
         t1 = t1 + norm(t11,'fro')^2;
         t22 = logm(R_KA) - logm(Ri(:,:,i));
         t2 = t2 + norm(t22,'fro')^2;

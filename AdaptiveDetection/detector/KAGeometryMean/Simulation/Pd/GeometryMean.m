@@ -28,7 +28,8 @@ theta_sig = 0.2;
 nn = 0:N-1;
 s = exp(-1i*2*pi*nn*theta_sig).'/sqrt(N); %%%%%% 系统导向矢量
 %%杂波协方差
-Rc = fun_rho(rou,N,1,0.1);
+fc=0;
+Rc = fun_rho(rou,N,1,fc);
 R = Rc;
 % R = CNRnum*Rc+eye(N);
 R_KA = zeros(size(R));

@@ -15,7 +15,7 @@ end
 
 figure()
 imagesc(abs(sig))
-xlabel('Range Bin')
+xlabel('Range Cell')
 ylabel('Pulse Number ')
 set(gca,'FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gcf,'Position',[100 0 1200 1000])
