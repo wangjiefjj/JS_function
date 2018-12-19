@@ -13,7 +13,7 @@ load IPIX_recognition_Rang_19_0.mat
 figure()
 bar(y)
 set(gca, 'XTickLabel', x);
-h_leg = legend('AIC','ABIC','GIC (\eta=2)');
+h_leg = legend('AIC','BIC','GIC (\eta=2)');
 xlabel('Recognition Results')
 ylabel('Percentage')
 axis([0.5,3.5,0,100])
@@ -32,7 +32,7 @@ load IPIX_recognition_Rang_19_50000.mat
 figure()
 bar(y)
 set(gca, 'XTickLabel', x);
-h_leg = legend('AIC','ABIC','GIC (\eta=2)');
+h_leg = legend('AIC','BIC','GIC (\eta=2)');
 xlabel('Recognition Results')
 ylabel('Percentage')
 axis([0.5,3.5,0,100])

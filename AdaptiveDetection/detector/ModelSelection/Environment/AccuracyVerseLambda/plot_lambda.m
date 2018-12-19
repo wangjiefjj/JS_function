@@ -18,7 +18,7 @@ plot(lambda,Accuracy_ABIC2*100,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(lambda,Accuracy_GIC2*100,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 load Hom_lambda_L20_rho4.mat
 plot(lambda,Accuracy_GIC2*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('AIC','AICc','ABIC','GIC(\eta=2)','GIC(\eta=4)');
+h_leg=legend('AIC','AICc','BIC','GIC(\eta=2)','GIC(\eta=4)');
 xlabel('\lambda','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\it{P}_{3,1}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([0.1,3,0,100])
@@ -62,7 +62,7 @@ print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 % Accuracy_GIC3=[Accuracy_GIC3_2,Accuracy_GIC3_1];
 % lambda = [lambda2,lambda1];
 % plot(lambda,Accuracy_GIC3*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-% h_leg=legend('AIC','AICc','ABIC','GIC(\eta=2)','GIC(\eta=4)');
+% h_leg=legend('AIC','AICc','BIC','GIC(\eta=2)','GIC(\eta=4)');
 % xlabel('\lambda','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 % ylabel('Recognition Percentage','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 % axis([0.1,3,0,100])
@@ -85,7 +85,7 @@ plot(lambda,Accuracy_ABIC2*100,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(lambda,Accuracy_GIC2*100,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 load Partial_lambda_L20_rho4.mat
 plot(lambda,Accuracy_GIC2*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('AIC','AICc','ABIC','GIC(\eta=2)','GIC(\eta=4)');
+h_leg=legend('AIC','AICc','BIC','GIC(\eta=2)','GIC(\eta=4)');
 xlabel('\lambda','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\it{P}_{3,2}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([0.1,3,0,100])
@@ -106,7 +106,7 @@ plot(lambda,Accuracy_ABIC3*100,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(lambda,Accuracy_GIC3*100,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 load Partial_lambda_L20_rho4.mat
 plot(lambda,Accuracy_GIC3*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('AIC','AICc','ABIC','GIC(\eta=2)','GIC(\eta=4)');
+h_leg=legend('AIC','AICc','BIC','GIC(\eta=2)','GIC(\eta=4)');
 xlabel('\lambda','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\it{P}_{3,2}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([0.1,3,0,100])
@@ -131,7 +131,7 @@ plot(lambda,Accuracy_GIC2*100,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 %%
 load SIRP_lambda_L20_rho4.mat
 plot(lambda,Accuracy_GIC2*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('AIC','AICc','ABIC','GIC(\eta=2)','GIC(\eta=4)');
+h_leg=legend('AIC','AICc','BIC','GIC(\eta=2)','GIC(\eta=4)');
 xlabel('\lambda','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\it{P}_{3,3}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([0.1,3,0,100])
@@ -152,7 +152,7 @@ plot(lambda,Accuracy_ABIC3*100,'b-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(lambda,Accuracy_GIC3*100,'k-.x','linewidth',linewide1,'MarkerSize',mkft)
 load SIRP_lambda_L20_rho4.mat
 plot(lambda,Accuracy_GIC3*100,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('AIC','AICc','ABIC','GIC(\eta=2)','GIC(\eta=4)');
+h_leg=legend('AIC','AICc','BIC','GIC(\eta=2)','GIC(\eta=4)');
 xlabel('\lambda','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('\it{P}_{3,3}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([0.1,3,0,100])
