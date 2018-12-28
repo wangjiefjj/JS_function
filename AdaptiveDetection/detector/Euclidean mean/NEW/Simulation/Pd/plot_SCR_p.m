@@ -27,8 +27,8 @@ set(h_leg,'Location','SouthEast')
 axis([min(SNRout),max(SNRout),0,1])
 grid on
 box on
-str=['PD1N_p_1','.eps'];
-print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
+% str=['PD1N_p_1','.eps'];
+% print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 load p_1N_s0.1.mat
 figure(2);
@@ -50,8 +50,8 @@ set(h_leg,'Location','SouthEast')
 axis([min(SNRout),max(SNRout),0,1])
 grid on
 box on
-str=['PD1N_p_2','.eps'];
-print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
+% str=['PD1N_p_2','.eps'];
+% print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 load p_1N_s0.5.mat
 figure(3);
@@ -73,8 +73,8 @@ set(h_leg,'Location','SouthEast')
 axis([min(SNRout),max(SNRout),0,1])
 grid on
 box on
-str=['PD1N_p_3','.eps'];
-print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
+% str=['PD1N_p_3','.eps'];
+% print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 load p_1N_s0.9.mat
 figure(4);
@@ -96,8 +96,8 @@ set(h_leg,'Location','SouthEast')
 axis([min(SNRout),max(SNRout),0,1])
 grid on
 box on
-str=['PD1N_p_4','.eps'];
-print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
+% str=['PD1N_p_4','.eps'];
+% print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 load p_2N_s0.01.mat
 figure(5);
@@ -119,8 +119,8 @@ set(h_leg,'Location','SouthEast')
 axis([min(SNRout),max(SNRout),0,1])
 grid on
 box on
-str=['PD2N_p_1','.eps'];
-print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
+% str=['PD2N_p_1','.eps'];
+% print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 load p_2N_s0.1.mat
 figure(6);
@@ -142,8 +142,8 @@ set(h_leg,'Location','SouthEast')
 axis([min(SNRout),max(SNRout),0,1])
 grid on
 box on
-str=['PD2N_p_2','.eps'];
-print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
+% str=['PD2N_p_2','.eps'];
+% print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 load p_2N_s0.5.mat
 figure(7);
@@ -165,8 +165,8 @@ set(h_leg,'Location','SouthEast')
 axis([min(SNRout),max(SNRout),0,1])
 grid on
 box on
-str=['PD2N_p_3','.eps'];
-print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
+% str=['PD2N_p_3','.eps'];
+% print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 load p_2N_s0.9.mat
 figure(8);
@@ -188,6 +188,6 @@ set(h_leg,'Location','SouthEast')
 axis([min(SNRout),max(SNRout),0,1])
 grid on
 box on
-str=['PD2N_p_4','.eps'];
-print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
-close all
+% str=['PD2N_p_4','.eps'];
+% print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
+% close all

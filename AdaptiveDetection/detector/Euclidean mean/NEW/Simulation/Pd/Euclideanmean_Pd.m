@@ -9,17 +9,17 @@ mu = 1;
 tau_m = mu/(lambda-1);
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
 rou = 0.95;  %%协方差矩阵生成的迟滞因子
-sigma_t =sqrt(0.5);
+sigma_t =sqrt(0.1);
 %%%%假设参数设置
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
 N = Na*Np;
 SNRout=-5:1:25; % 输出SNR
 cos2=0.9;
-PFA=1e-2;% PFA=1e-4;
+PFA=1e-3;% PFA=1e-4;
 SNRnum=10.^(SNRout/10);
 MonteCarloPfa=1/PFA*100;
-MonteCarloPd=1e3;
+MonteCarloPd=1e4;
 rouR = zeros(N,N);  %%真实的杂波协方差
 L=round(n*N); 
 theta_sig = 0.1;
