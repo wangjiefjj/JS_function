@@ -9,17 +9,17 @@ if nargin<2
 end
 for i = 1:L
     Ri = fun_Positive(X(:,i),opt);
-    if opt == 4 || opt == 1
+%     if opt == 4 || opt == 1
        logm_R = logm_R + logm(Ri);
-    else
-       logm_R = logm_R + fun_Logm(Ri);
-    end  
-end
-if opt == 4 || opt == 1
+%     else
+%        logm_R = logm_R + fun_Logm(Ri);
+%     end  
+% end
+% if opt == 4 || opt == 1
     R = expm(logm_R/L);
-else
-    R = fun_Expm(logm_R/L);
-end
+% else
+%     R = fun_Expm(logm_R/L);
+% end
 
 
 end
