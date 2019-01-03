@@ -9,8 +9,8 @@ mu = 1;
 tau_m = mu/(lambda-1);
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
-sigma_tt =0.9;
-sigma_t =sqrt(0.1);
+sigma_tt =0.1;
+sigma_t =sqrt(sigma_tt);
 %%假设参数设置
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
@@ -19,12 +19,12 @@ SNRout=10; % 输出SNR
 CNR = 30; %%杂噪比
 cos2=0.9;
 SNRnum=10.^(SNRout/10);
-PFA=1e-3;% PFA=1e-4;
+PFA=1e-2;% PFA=1e-4;
 MonteCarloPfa=1/PFA*100;
 MonteCarloPd=1e3;
 L=round(n*N); 
 nn = 0:N-1;
-fd=0.2;
+fd=0;
 s = exp(1i*2*pi*nn*fd).'/sqrt(N); %%%%%% 系统导向矢量
 fc = -0.5:0.05:0.5;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%门限计算%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -59,11 +59,11 @@ for i_fc = 1:length(fc)
         R_KA2 = tau_m*rouR.*(t*t');    
     % % % %     协方差估计
         R_CC = fun_CC(Train,fun_SCMN(Train),R_KA2);
-        R_E = fun_RPowerEMean(Train,1,3);
-        R_ECC = fun_PowerCC(Train,R_KA1,1,4);
-        R_LogM = fun_RLogEMean(Train,3);
-        R_LogCC = fun_LogCC_new(Train,R_KA1,4);
-        R_P = fun_RPowerEMean(Train,-1,3);
+        R_E = fun_RPowerEMean(Train,1,4);
+        R_ECC = fun_PowerCC(Train,R_KA1,1,10);
+        R_LogM = fun_RLogEMean(Train,4);
+        R_LogCC = fun_LogCC_new(Train,R_KA1,9);
+        R_P = fun_RPowerEMean(Train,-1,4);
         R_PCC = fun_PowerCC(Train,R_KA1,-1,4);
         R_SFP = fun_SFP(Train,1);
     %     %%检测器%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -163,11 +163,11 @@ for i_t = 1:length(fc)
         R_KA2 = tau_m*rouR.*(t*t');       
 % %         协方差估计
         R_CC = fun_CC(Train,fun_SCMN(Train),R_KA2);
-        R_E = fun_RPowerEMean(Train,1,3);
-        R_ECC = fun_PowerCC(Train,R_KA1,1,4);
-        R_LogM = fun_RLogEMean(Train,3);
-        R_LogCC = fun_LogCC_new(Train,R_KA1,4);
-        R_P = fun_RPowerEMean(Train,-1,3);
+        R_E = fun_RPowerEMean(Train,1,4);
+        R_ECC = fun_PowerCC(Train,R_KA1,1,10);
+        R_LogM = fun_RLogEMean(Train,4);
+        R_LogCC = fun_LogCC_new(Train,R_KA1,9);
+        R_P = fun_RPowerEMean(Train,-1,4);
         R_PCC = fun_PowerCC(Train,R_KA1,-1,4);
         R_SFP = fun_SFP(Train,1);
         %检测信号
@@ -234,5 +234,5 @@ h_leg = legend('NMF','ANMF with CC',...
     'ANMF with P','ANMF with PCC','SFP');
 
 
-str = ['PdFc_',num2str(L),'Second','_s',num2str(sigma_tt),'_',str_train,'.mat'];
-save (str); 
+% str = ['PdFc_',num2str(L),'Second','_s',num2str(sigma_tt),'_',str_train,'.mat'];
+% save (str); 

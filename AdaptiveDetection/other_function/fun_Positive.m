@@ -12,7 +12,8 @@ if opt==0
 elseif opt == 1
 %%《Covariance matrix estimation via geometric
 %%barycenters and its application to radar training data selection》  
-    X = X/sqrt(X'*X/N);%%归一化
+%     X = X/sqrt(X'*X/N);%%归一化
+    X = X/norm(X,'fro');%%归一化
     Rx = X*X';
     [V,D] = svd(Rx);
     Evalue = (diag(D));
@@ -39,11 +40,13 @@ elseif opt == 2
     Rx = abs(V)*D*abs(V');
 %     Rx = Rx./xk^2;
 elseif opt == 3
-   X = X/sqrt(X'*X/N);%%归一化 
+%    X = X/sqrt(X'*X/N);%%归一化 
    Rx = (X*X'+ eye(N)); 
+%    Rx = Rx./norm(Rx,'fro');
 elseif opt == 4
-   X = X/sqrt(X'*X/N);%%归一化
-   Rx = fun_corrcoef(X) ;
+   X = X/norm(X,'fro');%%归一化
+   Rx = fun_corrcoef(X);
+%    Rx = Rx./norm(Rx,'fro');
 elseif opt == 5
    Rx = fun_SFP(X,1);
 elseif opt == 6
@@ -57,7 +60,14 @@ elseif opt == 7  %%%persymmetric
     Rx = 0.5*(S + J*conj(S)*J);  
 elseif opt == 8 %%symmetric
     S = fun_NSCMN(X);
-    Rx = real(S);  
+    Rx = real(S);
+elseif opt == 9
+%    X = X/norm(X,'fro');%%归一化
+   Rx = fun_corrcoef(X);
+   Rx = Rx./norm(Rx,'fro');
+elseif opt == 10
+    X = X/sqrt(X'*X/N);%%归一化
+    Rx = fun_corrcoef(X);
 end
 end
 

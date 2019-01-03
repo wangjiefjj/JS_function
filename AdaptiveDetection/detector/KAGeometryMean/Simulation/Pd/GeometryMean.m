@@ -9,7 +9,7 @@ mu = 1;
 tau_m = mu/(lambda-1);
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
-sigma_tt = 0.9;
+sigma_tt = 0.1;
 sigma_t =sqrt(sigma_tt);
 %%假设参数设置
 Na = 2;     % 阵元数
@@ -68,9 +68,9 @@ parfor i = 1:MonteCarloPfa
     Tanmf_ECC(i) = fun_ANMF(R_ECC,x0,s); 
     %%% ANMF_LogM
     Tanmf_LogM(i) = fun_ANMF(R_LogM,x0,s);
-    if Tanmf_LogM(i)>1
-        Tanmf_LogM(i) = 0;
-    end
+%     if Tanmf_LogM(i)>1
+%         Tanmf_LogM(i) = 1;
+%     end
     %%%%% ANMF_LogCC
     Tanmf_LogCC(i) = fun_ANMF(R_LogCC,x0,s);
     %%%%%% ANMF_P
@@ -168,9 +168,9 @@ for m=1:length(SNRout)
         T_ECC = fun_ANMF(R_ECC,x0,s); 
         %%% ANMF_LogM
         T_LogM = fun_ANMF(R_LogM,x0,s);
-        if T_LogM>1
-            T_LogM = 1;
-        end
+%         if T_LogM>1
+%             T_LogM = 1;
+%         end
         %%%% ANMF_LogCC
         T_LogCC = fun_ANMF(R_LogCC,x0,s);
         %%%% ANMF_P
@@ -224,5 +224,5 @@ set(gca,'FontSize',20)
 set(h_leg,'Location','SouthEast')
 grid on
 % grid minor
-str = ['Pd_',num2str(L),'Second','_s',num2str(sigma_tt),'_',str_train,'.mat'];
-save (str); 
+% str = ['Pd_',num2str(L),'Second','_s',num2str(sigma_tt),'_',str_train,'.mat'];
+% save (str); 
