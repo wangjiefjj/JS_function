@@ -2,7 +2,7 @@ clc
 clear 
 close all
 %%参数设置
-n = 1.25; %几倍的样本
+n = 0.5; %几倍的样本
 str_train = 'p';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
 lambda = 3;
 mu = 1;

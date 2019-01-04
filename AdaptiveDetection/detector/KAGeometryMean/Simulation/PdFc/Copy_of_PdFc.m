@@ -19,9 +19,9 @@ SNRout=10; % 输出SNR
 CNR = 30; %%杂噪比
 cos2=0.9;
 SNRnum=10.^(SNRout/10);
-PFA=1e-1;% PFA=1e-4;
+PFA=1e-3;% PFA=1e-4;
 MonteCarloPfa=1/PFA*100;
-MonteCarloPd=1e3;
+MonteCarloPd=1e4;
 L=round(n*N); 
 nn = 0:N-1;
 fd=0;
@@ -55,8 +55,8 @@ for i_fc = 1:length(fc)
         x0 = fun_TrainData(str_train,N,1,rouR,lambda,mu,opt_train); % 接收信号仅包括杂波和噪声
     %     x0 = awgn(Train,CNR);
     % % % %     RKA
-        t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
-        R_KA2 = tau_m*rouR.*(t*t');    
+%         t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
+        R_KA2 = rouR.*(t*t');    
     % % % %     协方差估计
         R_CC = fun_CC(Train,fun_SCMN(Train),R_KA2);
         R_E = fun_RPowerEMean(Train,1,10);
@@ -160,7 +160,7 @@ for i_t = 1:length(fc)
 %         x0 = awgn(x0,CNR);
 % % %       RKA
         t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
-        R_KA2 = tau_m*rouR.*(t*t');       
+        R_KA2 = rouR.*(t*t');       
 % %         协方差估计
         R_CC = fun_CC(Train,fun_SCMN(Train),R_KA2);
         R_E = fun_RPowerEMean(Train,1,10);

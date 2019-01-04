@@ -8,7 +8,7 @@ lambda = 3;
 mu = 1;
 tau_m = mu/(lambda-1);
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
-sigma_tt = 0.9;
+sigma_tt = 0.1;
 sigma_t = sqrt(sigma_tt);
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
 Na = 2;     % 阵元数
@@ -37,11 +37,11 @@ parfor i =1:1e3
 %     R_KA = zeros(size(Sigma));
     t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
 %     R_KA = Sigma.*(t*t');
-%     R_KA2 = (tau*Sigma).*(t*t');
+    R_KA2 = (Sigma).*(t*t');
 %     R_KA = eye(N);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%
     R_LogM = fun_RLogEMean(Train,10);
-    [R_CC,alpha_cc(i)]=fun_CC(Train,fun_NSCMN(Train),R_KA);
+    [R_CC,alpha_cc(i)]=fun_CC(Train,fun_SCMN(Train),R_KA2);
     [R_LogCC,alpha_lecc(i)]=fun_LogCC_new(Train,R_KA,10);
     [R_ECC,alpha_ecc(i)]=fun_PowerCC(Train,R_KA,1,10);
     [R_PCC,alpha_pcc(i)]=fun_PowerCC(Train,R_KA,-1,10);
@@ -51,7 +51,7 @@ parfor i =1:1e3
     error_LogCC(i) = norm(R_LogCC-Sigma,'fro');
     error_LogM(i) = norm((R_LogM)-(Sigma),'fro');
     error_RSFP(i) = norm(R_SFP-Sigma,'fro');
-    error_RCC(i) = norm(R_CC-Sigma,'fro');
+    error_RCC(i) = norm(R_CC-tau*Sigma,'fro');
 end
 toc
 m_errorECC= mean(error_ECC)/norm(Sigma,'fro');
