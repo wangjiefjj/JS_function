@@ -2,7 +2,7 @@ clc
 clear 
 close all
 %%参数设置
-n = 2; %几倍的样本
+n = 0.5; %几倍的样本
 str_train = 'p';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
 lambda = 3;
 mu = 1;
@@ -49,14 +49,15 @@ parfor i = 1:MonteCarloPfa
 % % % %     协方差估计
 %     t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
 %     R_KA = R.*(t*t');
-    R_KACC = (tau0*R).*(t*t');
+    t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量    
+    R_KACC = (R).*(t*t');
     R_CC = fun_CC(Train,fun_SCMN(Train),R_KACC);
-    R_E = fun_RPowerEMean(Train,1,3);
-    R_ECC = fun_PowerCC(Train,R_KA,1,4);
-    R_LogM = fun_RLogEMean(Train,3);
-    R_LogCC = fun_LogCC_new(Train,R_KA,4);
-    R_P = fun_RPowerEMean(Train,-1,3);
-    R_PCC = fun_PowerCC(Train,R_KA,-1,4);
+    R_E = fun_RPowerEMean(Train,1,10);
+    R_ECC = fun_PowerCC(Train,R_KA,1,10);
+    R_LogM = fun_RLogEMean(Train,10);
+    R_LogCC = fun_LogCC_new(Train,R_KA,10);
+    R_P = fun_RPowerEMean(Train,-1,10);
+    R_PCC = fun_PowerCC(Train,R_KA,-1,9);
     R_SFP = fun_SFP(Train,1);
 %     %%检测器%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     Tanmf_R(i) = fun_ANMF(R,x0,s);
@@ -68,9 +69,9 @@ parfor i = 1:MonteCarloPfa
     Tanmf_ECC(i) = fun_ANMF(R_ECC,x0,s); 
     %%% ANMF_LogM
     Tanmf_LogM(i) = fun_ANMF(R_LogM,x0,s);
-    if Tanmf_LogM(i)>1
-        Tanmf_LogM(i) = 0;
-    end
+%     if Tanmf_LogM(i)>1
+%         Tanmf_LogM(i) = 1;
+%     end
     %%%%% ANMF_LogCC
     Tanmf_LogCC(i) = fun_ANMF(R_LogCC,x0,s);
     %%%%%% ANMF_P
@@ -143,15 +144,15 @@ for m=1:length(SNRout)
 % % %       RKA
 %         t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
 %         R_KA = R.*(t*t'); 
-        R_KACC = (tau0*R).*(t*t'); 
+        R_KACC = (R).*(t*t'); 
 % %         协方差估计
         R_CC = fun_CC(Train,fun_SCMN(Train),R_KACC);
-        R_E = fun_RPowerEMean(Train,1,3);
-        R_ECC = fun_PowerCC(Train,R_KA,1,4);
-        R_LogM = fun_RLogEMean(Train,3);
-        R_LogCC = fun_LogCC_new(Train,R_KA,4);
-        R_P = fun_RPowerEMean(Train,-1,3);
-        R_PCC = fun_PowerCC(Train,R_KA,-1,4);
+        R_E = fun_RPowerEMean(Train,1,10);
+        R_ECC = fun_PowerCC(Train,R_KA,1,10);
+        R_LogM = fun_RLogEMean(Train,10);
+        R_LogCC = fun_LogCC_new(Train,R_KA,10);
+        R_P = fun_RPowerEMean(Train,-1,10);
+        R_PCC = fun_PowerCC(Train,R_KA,-1,9);
         R_SFP = fun_SFP(Train,1);
         %检测信号
         x0=alpha(m)*s+x0;%+pp;    %%%%%%%  重要  %%%%%%%%%%%%%
@@ -168,9 +169,9 @@ for m=1:length(SNRout)
         T_ECC = fun_ANMF(R_ECC,x0,s); 
         %%% ANMF_LogM
         T_LogM = fun_ANMF(R_LogM,x0,s);
-        if T_LogM>1
-            T_LogM = 1;
-        end
+%         if T_LogM>1
+%             T_LogM = 1;
+%         end
         %%%% ANMF_LogCC
         T_LogCC = fun_ANMF(R_LogCC,x0,s);
         %%%% ANMF_P

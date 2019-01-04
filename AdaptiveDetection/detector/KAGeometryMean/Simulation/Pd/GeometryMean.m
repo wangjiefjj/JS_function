@@ -49,14 +49,14 @@ parfor i = 1:MonteCarloPfa
 % % % %     协方差估计
 %     t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
 %     R_KA = R.*(t*t');
-    R_KACC = (tau0*R).*(t*t');
+    R_KACC = (R).*(t*t');
     R_CC = fun_CC(Train,fun_SCMN(Train),R_KACC);
-    R_E = fun_RPowerEMean(Train,1,3);
-    R_ECC = fun_PowerCC(Train,R_KA,1,4);
-    R_LogM = fun_RLogEMean(Train,3);
-    R_LogCC = fun_LogCC_new(Train,R_KA,4);
-    R_P = fun_RPowerEMean(Train,-1,3);
-    R_PCC = fun_PowerCC(Train,R_KA,-1,4);
+    R_E = fun_RPowerEMean(Train,1,10);
+    R_ECC = fun_PowerCC(Train,R_KA,1,10);
+    R_LogM = fun_RLogEMean(Train,10);
+    R_LogCC = fun_LogCC_new(Train,R_KA,10);
+    R_P = fun_RPowerEMean(Train,-1,10);
+    R_PCC = fun_PowerCC(Train,R_KA,-1,10);
     R_SFP = fun_SFP(Train,1);
 %     %%检测器%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     Tanmf_R(i) = fun_ANMF(R,x0,s);
@@ -143,15 +143,15 @@ for m=1:length(SNRout)
 % % %       RKA
 %         t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
 %         R_KA = R.*(t*t'); 
-        R_KACC = (tau0*R).*(t*t'); 
+        R_KACC = (R).*(t*t'); 
 % %         协方差估计
         R_CC = fun_CC(Train,fun_SCMN(Train),R_KACC);
-        R_E = fun_RPowerEMean(Train,1,3);
-        R_ECC = fun_PowerCC(Train,R_KA,1,4);
-        R_LogM = fun_RLogEMean(Train,3);
-        R_LogCC = fun_LogCC_new(Train,R_KA,4);
-        R_P = fun_RPowerEMean(Train,-1,3);
-        R_PCC = fun_PowerCC(Train,R_KA,-1,4);
+        R_E = fun_RPowerEMean(Train,1,10);
+        R_ECC = fun_PowerCC(Train,R_KA,1,10);
+        R_LogM = fun_RLogEMean(Train,10);
+        R_LogCC = fun_LogCC_new(Train,R_KA,10);
+        R_P = fun_RPowerEMean(Train,-1,10);
+        R_PCC = fun_PowerCC(Train,R_KA,-1,10);
         R_SFP = fun_SFP(Train,1);
         %检测信号
         x0=alpha(m)*s+x0;%+pp;    %%%%%%%  重要  %%%%%%%%%%%%%
