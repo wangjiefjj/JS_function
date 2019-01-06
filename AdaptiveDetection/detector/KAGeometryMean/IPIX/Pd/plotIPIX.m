@@ -3,10 +3,10 @@ clear
 close all
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%实测数据IPIX%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-labeltsize=20;
+labeltsize=35;
 fw = 'normal'; %%是否加粗斜体之类
 fn='Times New Roman';
-linewide1=2;
+linewide1=3;
 mkft = 10;
 FontSize = 20;
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%19980223_224024%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -43,7 +43,7 @@ plot(SNRout,Pd_SFP_mc,'c-*','linewidth',linewide1,'markersize',mkft)
 % plot(SNRout,Pd_NSCM_mc,'m-.','linewidth',linewide1,'markersize',mkft)
 
 xlabel('SCR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('Pd','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('PD','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[700 0 1200 1000])
 axis([-5,20,0,1])

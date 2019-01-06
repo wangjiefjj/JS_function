@@ -8,7 +8,8 @@ lambda = 3;
 mu = 1;
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
-sigma_t =0.9;
+sigma_tt = 0.1;
+sigma_t =sqrt(sigma_tt);
 %%假设参数设置
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
@@ -17,9 +18,9 @@ SNRout=10; % 输出SNR
 CNR = 30; %%杂噪比
 cos2=0.9;
 SNRnum=10.^(SNRout/10);
-PFA=1e-1;% PFA=1e-4;
+PFA=1e-3;% PFA=1e-4;
 MonteCarloPfa=1/PFA*100;
-MonteCarloPd=1e2;
+MonteCarloPd=1e4;
 L=round(n*N); 
 nn = 0:N-1;
 rouR = fun_rho(rou,N,1); %%真实的杂波协方差
@@ -30,7 +31,7 @@ for i = 1:10000
     t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
     R_KA1 = R_KA1 + rouR.*(t*t')/10000;
 end
-fd = -0.5:0.1:0.5;
+fd = -0.5:0.05:0.5;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%门限计算%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for i_fd = 1:length(fd)
     i_fd/length(fd)
@@ -48,21 +49,20 @@ for i_fd = 1:length(fd)
     warning('off')
     %%%%%%%%%训练数据产生%%%%%%%%%%%%%%
         Train = fun_TrainData(str_train,N,L,rouR,lambda,mu,opt_train);%%产生的训练数据,协方差矩阵为rouR的高斯杂波
-    %     Train = awgn(Train,CNR);
+   
         x0 = fun_TrainData(str_train,N,1,rouR,lambda,mu,opt_train); % 接收信号仅包括杂波和噪声
-    %     x0 = awgn(Train,CNR);
+   
     % % % %     RKA
         t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
-        R_KA2 = zeros(size(rouR));
         R_KA2 = rouR.*(t*t');    
     % % % %     协方差估计
         R_CC = fun_CC(Train,fun_SCMN(Train),R_KA2);
-        R_E = fun_RPowerEMean(Train,1,10);
+        R_E = fun_RPowerEMean(Train,1,3);
         R_ECC = fun_PowerCC(Train,R_KA1,1,10);
-        R_LogM = fun_RLogEMean(Train,10);
+        R_LogM = fun_RLogEMean(Train,3);
         R_LogCC = fun_LogCC_new(Train,R_KA1,10);
-        R_P = fun_RPowerEMean(Train,-1,10);
-        R_PCC = fun_PowerCC(Train,R_KA1,-1,10);
+        R_P = fun_RPowerEMean(Train,-1,3);
+        R_PCC = fun_PowerCC(Train,R_KA1,-1,9);
         R_SFP = fun_SFP(Train,1);
     %     %%检测器%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         Tanmf_R(i) = fun_ANMF(rouR,x0,s);
@@ -87,7 +87,6 @@ for i_fd = 1:length(fd)
         Tanmf_SFP(i) = fun_ANMF(R_SFP,x0,s);  
     end
     % close(h)
-    toc
     TANMF_R=sort(Tanmf_R,'descend');
     TANMF_CC=sort(Tanmf_CC,'descend');
     TANMF_E=sort(Tanmf_E,'descend');
@@ -129,7 +128,6 @@ Pd_LogCC_mc = zeros(1,length(fd));
 Pd_P_mc = zeros(1,length(fd));
 Pd_PCC_mc = zeros(1,length(fd));
 Pd_SFP_mc = zeros(1,length(fd));
-tic
 for i_t = 1:length(fd)
     waitbar(i_t/length(fd),h,sprintf([num2str(i_t/length(fd)*100),'%%']));
     s = exp(-1i*2*pi*nn*fd(i_t)).'/sqrt(N); %%%%%% 系统导向矢量
@@ -147,21 +145,18 @@ for i_t = 1:length(fd)
     parfor i=1:MonteCarloPd
         %%%%%%%%%训练数据产生%%%%%%%%%%%%%%
         Train = fun_TrainData(str_train,N,L,rouR,lambda,mu,opt_train);%%产生的训练数据,协方差矩阵为rouR的高斯杂波
-%         Train = awgn(Train,CNR);
         x0 = fun_TrainData(str_train,N,1,rouR,lambda,mu,opt_train); % 接收信号仅包括杂波和噪声
-%         x0 = awgn(x0,CNR);
 % % %       RKA
         t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
-        R_KA2 = zeros(size(rouR));
         R_KA2 = rouR.*(t*t');        
 % %         协方差估计
         R_CC = fun_CC(Train,fun_SCMN(Train),R_KA2);
-        R_E = fun_RPowerEMean(Train,1,10);
+        R_E = fun_RPowerEMean(Train,1,3);
         R_ECC = fun_PowerCC(Train,R_KA1,1,10);
-        R_LogM = fun_RLogEMean(Train,10);
+        R_LogM = fun_RLogEMean(Train,3);
         R_LogCC = fun_LogCC_new(Train,R_KA1,10);
-        R_P = fun_RPowerEMean(Train,-1,10);
-        R_PCC = fun_PowerCC(Train,R_KA1,-1,10);
+        R_P = fun_RPowerEMean(Train,-1,3);
+        R_PCC = fun_PowerCC(Train,R_KA1,-1,9);
         R_SFP = fun_SFP(Train,1);
         %检测信号
         x0=alpha*s+x0;%+pp;    %%%%%%%  重要  %%%%%%%%%%%%%
@@ -208,7 +203,6 @@ for i_t = 1:length(fd)
     Pd_PCC_mc(i_t)=counter_PCC/MonteCarloPd;          counter_PCC=0;
     Pd_SFP_mc(i_t)=counter_SFP/MonteCarloPd;          counter_SFP=0;
 end
-toc
 close(h)
 figure();
 hold on
@@ -226,12 +220,11 @@ h_leg = legend('NMF','ANMF with CC',...
     'ANMF with E','ANMF with ECC','ANMF with LogM','ANMF with LogCC',...
     'ANMF with P','ANMF with PCC','SFP');
 
-% xlabel('SNR/dB','FontSize',20)
-% ylabel('Pd','FontSize',20)
-% set(gca,'FontSize',20)
-% set(h_leg,'Location','SouthEast')
-% grid on
-% grid minor
-% str = ['PdFd_2_',num2str(L),'Second','_',str_train,'.mat'];
-% str = ['PdFd_2_',num2str(L),'Second','_s',num2str(sigma_t),'_',str_train,'.mat'];
-% save (str); 
+xlabel('SNR/dB','FontSize',20)
+ylabel('Pd','FontSize',20)
+set(gca,'FontSize',20)
+set(h_leg,'Location','SouthEast')
+grid on
+grid minor
+str = ['PdFd_',num2str(L),'Second','_s',num2str(sigma_tt),'_',str_train,'.mat'];
+save (str); 

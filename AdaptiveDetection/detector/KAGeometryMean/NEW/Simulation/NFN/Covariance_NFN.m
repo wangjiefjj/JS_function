@@ -56,7 +56,7 @@ parfor i =1:1e3
     error_LogM(i) = norm((R_LogM)-(Sigma),'fro');
     
     error_RSFP(i) = norm(R_SFP-Sigma,'fro');
-    error_RCC(i) = norm(R_CC-tau*Sigma,'fro');
+    error_RCC(i) = norm(R_CC-Sigma,'fro');
 end
 toc
 m_errorE= mean(error_E)/norm(Sigma,'fro');
@@ -78,13 +78,6 @@ mean_alpha_cc = mean(alpha_cc);
 
 str = [str_train,'_Rerror_',num2str(n),'N','_s',num2str(sigma_tt),'.mat'];
 save (str); 
-% num = 1:1000;
-% plot(num,alpha_cc,'b')
-% hold on
-% plot(num,alpha_ML,'g')
-% plot(num,alpha_ecc,'r')
-% plot(num,alpha_lecc,'k')
-% legend('CC','ML','E','LE')
 
 
 

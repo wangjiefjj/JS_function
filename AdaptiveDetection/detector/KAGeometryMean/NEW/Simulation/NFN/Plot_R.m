@@ -29,7 +29,7 @@ ylabel('NFN')
 set(gca,'FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gcf,'Position',[300 0 1200 1000])
 set(gcf,'color','white');
-axis([0,9,0,0.5])
+axis([0,9,0,1])
 str=[{'KA-E'},{'KA-PE'},{'KA-LogE'},{'E'},{'P'},{'LogE'},{'CC'},{'SFP'}];
 columnlegend(2, str);
 grid on
@@ -64,7 +64,7 @@ ylabel('NFN')
 set(gca,'FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gcf,'Position',[300 0 1200 1000])
 set(gcf,'color','white');
-axis([0,9,0,0.5])
+axis([0,9,0,1])
 str=[{'KA-E'},{'KA-PE'},{'KA-LogE'},{'E'},{'P'},{'LogE'},{'CC'},{'SFP'}];
 h_leg = columnlegend(2, str);
 % set(h_leg,'Location','SouthEast')

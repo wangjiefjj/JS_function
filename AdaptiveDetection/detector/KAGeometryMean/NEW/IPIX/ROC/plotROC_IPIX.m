@@ -3,10 +3,10 @@ clear
 close all
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-labeltsize=35;
+labeltsize=20;
 fw = 'normal'; %%是否加粗斜体之类
 fn='Times New Roman';
-linewide1=3;
+linewide1=2;
 mkft = 10;
 FontSize = 20;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%-5dB%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -51,13 +51,9 @@ set(gcf,'Position',[700 0 1200 1000])
 grid on
 grid minor
 box on
-xlabel('PFA','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-ylabel('PD','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-% h_leg = legend( 'ANMF with KA-E','ANMF with KA-PE','ANMF with KA-LogE',...
-%     'ANMF with E','ANMF with P','ANMF with LogE','ANMF with CC',...
-%     'ANMF with SFP','NMF');
-% set(h_leg,'Location','SouthEast')
-str=[{'ANMF with KA-E'},{'ANMF with KA-PE'},{'ANMF with KA-LogE'},...
-    {'ANMF with E'},{'ANMF with P'},{'ANMF with LogE'},...
-    {'ANMF with CC'},{'ANMF with SFP'}];
-columnlegend(2, str);
+xlabel('P_{fa}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('Pd','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+h_leg = legend( 'ANMF with KA-E','ANMF with KA-PE','ANMF with KA-LogE',...
+    'ANMF with E','ANMF with P','ANMF with LogE','ANMF with CC',...
+    'ANMF with SFP','NMF');
+set(h_leg,'Location','SouthEast')
