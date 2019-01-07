@@ -10,11 +10,11 @@ opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
 sigma_t = sqrt([0.01,0.1,0.5,0.9]);
 L_s = length(sigma_t);
 L_R = 1000;
-rou = 0.95;  %%协方差矩阵生成的迟滞因子
+rou = 0.90;  %%协方差矩阵生成的迟滞因子
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
 N = Na*Np;
-R = fun_rho(rou,N,2);
+R = fun_rho(rou,N,1);
 L=round(n*N); 
 m_errorRCC = zeros(1,L_s);
 m_errorRECCT = zeros(1,L_s);
@@ -29,19 +29,24 @@ for i_s = 1:L_s
     error_RML = zeros(1,L_R);
     error_R_2 = zeros(1,L_R);
     error_RSCM = zeros(1,L_R);
+    R_KA = zeros(size(R));
+    for l = 1:10000
+        t = normrnd(1,sigma_t(i_s),N,1);%%0~0.5%%失配向量
+        R_KA = R_KA + R.*(t*t')/10000;
+    end
     parfor i =1:L_R
         Train = fun_TrainData(str_train,N,L,R,lambda,mu,opt_train);%%产生的训练数据,协方差矩阵为rouR的高斯杂波
         [x0,tau0] = fun_TrainData(str_train,N,1,R,lambda,mu,opt_train); 
         R_real = (tau0^2)*R;
         %%先验协方差
         t = normrnd(1,sigma_t(i_s),N,1);%%0~0.5%%失配向量
-        R_KA =  (R).*(t*t');
+        R_KA2 =  (R).*(t*t');
         %%%
 %         Train = Train/(diag(sqrt(diag(Train'*Train))));%%%归一化 
         %%%%协方差估计%%%%%%%%%%%%%%%%%%%%%%    
         R_SCM = (fun_SCMN(Train));
-        R_CC = fun_CC(Train,R_SCM,R_KA);
-        R_ECCT = fun_PowerCC(Train,R_KA,1,4);
+        R_CC = fun_CC(Train,R_SCM,R_KA2);
+        R_ECCT = fun_PowerCC(Train,R_KA,1,10);
         R_ECCS = fun_PowerCC(Train,R_KA,1,8);
         R_ECCP = fun_PowerCC(Train,R_KA,1,7);
         R_ML = fun_MLalpha(Train,R_SCM,R_KA,x0);
@@ -77,5 +82,5 @@ xlabel('\sigma^2','FontSize',10)
 ylabel('Error','FontSize',10)
 set(gca,'FontSize',10)
 set(h_leg,'Location','SouthEast')
-str = [str_train,'_Rerror_',num2str(n),'N','.mat'];
+str = [str_train,'_Rerror2_',num2str(n),'N','.mat'];
 save (str); 

@@ -8,10 +8,11 @@ linewide1=3;
 mkft = 10;
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for i = 1:4
-    load p_Rerror_1N.mat
+    i
+    load p_Rerror2_1N.mat
     y1=[m_errorRSCM(i),m_errorRCC(i),m_errorRML(i),m_errorRECCP(i),...
         m_errorRECCS(i),m_errorRECCT(i)];
-    load p_Rerror_2N.mat
+    load p_Rerror2_2N.mat
     y2=[m_errorRSCM(i),m_errorRCC(i),m_errorRML(i),m_errorRECCP(i),...
         m_errorRECCS(i),m_errorRECCT(i)];
     y = [y1;y2];
@@ -29,16 +30,16 @@ for i = 1:4
     set(gcf,'Position',[300 0 1200 1000])
     grid on
     box on
-    str=['Rerror_p',num2str(i),'.eps'];
+    str=['Rerror2_p',num2str(i),'.eps'];
     print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %     saveas(gcf,str,'psc2')
 end
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for i = 1:4
-    load g_Rerror_1N.mat
+    load g_Rerror2_1N.mat
     y1=[m_errorRSCM(i),m_errorRCC(i),m_errorRML(i),m_errorRECCP(i),...
         m_errorRECCS(i),m_errorRECCT(i)];
-    load g_Rerror_2N.mat
+    load g_Rerror2_2N.mat
     y2=[m_errorRSCM(i),m_errorRCC(i),m_errorRML(i),m_errorRECCP(i),...
         m_errorRECCS(i),m_errorRECCT(i)];
     y = [y1;y2];
@@ -56,7 +57,7 @@ for i = 1:4
     set(gcf,'Position',[300 0 1200 1000])
     grid on
     box on
-    str=['Rerror_g',num2str(i),'.eps'];
+    str=['Rerror2_g',num2str(i),'.eps'];
     print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
 %     saveas(gcf,str,'psc2')
 end
