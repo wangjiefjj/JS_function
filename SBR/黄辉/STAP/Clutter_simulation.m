@@ -2,8 +2,8 @@
 % %*******************  Ö÷ ³Ì Ğò  *********************%
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clc;clear;close all;
-isRotation=0;
-isRu = 0;
+isRotation=1;  %%ÊÇ·ñÓĞµØÇò×Ô×ª
+isRu = 1;      %%ÊÇ·ñÓĞ¾àÀëÄ£ºı 
 %% Éú³É·ÂÕæ²ÎÊı
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %               ÔÓ²¨·ÂÕæÄ£ĞÍ¡¢²ÎÊı
@@ -26,7 +26,7 @@ signal_parameter.minu=40*10^(-6);         %Âö¿í£¨s£©
 signal_parameter.fs=1*10^6;              %²ÉÑùÂÊ(´Î/s)
 % signal_parameter.fr=4*airborne_parameter.V/signal_parameter.lambda;            %Âö³åÖØ¸´ÆµÂÊ£¨Hz),
 signal_parameter.fr=5000;
-signal_parameter.pulse_num=16;           %Âö³åÊı
+signal_parameter.pulse_num=2;           %Âö³åÊı
 signal_parameter.D_zk=signal_parameter.minu*signal_parameter.fr;             %Õ¼¿Õ±È
 signal_parameter.D=signal_parameter.Bs*signal_parameter.minu;             %ÂöÑ¹±È
 signal_parameter.delta_r=entironment_parameter.C/signal_parameter.fs/2;        %¾àÀë·Ö±æµ¥Ôª£¨m£©
@@ -34,9 +34,9 @@ signal_parameter.delta_r=entironment_parameter.C/signal_parameter.fs/2;        %
 %%%%%%%%%%%%%%%%%%%%%ÕóÁĞ²ÎÊı%%%%%%%%%%%%%%%%%%%%%%%%
 natenna_parameter.arry_distance=0.5*signal_parameter.lambda;  %ÕóÔª¼ä¾à
 %natenna_parameter.arry_distance=0.5;  %ÕóÔª¼ä¾à
-natenna_parameter.arry_col_num=8;                     %ÕóÔªÁĞÊı
+natenna_parameter.arry_col_num=4;                     %ÕóÔªÁĞÊı
 natenna_parameter.Wq_azimuth_db=35;          %ĞĞ¼ÓÈ¨£¨db£©
-natenna_parameter.arry_row_num=8;                     %ÕóÔªĞĞÊı
+natenna_parameter.arry_row_num=4;                     %ÕóÔªĞĞÊı
 natenna_parameter.Wq_pitch_db=35;           %ÁĞ¼ÓÈ¨£¨db)
 %%%%%%%%%%%%%%%%%%%%%%À×´ï²ÎÊı%%%%%%%%%%%%%%%%%%%%%%%
 Pt=4.8*10^8;                            %À×´ï·¢ÉäµÄ·åÖµ¹¦ÂÊ(W)
@@ -133,7 +133,8 @@ Clutter=zeros(arry_row_num*arry_col_num*pulse_num,r_num-r_start+1);       %ÔÓ²¨´
 C_Pt=zeros(1,r_num-r_start+1);                                                                            %ÔÓ²¨·åÖµ¹¦ÂÊ´æ´¢  
 R_temp = zeros(arry_row_num*arry_col_num*pulse_num,arry_row_num*arry_col_num*pulse_num);              %ÔÓ²¨Ğ­·½²î¾ØÕóÁÙÊ±´æ´¢¾ØÕó
 % for n=0:r_num-r_start%n=1:r_num
-for n=0:0%n=1:r_num
+for n=0:r_num-1 % n=0:0%
+    n
     rp=(r_start+n)*delta_r;                                                                                                                                        %ÔÓ²¨·´Éäµ¥Ôª¾¶Ïò¾àÀë
     
     Clutter_temp=zeros(arry_row_num*arry_col_num,pulse_num);                                                                        %ÔÓ²¨ÁÙÊ±´æ´¢¾ØÕó(ÕóÔª¼¶£©
@@ -141,7 +142,7 @@ for n=0:0%n=1:r_num
     
     
     for l = 0:L-1%L-1
-        l
+%         l
         r=H+rp+ru*l;                                                                                                                                                     %¾àÀëÄ£ºı»·¾¶Ïò¾àÀë
         phi=asin(H/r+(r.^2-H^2)/(2*re*r));                                                                                                             %¸©Ñö½Ç
         
@@ -180,9 +181,10 @@ for n=0:0%n=1:r_num
 %             end
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         end
-        
-        Clutterz=s_ph.'*(C_z);                                                                                  %ËùÓĞÕóÔª½ÓÊÕµ½µ±Ç°¾àÀë»·µÄpulse_numÂö³åµÄÔÓ²¨Êı¾İ
-        Clutter_temp=Clutter_temp+Clutterz;                                                       %¶ÔËùÓĞ¾àÀëÄ£ºı»·ÔÓ²¨Êı¾İ½øĞĞÀÛ»ı
+        % ËùÓĞÕóÔª½ÓÊÕµ½µ±Ç°¾àÀë»·µÄpulse_numÂö³åµÄÔÓ²¨Êı¾İ
+        Clutterz=s_ph.'*(C_z);  
+        % ¶ÔËùÓĞ¾àÀëÄ£ºı»·ÔÓ²¨Êı¾İ½øĞĞÀÛ»ı
+        Clutter_temp=Clutter_temp+Clutterz;                                                       
         
     end
     
@@ -221,7 +223,7 @@ Sys_DOF=arry_col_num*arry_row_num*pulse_num;
 % %% ÔÓ²¨¹¦ÂÊÆ×·ÖÎö
 % 
 % % ¼ÆËãĞ­·½²îÌØÕ÷ÖµD²¢»æÍ¼
-R =clutter_data{1}.clutter_covariance(:,:,1);
+R = clutter_data{1}.clutter_covariance(:,:,1);
 % R =Clutter*Clutter'/150;
 CNR_dB = 60;
 CNR = 10^(CNR_dB/10);
