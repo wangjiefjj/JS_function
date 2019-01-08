@@ -2,13 +2,13 @@ clc
 clear 
 close all
 warning off
-n = 0.5; %几倍的样本
+n = 2; %几倍的样本
 str_train = 'p';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
 lambda = 3;
 mu = 1;
 tau_m = mu/(lambda-1);
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
-sigma_tt = 0.1;
+sigma_tt = 0.9;
 sigma_t = sqrt(sigma_tt);
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
 Na = 2;     % 阵元数
@@ -76,8 +76,8 @@ mean_alpha_ecc = mean(alpha_ecc);
 mean_alpha_pcc = mean(alpha_pcc);
 mean_alpha_cc = mean(alpha_cc);
 
-% str = [str_train,'_Rerror_',num2str(n),'N','_s',num2str(sigma_tt),'.mat'];
-% save (str); 
+str = [str_train,'_Rerror_',num2str(n),'N','_s',num2str(sigma_tt),'.mat'];
+save (str); 
 
 
 
