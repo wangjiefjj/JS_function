@@ -4,7 +4,7 @@ close all
 labeltsize=35;
 fw = 'normal'; %%是否加粗斜体之类
 fn='Times New Roman';
-linewide1=2;
+linewide1=3;
 mkft = 10;
 load p_Alpha_1N.mat
 figure(1);
