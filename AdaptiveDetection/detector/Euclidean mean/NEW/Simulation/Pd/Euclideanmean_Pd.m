@@ -30,11 +30,11 @@ rouR_abs=abs(rouR);
 rouR_half=rouR^0.5;
 irouR=inv(rouR);
 t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
-% R_KA = zeros(size(rouR));
-% for i = 1:1000
-%     t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
-%     R_KA = R_KA + rouR.*(t*t')/1000;
-% end
+R_KA = zeros(size(rouR));
+for i = 1:10000
+    t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
+    R_KA = R_KA + rouR.*(t*t')/10000;
+end
 tic
 % h = waitbar(1,'Please wait...');
 parfor i = 1:MonteCarloPfa
@@ -47,13 +47,12 @@ parfor i = 1:MonteCarloPfa
 %     x0 = x0/sqrt(x0'*x0);
     %     %%先验协方差
     t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
-    R_KA =  (rouR).*(t*t');
     R_KA2 =  (tau0*rouR).*(t*t');
     %%%%协方差估计%%%%%%%%%%%%%%%%%%%%%%    
     R_SCM = (fun_SCMN(Train));  
     R_CC = fun_CC(Train,R_SCM,R_KA2);
     R_ML = fun_MLalpha(Train,R_SCM,R_KA2,x0);
-    R_ECCT = fun_PowerCC(Train,R_KA,1,4);
+    R_ECCT = fun_PowerCC(Train,R_KA,1,10);
     R_ECCS = fun_PowerCC(Train,R_KA,1,8);
     R_ECCP = fun_PowerCC(Train,R_KA,1,7);
     %%%检测器%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -128,11 +127,10 @@ for m=1:length(SNRout)
 %         x0 = x0/sqrt(x0'*x0);
         %%先验协方差
         t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
-        R_KA =  (rouR).*(t*t');
         R_KA2 =  (tau0*rouR).*(t*t');
         %%%%协方差估计%%%%%%%%%%%%%%%%%%%%%%
         R_SCM = (fun_SCMN(Train));    
-        R_ECCT = fun_PowerCC(Train,R_KA,1,4);
+        R_ECCT = fun_PowerCC(Train,R_KA,1,10);
         R_ECCS = fun_PowerCC(Train,R_KA,1,8);
         R_ECCP = fun_PowerCC(Train,R_KA,1,7);
         R_ML = fun_MLalpha(Train,R_SCM,R_KA2,x0);    
@@ -187,6 +185,6 @@ set(gca,'FontSize',20)
 set(h_leg,'Location','SouthEast')
 axis([min(SNRout),max(SNRout),0,1])
 grid on
-% str = [str_train,'_',num2str(n),'N','_s',num2str(sigma_t^2),'.mat'];
-% save (str); 
+str = ['new_',str_train,'_',num2str(n),'N','_s',num2str(sigma_t^2),'.mat'];
+save (str); 
 

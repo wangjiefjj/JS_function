@@ -2,8 +2,8 @@ clc
 clear 
 close all
 %%%%%%%声明几个全局变量方便使用
-cdfFile =  '19980205_185111_ANTSTEP.CDF';
-Range = 14;
+cdfFile =  '19980204_224024_ANTSTEP.CDF';
+Range = 17;
 cdfFile_t = cdfFile;
 if length(cdfFile_t)>17
     cdfFile_t(17:27)=[];

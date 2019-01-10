@@ -2,7 +2,7 @@ clc
 clear 
 close all
 %%%%参数设置
-n = 2; %几倍的样本
+n = 1; %几倍的样本
 str_train = 'p';%%训练数据分布，p:IG纹理复合高斯，k：k分布，g：gauss
 lambda = 3;
 mu = 1;
@@ -13,15 +13,15 @@ sigma_t =sqrt(0.1);
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
 N = Na*Np;
-SNRout=15; % 输出SNR
+SNRout=10; % 输出SNR
 cos2=0.9;
-PFA=1e-3;% PFA=1e-4;
+PFA=1e-1;% PFA=1e-4;
 SNRnum=10.^(SNRout/10);
 MonteCarloPfa=1/PFA*100;
-MonteCarloPd=1e4;
+MonteCarloPd=1e3;
 rouR = zeros(N,N);  %%真实的杂波协方差
 L=round(n*N); 
-theta_sig = 0.1;
+theta_sig = 0;
 nn = 0:N-1;
 s = exp(-1i*2*pi*nn*theta_sig).'/sqrt(N); %%%%%% 系统导向矢量
 %%%杂波多普勒
@@ -54,8 +54,8 @@ for i_c = 1:length(fc)
         R_KA2 =  (tau0^2*rouR).*(t*t');
         %%%%协方差估计%%%%%%%%%%%%%%%%%%%%%%    
         R_SCM = (fun_SCMN(Train));  
-        R_CC = fun_CC(Train,R_SCM,R_KA);
-        R_ML = fun_MLalpha(Train,R_SCM,R_KA,x0);
+        R_CC = fun_CC(Train,R_SCM,R_KA2);
+        R_ML = fun_MLalpha(Train,R_SCM,R_KA2,x0);
         R_ECCT = fun_PowerCC(Train,R_KA,1,4);
         R_ECCS = fun_PowerCC(Train,R_KA,1,8);
         R_ECCP = fun_PowerCC(Train,R_KA,1,7);
@@ -108,7 +108,7 @@ for i_c = 1:length(fc)
         R_KA2 =  (tau0^2*rouR).*(t*t');
         %%%%协方差估计%%%%%%%%%%%%%%%%%%%%%%
         R_SCM = (fun_SCMN(Train));    
-        R_ECCT = fun_PowerCC(Train,R_KA,1,4);
+        R_ECCT = fun_PowerCC(Train,R_KA,1,10);
         R_ECCS = fun_PowerCC(Train,R_KA,1,8);
         R_ECCP = fun_PowerCC(Train,R_KA,1,7);
         R_ML = fun_MLalpha(Train,R_SCM,R_KA2,x0);    
@@ -162,6 +162,6 @@ set(gca,'FontSize',20)
 set(h_leg,'Location','SouthEast')
 axis([min(fc),max(fc),0,1])
 grid on
-str = [str_train,'_fc_SNR_',num2str(SNRout),'_',num2str(n),'N','_s',num2str(sigma_t^2),'.mat'];
-save (str); 
+% str = [str_train,'_fc_SNR_',num2str(SNRout),'_',num2str(n),'N','_s',num2str(sigma_t^2),'.mat'];
+% save (str); 
 
