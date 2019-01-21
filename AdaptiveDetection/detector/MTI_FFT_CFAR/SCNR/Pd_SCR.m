@@ -10,7 +10,7 @@ optc = 'g';
 opt_train = 1;%%1:SIRP,2:部分均匀
 lambda = 2;
 mu = 1;
-L=round(4*N); 
+L=round(2*N); 
 cos2=1;%%%失配
 PFA=1e-3;% PFA=1e-4;
 %%各种比
