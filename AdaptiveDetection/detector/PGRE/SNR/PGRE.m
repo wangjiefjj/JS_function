@@ -8,11 +8,11 @@ Np=4;
 N=Na*Np;
 optc = 'g';
 opt_train = 1;%%1:SIRP,2:部分均匀
-L=round(1*N); 
+L=round(2*N); 
 cos2=1;%%%失配
 PFA=1e-3;% PFA=1e-4;
 %%各种比
-SNRout = 0:30; % 输出信噪比SNR
+SNRout = 0:1:30; % 输出信噪比SNR
 CNRout = 15; %杂噪比
 JNRout = 15; %干噪比
 SNRnum=10.^(SNRout/10);

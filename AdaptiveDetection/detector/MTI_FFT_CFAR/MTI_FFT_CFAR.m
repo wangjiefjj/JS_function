@@ -14,10 +14,10 @@ PFA=1e-4;% PFA=1e-4;
 %%各种比
 SNRout = 20; % 输出信噪比SNR
 CNRout = 15; %杂噪比
-JNRout = 15; %干噪比
+% JNRout = 15; %干噪比
 SNRnum=10.^(SNRout/10);
 CNRnum=10.^(CNRout/10);
-JNRnum=10.^(JNRout/10);
+% JNRnum=10.^(JNRout/10);
 %%虚警率和MC次数
 MonteCarloPfa=round(1/PFA*100);
 MonteCarloPd=1e4;
@@ -38,24 +38,29 @@ sigmaf = 0.03; %%杂波谱展宽
 % Rc = CNRnum * toeplitz(rc);
 Rc = CNRnum * fun_rho(0.9,N,1,0.0);  
 %%干扰协方差
-fj = -0.2;
-jam = exp(-1i*2*pi*nn*fj);
-Rj = JNRnum * jam*jam';
+% fj = -0.2;
+% jam = exp(-1i*2*pi*nn*fj);
+% Rj = JNRnum * jam*jam';
 %%检测单元协方差test
-Rt = eye(N) + Rc + Rj;
+% Rt = eye(N) + Rc + Rj;
+Rt = eye(N) + Rc;
 %%参考单元协方差secondary 
 Rs = eye(N) + Rc;
 %% 回波脉压的数据
 Train = fun_TrainData(optc,N,L,Rs,3,1,opt_train);
-x = fun_TrainData(optc,N,1,Rs ,3,1,opt_train);
+x = fun_TrainData(optc,N,1,Rt ,3,1,opt_train);
 alpha=sqrt(SNRnum/abs(vt'/Rs*vt)); 
 x=alpha*vt+x;%+pp;    
 Pc = [Train(:,1:L/2),x,Train(:,L/2+1:end)];%%包含目标的脉压结果
+figure()
+mesh(abs(Pc))
+%% RD图
 RD=fftshift(fft(Pc,[],1),1);
 fd = linspace(-0.5,0.5,N);
 [X,Y]=meshgrid(1:L+1,fd);
+figure()
 mesh(X,Y,db(abs(RD),'power'))
-%% MTI 
+%% MTI-FFT 
 h = [1 -2 1]';  % 3脉冲MTI滤波器的H(z) = 1 - 2z.^(-1) + z.^2
 for i=1:L+1
     Pcm(:,i) = conv(h,Pc(:,i)); %对于相同的距离单元，在脉冲间做运算：Vout = V(i) - 2V(i -1) + V(i - 2) 是这样干的
