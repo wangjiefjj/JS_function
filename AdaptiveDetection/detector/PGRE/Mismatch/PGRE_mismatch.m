@@ -8,10 +8,10 @@ Np=4;
 N=Na*Np;
 optc = 'g';
 opt_train = 1;%%1:SIRP,2:部分均匀
-L=round(2*N); 
+L=round(4*N); 
 PFA=1e-3;% PFA=1e-4;
 %%各种比
-SNRout = 35; % 输出信噪比SNR
+SNRout = 20:1:40; % 输出信噪比SNR
 CNRout = 5; %杂噪比
 JNRout = 5; %干噪比
 SNRnum=10.^(SNRout/10);
@@ -161,13 +161,13 @@ close(h)
 if length(SNRnum)==1
     figure(2);
     hold on
-    plot(cos2,Pd_PGLRT_mc,'k-o','linewidth',2,'MarkerSize',2)
-    plot(cos2,Pd_PRAO_mc,'r-x','linewidth',2,'MarkerSize',10)
-    plot(cos2,Pd_PWALD_mc,'b-x','linewidth',2,'MarkerSize',10)
+    plot(1-cos2,Pd_PGLRT_mc,'k-o','linewidth',2,'MarkerSize',2)
+    plot(1-cos2,Pd_PRAO_mc,'r-x','linewidth',2,'MarkerSize',10)
+    plot(1-cos2,Pd_PWALD_mc,'b-x','linewidth',2,'MarkerSize',10)
 
-    plot(cos2,Pd_SGLRT_mc,'k-.o','linewidth',2,'MarkerSize',2)
-    plot(cos2,Pd_SRAO_mc,'r-.x','linewidth',2,'MarkerSize',10)
-    plot(cos2,Pd_SWALD_mc,'b-.x','linewidth',2,'MarkerSize',10)
+    plot(1-cos2,Pd_SGLRT_mc,'k-.o','linewidth',2,'MarkerSize',2)
+    plot(1-cos2,Pd_SRAO_mc,'r-.x','linewidth',2,'MarkerSize',10)
+    plot(1-cos2,Pd_SWALD_mc,'b-.x','linewidth',2,'MarkerSize',10)
     legend('P-SGLRT','P-SRAO','P-SWALD','SGLRT','SRAO','SWALD')
 %     legend('P-SGLRT','P-SRAO','P-SWALD')
 %     legend('SGLRT','SRAO','SWALD')

@@ -15,11 +15,11 @@ plot(SNRout,Pd_PWALD_mc,'b-x','linewidth',linewide1,'MarkerSize',mkft)
 plot(SNRout,Pd_SGLRT_mc,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(SNRout,Pd_SRAO_mc,'r-.x','linewidth',linewide1,'MarkerSize',mkft)
 plot(SNRout,Pd_SWALD_mc,'b-.x','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('P-SGLRT','P-SRAO','P-SWALD','SGLRT','SRAO','SWALD');
+h_leg=legend('P-SGLRT','P-SRAO','P-SWALD','GLRT','RAO','WALD');
 xlabel('SNR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('PD','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gca,'FontSize',labeltsize)
-set(gcf,'Position',[700 0 1200 1000])
+set(gcf,'Position',[500 0 1200 1000])
 set(h_leg,'Location','SouthEast')
 grid on
 box on
@@ -35,31 +35,53 @@ plot(SNRout,Pd_PWALD_mc,'b-x','linewidth',linewide1,'MarkerSize',mkft)
 plot(SNRout,Pd_SGLRT_mc,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(SNRout,Pd_SRAO_mc,'r-.x','linewidth',linewide1,'MarkerSize',mkft)
 plot(SNRout,Pd_SWALD_mc,'b-.x','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('PGLRT','PRAO','PWALD','SGLRT','SRAO','SWALD');
+h_leg=legend('P-SGLRT','P-SRAO','P-SWALD','GLRT','RAO','WALD');
 xlabel('SNR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('PD','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gca,'FontSize',labeltsize)
-set(gcf,'Position',[700 0 1200 1000])
+set(gcf,'Position',[500 0 1200 1000])
 set(h_leg,'Location','SouthEast')
 grid on
 box on
 str=['Pd_2K.eps'];
 print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% load 10K.mat
-% figure(3);
-% hold on
-% plot(SNRout,Pd_PGLRT_mc,'k-o','linewidth',linewide1,'MarkerSize',mkft)
-% plot(SNRout,Pd_PRAO_mc,'r-x','linewidth',linewide1,'MarkerSize',mkft)
-% plot(SNRout,Pd_PWALD_mc,'b-x','linewidth',linewide1,'MarkerSize',mkft)
-% plot(SNRout,Pd_SGLRT_mc,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
-% plot(SNRout,Pd_SRAO_mc,'r-.x','linewidth',linewide1,'MarkerSize',mkft)
-% plot(SNRout,Pd_SWALD_mc,'b-.x','linewidth',linewide1,'MarkerSize',mkft)
-% h_leg=legend('PGLRT','PRAO','PWALD','SGLRT','SRAO','SWALD');
-% xlabel('SNR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-% ylabel('Pd','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-% set(gca,'FontSize',labeltsize)
-% set(gcf,'Position',[700 0 1200 1000])
-% set(h_leg,'Location','SouthEast')
-% grid on
-% box on
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+load 4K.mat
+figure(3);
+hold on
+plot(SNRout,Pd_PGLRT_mc,'k-o','linewidth',linewide1,'MarkerSize',mkft)
+plot(SNRout,Pd_PRAO_mc,'r-x','linewidth',linewide1,'MarkerSize',mkft)
+plot(SNRout,Pd_PWALD_mc,'b-x','linewidth',linewide1,'MarkerSize',mkft)
+plot(SNRout,Pd_SGLRT_mc,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
+plot(SNRout,Pd_SRAO_mc,'r-.x','linewidth',linewide1,'MarkerSize',mkft)
+plot(SNRout,Pd_SWALD_mc,'b-.x','linewidth',linewide1,'MarkerSize',mkft)
+h_leg=legend('P-SGLRT','P-SRAO','P-SWALD','GLRT','RAO','WALD');
+xlabel('SNR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('Pd','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+set(gca,'FontSize',labeltsize)
+set(gcf,'Position',[500 0 1200 1000])
+set(h_leg,'Location','SouthEast')
+grid on
+box on
+str=['Pd_4K.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+load 10K.mat
+figure(4);
+hold on
+plot(SNRout,Pd_PGLRT_mc,'k-o','linewidth',linewide1,'MarkerSize',mkft)
+plot(SNRout,Pd_PRAO_mc,'r-x','linewidth',linewide1,'MarkerSize',mkft)
+plot(SNRout,Pd_PWALD_mc,'b-x','linewidth',linewide1,'MarkerSize',mkft)
+plot(SNRout,Pd_SGLRT_mc,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
+plot(SNRout,Pd_SRAO_mc,'r-.x','linewidth',linewide1,'MarkerSize',mkft)
+plot(SNRout,Pd_SWALD_mc,'b-.x','linewidth',linewide1,'MarkerSize',mkft)
+h_leg=legend('P-SGLRT','P-SRAO','P-SWALD','GLRT','RAO','WALD');
+xlabel('SNR/dB','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+ylabel('Pd','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+set(gca,'FontSize',labeltsize)
+set(gcf,'Position',[500 0 1200 1000])
+set(h_leg,'Location','SouthEast')
+grid on
+box on
+str=['Pd_10K.eps'];
+print(gcf,'-depsc',str)   %保存为png格式的图片到当前路径
