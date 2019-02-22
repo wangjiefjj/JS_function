@@ -18,7 +18,7 @@ SNRout=10; % 输出SNR
 CNR = 30; %%杂噪比
 cos2=0.9;
 SNRnum=10.^(SNRout/10);
-PFA=1e-3;% PFA=1e-4;
+PFA=1e-2;% PFA=1e-4;
 MonteCarloPfa=1/PFA*100;
 MonteCarloPd=1e4;
 L=round(n*N); 
@@ -29,7 +29,11 @@ fc = -0.5:0.05:0.5;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%门限计算%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for i_fc = 1:length(fc)
     i_fc/length(fc)
-    rouR = fun_rho(rou,N,1,fc(i_fc)); %%真实的杂波协方差
+%     rouR = fun_rho(rou,N,1,fc(i_fc)); %%真实的杂波协方差
+    %%杂波协方差
+    sigmaf = 0.03; %%杂波谱展宽
+    rc =  exp(-1i*2*pi*nn*fc(i_fc)-2*(nn*pi*sigmaf).^2);
+    rouR = toeplitz(rc);
     rouR_half=rouR^0.5;
     irouR=inv(rouR);
     R_KA1 = zeros(size(rouR));
@@ -232,5 +236,5 @@ h_leg = legend('NMF','ANMF with CC',...
     'ANMF with E','ANMF with ECC','ANMF with LogM','ANMF with LogCC',...
     'ANMF with P','ANMF with PCC','SFP');
 % str = ['PdFd_2_',num2str(L),'Second','_',str_train,'.mat'];
-str = ['PdFc_',num2str(L),'Second','_s',num2str(sigma_tt),'_',str_train,'.mat'];
+str = ['rouR_PdFc_PFA_',num2str(L),'Second','_s',num2str(sigma_tt),'_',str_train,'.mat'];
 save (str); 

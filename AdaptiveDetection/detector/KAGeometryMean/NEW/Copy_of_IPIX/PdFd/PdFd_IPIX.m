@@ -28,7 +28,7 @@ Zhh = sig;
 before = 100+N-1; %%去前几帧作为先验协方差
 nn = 0:N-1;
 % load Th_4Second19980223_170435_IPIX3.mat
-fd = -0.01:0.001:0.01;
+fd = -0.5:0.05:0.5;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%门限计算%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for i_fd = 1:length(fd)
     i_fd/length(fd)
@@ -44,7 +44,7 @@ for i_fd = 1:length(fd)
     parfor i = 1:MonteCarloPfa  
     warning('off')
     %%%%%%%%%%%训练数据产生%%%%%%%%%%%%%0%
-        index_t1 = ceil(rand()*(M-10000))+2000;
+        index_t1 = i+before;
         R_KA1 = zeros(N,N);
         R_KA2 = zeros(N,N);
         for ii = 1:before-N+1
@@ -138,7 +138,7 @@ for i_fd=1:length(fd)
     s = exp(-1i*2*pi*nn*fd(i_fd)).'/sqrt(N); %%%%%% 系统导向矢量
     parfor i=1:MonteCarloPd
         %%%%%%%%%%%训练数据产生%%%%%%%%%%%%%0%
-        index_t1 = ceil(rand()*(M-10000))+2000;
+        index_t1 = i+before;
         R_KA1 = zeros(N,N);
         R_KA2 = zeros(N,N);
         for ii = 1:before-N+1
@@ -220,7 +220,7 @@ ylabel('Pd','FontSize',20)
 % set(gca,'FontSize',20)
 % set(h_leg,'Location','SouthEast')
 grid on
-str = ['PdFd_PFA3_',num2str(L),'Second',str_IPIX_t,'IPIX','.mat'];
+str = ['new_PdFd_PFA_',num2str(L),'Second',str_IPIX_t,'IPIX','.mat'];
 save (str); 
 
 

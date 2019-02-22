@@ -11,7 +11,7 @@ mkft2 = 10;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%复合高斯0.1%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(1)
 hold on
-load PdFc_4Second_s0.1_p.mat
+load PdFc_PFA_4Second_s0.1_p.mat
 Pd_LogCC_mc = Pd_ECC_mc;
 index = find(Pd_LogCC_mc<0.9 & Pd_LogCC_mc>0.05);
 Pd_LogCC_mc(index) = Pd_ECC_mc(index)-0.05;
@@ -26,8 +26,8 @@ plot(fc,Pd_CC_mc,'k-*','linewidth',linewide2,'markersize',mkft2)
 plot(fc,Pd_SFP_mc,'c-*','linewidth',linewide2,'markersize',mkft2)
 plot(fc,Pd_R_mc,'m-.*','linewidth',linewide2,'markersize',mkft2)
 
-% xlabel('Normalized Doppler of Clutter','FontSize',labeltsize2,'FontWeight',fw2,'FontName',fn2)
-xlabel('归一化杂波多普勒','FontSize',labeltsize2,'FontWeight',fw2)
+xlabel('Normalized Doppler of Clutter','FontSize',labeltsize2,'FontWeight',fw2,'FontName',fn2)
+% xlabel('归一化杂波多普勒','FontSize',labeltsize2,'FontWeight',fw2)
 ylabel('PD','FontSize',labeltsize2,'FontWeight',fw2,'FontName',fn2)
 set(gca,'FontSize',labeltsize2)
 set(gcf,'Position',[300 0 1200 1000])
@@ -42,7 +42,7 @@ set(h_leg,'Location','SouthWest')
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%复合高斯0.9%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(2)
 hold on
-load PdFc_4Second_s0.9_p.mat
+load PdFc_PFA_4Second_s0.9_p.mat
 Pd_LogCC_mc = Pd_ECC_mc;
 index = find(Pd_LogCC_mc<0.95 & Pd_LogCC_mc>0.05);
 Pd_LogCC_mc(index) = Pd_ECC_mc(index)-0.05;
@@ -56,8 +56,8 @@ plot(fc,Pd_CC_mc,'k-*','linewidth',linewide2,'markersize',mkft2)
 plot(fc,Pd_SFP_mc,'c-*','linewidth',linewide2,'markersize',mkft2)
 plot(fc,Pd_R_mc,'m-.*','linewidth',linewide2,'markersize',mkft2)
 
-% xlabel('Normalized Doppler of Clutter','FontSize',labeltsize2,'FontWeight',fw2,'FontName',fn2)
-xlabel('归一化杂波多普勒','FontSize',labeltsize2,'FontWeight',fw2)
+xlabel('Normalized Doppler of Clutter','FontSize',labeltsize2,'FontWeight',fw2,'FontName',fn2)
+% xlabel('归一化杂波多普勒','FontSize',labeltsize2,'FontWeight',fw2)
 ylabel('PD','FontSize',labeltsize2,'FontWeight',fw2,'FontName',fn2)
 set(gca,'FontSize',labeltsize2)
 set(gcf,'Position',[300 0 1200 1000])
