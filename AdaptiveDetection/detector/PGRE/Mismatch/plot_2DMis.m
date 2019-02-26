@@ -17,7 +17,7 @@ plot(1-cos2,Pd_PWALD_mc,'b-*','linewidth',linewide1,'MarkerSize',mkft)
 plot(1-cos2,Pd_SGLRT_mc,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(1-cos2,Pd_SRAO_mc,'r-.x','linewidth',linewide1,'MarkerSize',mkft)
 plot(1-cos2,Pd_SWALD_mc,'b-.*','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('P-SGLRT','P-SRAO','P-SWALD','GLRT','RAO','WALD');
+h_leg=legend('P-SGLRT','P-SRAO','P-SWALD','SGLRT','SRAO','SWALD');
 xlabel('cos^2{\phi}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('PD','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gca,'FontSize',labeltsize)
@@ -37,7 +37,7 @@ plot(1-cos2,Pd_PWALD_mc,'b-*','linewidth',linewide1,'MarkerSize',mkft)
 plot(1-cos2,Pd_SGLRT_mc,'k-.o','linewidth',linewide1,'MarkerSize',mkft)
 plot(1-cos2,Pd_SRAO_mc,'r-.x','linewidth',linewide1,'MarkerSize',mkft)
 plot(1-cos2,Pd_SWALD_mc,'b-.*','linewidth',linewide1,'MarkerSize',mkft)
-h_leg=legend('P-SGLRT','P-SRAO','P-SWALD','GLRT','RAO','WALD');
+h_leg=legend('P-SGLRT','P-SRAO','P-SWALD','SGLRT','SRAO','SWALD');
 xlabel('cos^2{\phi}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('PD','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gca,'FontSize',labeltsize)

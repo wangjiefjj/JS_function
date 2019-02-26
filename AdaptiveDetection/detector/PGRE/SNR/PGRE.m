@@ -8,7 +8,7 @@ Np=4;
 N=Na*Np;
 optc = 'g';
 opt_train = 1;%%1:SIRP,2:部分均匀
-L=round(10*N); 
+L=round(2*N); 
 cos2=1;%%%失配
 PFA=1e-3;% PFA=1e-4;
 %%各种比
@@ -71,9 +71,7 @@ parfor i=1:MonteCarloPfa
     Tpwald(i)=fun_P_GRE_Wald(Train,x,H);                   %%%%%% Wald
     Tsglrt(i)=fun_SGLRT(Train,x,H);                   %%%%%% KGLRT
     Tsrao(i)=fun_SRAO(Train,x,H);                     %%%%%% RAO
-    Tswald(i)=fun_SWALD(Train,x,H);                   %%%%%% Wald
-    
- 
+    Tswald(i)=fun_SWALD(Train,x,H);                   %%%%%% Wald     
 end
 toc
 TPGLRT=sort(Tpglrt,'descend');

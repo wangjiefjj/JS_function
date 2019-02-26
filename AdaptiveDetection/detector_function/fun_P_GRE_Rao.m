@@ -25,6 +25,6 @@ H = SS^(-0.5)*H;
 P_H = H / (H'*H) * H';
 % P_pH = eye(N)-P_H;
 % Tprao = abs(y'*P_pH*y);
-Tprao = abs(y'*P_H*y);
+Tprao = (y'*P_H*y);
 end
 
