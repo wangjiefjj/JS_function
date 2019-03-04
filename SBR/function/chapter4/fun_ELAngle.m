@@ -11,7 +11,7 @@ if nargin==1
 else
     Rs = fun_R2Rs(H,R);
     EL=(asin(Re./Rs.*sin(R./Re)));
-    EL = EL/pi*180;
+    EL = rad2deg(EL);
 end
 
 

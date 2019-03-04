@@ -10,7 +10,7 @@ Gt = 22;                      % Transmit Gain in dB
 Gr = 10;                      % Column Receive Gain in dB
 B  = 4e6;                     % Receiver Instantaneous Bandwidth in Hz
 Ls = 4;                       % System Losses in dB
-fr = 60928;                     % PRF in Hz
+fr = 1000000;%60928;                     % PRF in Hz
 Tr = 1/fr;                    % PRI in sec.
 M = 32;  %16                  % Number of Pulses per CPI.
 Tp = 200e-6;                  % Pulse Width in sec.
@@ -83,6 +83,7 @@ for i =1:LAz
         f(i) = 10^(be/10)*sin(Az(i)*pi/180);
     end
 end
+% f=ones(size(f));
 % figure('NumberTitle', 'off','Name', ...
 %        'Figure 9. The element voltage pattern. A -30-dB backlobe level is assumed.');
 % polardb(Az*pi/180,10*log10(abs(f)),-60,'g');
@@ -94,6 +95,7 @@ for k=1:LAz
     AF(k) = sum(exp(-1i*pi*(d/lambda*2)*(0:N-1)*(cos(Az(k)*pi/180) ...
                   - cos(steering_angle*pi/180))));
 end
+% AF=ones(size(AF));
 % f = AF;
 % Calculate the Full Array Transmit Power Gain:
 Gtgain = 10^(Gt/10)*abs(AF).^2;
@@ -163,6 +165,7 @@ a = zeros(N,Nc);
 b = zeros(M,Nc);
 Vc = zeros(M*N,Nc);
 for i = 1:length(elk)
+    i
     Vc_t = zeros(M*N,Nc);
     for k=1:Nc
         a(:,k) = exp(1i*2*pi*fspc(i,k)*(0:N-1));   % Spatial Steering Vector.
@@ -175,9 +178,9 @@ end
 Rc = Vc*Ksic*Vc';                            % Eq. (64)
 
 Rn = sigma2*eye(M*N);
-CNR_dB = 60;
-CNR = 10^(CNR_dB/10);
-Rn = CNR*Rc./sum(eig(Rn)/Sys_DOF);
+% CNR_dB = 60;
+% CNR = 10^(CNR_dB/10);
+% Rn = CNR*Rc./sum(eig(Rn)/Sys_DOF);
 Rcn = Rc + Rn;
 
 

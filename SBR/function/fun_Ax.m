@@ -19,10 +19,10 @@ if nargin == 9 %%方位俯仰向都是均匀加权
     Iaz = ones(1,N_az);
     Iel = ones(1,N_el);
 end
-CosAz = cos(Az/180*pi);
-CosEl = cos(El/180*pi);
-CosEl0 = cos(El0/180*pi);
-CosAz0 = cos(Az0/180*pi);
+CosAz = cos(deg2rad(Az));
+CosEl = cos(deg2rad(El));
+CosEl0 = cos(deg2rad(El0));
+CosAz0 = cos(deg2rad(Az0));
 kx = 2*pi*d_az/lambda;
 ky = 2*pi*d_el/lambda;
 tx = CosAz - CosAz0;

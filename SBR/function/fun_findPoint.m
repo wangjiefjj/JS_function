@@ -8,9 +8,9 @@ AZ = linspace(0,179,L);
 count = 0;
 for i = 1:L
     for j = 1:L
-        if abs(cmj - sin(EL(i)/180*pi) * cos(AZ(j)/180*pi))<1e-5
+        if abs(cmj - sin(deg2rad(EL(i))) * cos(deg2rad(AZ(j))))<1e-3
             count = count + 1;
-            Point(count,:) =[EL(i),AZ(j)]; 
+            Point(count,:) = [EL(i),AZ(j)]; 
         end
     end
 end

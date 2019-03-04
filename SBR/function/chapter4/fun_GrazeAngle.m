@@ -9,6 +9,6 @@ if nargin==1
     [R,Rs] = fun_RsR(H);
 end
 GA = (acos((Re+H)./Rs .* sin(R/Re)));
-GA = GA/pi*180;
+GA = rad2deg(GA);
 end
 

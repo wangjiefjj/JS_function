@@ -5,58 +5,59 @@ close all
 
 %%%距离模糊
 %% 杂波协方差
-isRu = 0;
-isRotation = 0;
-P00= fun_GenerateComplexTrainData(isRu,isRotation);
-Rcn_00 = P00.R{1};
-% [Rcn_00,El0,d,lambda] = fun_GenerateComplexR(isRu,isRotation);%无自转
-% [Rcn_00,El0,d,lambda,fr,M,N] = fun_JWR(isRu,isRotation);%无自转
-isRu = 0;
-isRotation = 1;
-P01= fun_GenerateComplexTrainData(isRu,isRotation);
-Rcn_01 = P01.R{1};
-% [Rcn_01] = fun_GenerateComplexR(isRu,isRotation);%有自转
-% [Rcn_01] = fun_JWR(isRu,isRotation);%有自转
-isRu = 1;
-isRotation = 0;
-P10= fun_GenerateComplexTrainData(isRu,isRotation);
-Rcn_10 = P10.R{1};
-% [Rcn_10] = fun_GenerateComplexR(isRu,isRotation);%有自转
-% [Rcn_10] = fun_JWR(isRu,isRotation);%有自转
+% isRu = 0;
+% isRotation = 0;
+% P00= fun_GenerateComplexTrainData(isRu,isRotation);
+% Rcn_00 = P00.R{1};
+% % [Rcn_00,El0,d,lambda] = fun_GenerateComplexR(isRu,isRotation);%无自转
+% % [Rcn_00,El0,d,lambda,fr,M,N] = fun_JWR(isRu,isRotation);%无自转
+% isRu = 0;
+% isRotation = 1;
+% P01= fun_GenerateComplexTrainData(isRu,isRotation);
+% Rcn_01 = P01.R{1};
+% % [Rcn_01] = fun_GenerateComplexR(isRu,isRotation);%有自转
+% % [Rcn_01] = fun_JWR(isRu,isRotation);%有自转
+% isRu = 1;
+% isRotation = 0;
+% P10= fun_GenerateComplexTrainData(isRu,isRotation);
+% Rcn_10 = P10.R{1};
+% % [Rcn_10] = fun_GenerateComplexR(isRu,isRotation);%有自转
+% % [Rcn_10] = fun_JWR(isRu,isRotation);%有自转
 isRu = 1;
 isRotation = 1;
 P11= fun_GenerateComplexTrainData(isRu,isRotation);
-Rcn_11 = P11.R{1};
-Train11 = P11.TrainData;
-N = length(Rcn_11);
-Train11 = fun_TrainData('g',N,2*N, Rcn_11);
-SCM11 = fun_SCMN(Train11);
+% Rcn_11 = P11.R{1};
+[Rcn_11,El0,d,lambda,fr,M,N] = fun_JWR(isRu,isRotation);%有自转
+% Train11 = P11.TrainData;
+% N = length(Rcn_11);
+% Train11 = fun_TrainData('g',N,2*N, Rcn_11);
+% SCM11 = fun_SCMN(Train11);
 % [Rcn_11] = fun_GenerateComplexR(isRu,isRotation);%有自转
 % [Rcn_11] = fun_JWR(isRu,isRotation);%有自转
 %%%%%%%%%%%%%%%%
 %% 杂波子的秩
-E=abs(eig(Rcn_00));
-E = 10*log10(sort(E,'descend')).';
-figure
-hold on
-plot(E,'r','LineWidth',2)
-%%
-E=abs(eig(Rcn_01));
-E = 10*log10(sort(E,'descend')).';
-plot(E,'k','LineWidth',2)
-% % 
-E=abs(eig(Rcn_10));
-E = 10*log10(sort(E,'descend')).';
-plot(E,'g','LineWidth',2)
-% % 
+% E=abs(eig(Rcn_00));
+% E = 10*log10(sort(E,'descend')).';
+% figure
+% hold on
+% plot(E,'r','LineWidth',2)
+% %%
+% E=abs(eig(Rcn_01));
+% E = 10*log10(sort(E,'descend')).';
+% plot(E,'k','LineWidth',2)
+% % % 
+% E=abs(eig(Rcn_10));
+% E = 10*log10(sort(E,'descend')).';
+% plot(E,'g','LineWidth',2)
+% % % 
 E=abs(eig(Rcn_11));
 E = 10*log10(sort(E,'descend')).';
 plot(E,'b','LineWidth',2)
 % %
-E=abs(eig(SCM11));
-E = 10*log10(sort(E,'descend')).';
-plot(E,'y','LineWidth',2)
-legend('无距离模糊无自转','无距离模糊有自转','有距离模糊无自转','有距离模糊有自转','有距离模糊有自转SCM')%
+% E=abs(eig(SCM11));
+% E = 10*log10(sort(E,'descend')).';
+% plot(E,'y','LineWidth',2)
+% legend('无距离模糊无自转','无距离模糊有自转','有距离模糊无自转','有距离模糊有自转','有距离模糊有自转SCM')%
 grid on
 box on
 xlabel('Index')
@@ -67,32 +68,37 @@ ylabel('Eig')
 % fd = -60928/2:60928/1000:60928/2;  Lfd = length(fd);
 % fsp = d/lambda*sin(El0/180*pi)*cos(az*pi/180);
 % omega = fd/fr;
-% Pw2_00 = zeros(Lfd,Laz);
-% for m=1:Laz
-%     m
-%     for n=1:Lfd
-%         a = exp(1i*2*pi*fsp(m)*(0:N-1));                % Dummy Spatial Steering Vector.(Dummy虚拟)
-%         b = exp(1i*2*pi*omega(n)*(0:M-1));              % Dummy Doppler Steering Vector
-%         v = kron(b,a).';
+fsp = -0.5:0.005:0.5;
+omega = -0.5:0.005:0.5;
+Laz = length(fsp);
+Lfd = length(omega);
+Pw2_11 = zeros(Lfd,Laz);
+for m=1:Laz
+    m
+    for n=1:Lfd
+        a = exp(1i*2*pi*fsp(m)*(0:N-1));                % Dummy Spatial Steering Vector.(Dummy虚拟)
+        b = exp(1i*2*pi*omega(n)*(0:M-1));              % Dummy Doppler Steering Vector
+        v = kron(b,a).';
 %         Pw2_00(n,m) = abs(v'*Rcn_00*v)^2;                      %杂波脊
 %         Pw2_01(n,m) = abs(v'*Rcn_01*v)^2;                      %杂波脊
 %         Pw2_10(n,m) = abs(v'*Rcn_10*v)^2;                      %杂波脊
-%         Pw2_11(n,m) = abs(v'*Rcn_11*v)^2;                      %杂波脊
-%     end
-% end
-% %%Normalization:
+        Pw2_11(n,m) = abs(v'*Rcn_11*v)^2;                      %杂波脊
+    end
+end
+%%Normalization:
 % [Az,Doppler] = meshgrid(cos(az*pi/180),fd);
-% max_value2 = max(max(Pw2_00));
-% Pw2_00 = Pw2_00/max_value2;
-% figure()
-% colormap jet;
+max_value2 = max(max(Pw2_11));
+Pw2_11 = Pw2_11/max_value2;
+figure()
+colormap jet;
+imagesc(fsp, omega, 10*log10(abs(Pw2_11)));
 % imagesc(cos(az*pi/180), fd, 10*log10(abs(Pw2_00)));
-% shading interp;
-% % xlim([-1 1])
-% % ylim([-150 150]);
-% str = ['cos(','\theta_{Az}',')'];
-% xlabel(str);
-% ylabel('Doppler Frequency (Hz)');
+shading interp;
+% xlim([-1 1])
+% ylim([-150 150]);
+str = ['cos(','\theta_{Az}',')'];
+xlabel(str);
+ylabel('Doppler Frequency (Hz)');
 % h = colorbar;
 % % h = colorbar('YTickLabel',{-80:10:0});
 % set(get(h,'YLabel'),'String','Relative Power (dB)');
