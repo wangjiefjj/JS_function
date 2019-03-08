@@ -5,6 +5,6 @@ function [ABIC] = fun_ABIC(s,m,K)
 %%s:s函数值
 %%m：模型参数个数
 %%K:辅助数据长度
-ABIC = -2*s+m*log(K);
+ABIC = -2*s+m*log(K);%-m*log(2*pi)
 end
 
