@@ -12,7 +12,7 @@ mkft2 = 10;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%复合高斯0.1%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(1)
 hold on
-load Pd2_4Second_s0.1_p.mat
+load PD_8Second_s0.1_p.mat
 plot(SNRout,Pd_ECC_mc,'r-*','linewidth',linewide2,'markersize',mkft2)
 plot(SNRout,Pd_PCC_mc,'g-*','linewidth',linewide2,'markersize',mkft2)
 plot(SNRout,Pd_LogCC_mc,'b-*','linewidth',linewide2,'markersize',mkft2)
@@ -38,7 +38,7 @@ set(h_leg,'Location','SouthEast')
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%复合高斯0.9%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(2)
 hold on
-load Pd2_4Second_s0.9_p.mat
+load PD_4Second_s0.9_p.mat
 plot(SNRout,Pd_ECC_mc,'r-*','linewidth',linewide2,'markersize',mkft2)
 plot(SNRout,Pd_PCC_mc,'g-*','linewidth',linewide2,'markersize',mkft2)
 plot(SNRout,Pd_LogCC_mc,'b-*','linewidth',linewide2,'markersize',mkft2)
