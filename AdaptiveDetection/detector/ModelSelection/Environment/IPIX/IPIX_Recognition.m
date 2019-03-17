@@ -7,7 +7,7 @@ Data_process
 % matFile='19980204_224024_IPIX.mat';
 load(matFile) 
 Range = 19;
-offset=50000; %%前10000个就是0，后10000个就是50000
+offset=0; %%前10000个就是0，后10000个就是50000
 % lambda =  2.4072;
 % mu = 1.3600;
 %%%%参数设置
@@ -55,40 +55,66 @@ parfor i=1:10000-N+1
     H3_ABIC = fun_ABIC(s_H3,H3_num,L);
     Class_ABIC =[H1_ABIC,H2_ABIC,H3_ABIC];
     [~,Class_ABIC_num(i)] = min(Class_ABIC);
-    %%%%GIC%%%%%%%%%%%%%%
-    H1_GIC = fun_GIC(s_H1,H1_num,2);
-    H2_GIC = fun_GIC(s_H2,H2_num,2);
-    H3_GIC = fun_GIC(s_H3,H3_num,2);
-    Class_GIC =[H1_GIC,H2_GIC,H3_GIC];
-	[~,Class_GIC_num(i)] = min(Class_GIC);
+    %%%%GIC2%%%%%%%%%%%%%%
+    H1_GIC2 = fun_GIC(s_H1,H1_num,2);
+    H2_GIC2 = fun_GIC(s_H2,H2_num,2);
+    H3_GIC2 = fun_GIC(s_H3,H3_num,2);
+    Class_GIC2 =[H1_GIC2,H2_GIC2,H3_GIC2];
+	[~,Class_GIC2_num(i)] = min(Class_GIC2);
+    %%%%GIC4%%%%%%%%%%%%%%
+    H1_GIC4 = fun_GIC(s_H1,H1_num,4);
+    H2_GIC4 = fun_GIC(s_H2,H2_num,4);
+    H3_GIC4 = fun_GIC(s_H3,H3_num,4);
+    Class_GIC4 =[H1_GIC4,H2_GIC4,H3_GIC4];
+	[~,Class_GIC4_num(i)] = min(Class_GIC4);
 	%%%%AIC%%%%%%%%%%%%%%
 	H1_AIC = fun_AIC(s_H1,H1_num);
 	H2_AIC = fun_AIC(s_H2,H2_num);
 	H3_AIC = fun_AIC(s_H3,H3_num);
 	Class_AIC =[H1_AIC,H2_AIC,H3_AIC];
 	[~,Class_AIC_num(i)] = min(Class_AIC);  
+    %%%%AICc%%%%%%%%%%%%%%
+	H1_AICc = fun_AICc(s_H1,H1_num,N,L);
+	H2_AICc = fun_AICc(s_H2,H2_num,N,L);
+	H3_AICc = fun_AICc(s_H3,H3_num,N,L);
+	Class_AICc =[H1_AICc,H2_AICc,H3_AICc];
+	[~,Class_AICc_num(i)] = min(Class_AICc); 
 end   
 toc
 Num = length(Class_AIC_num);
 count_H1_ABIC = length(find(Class_ABIC_num==1))/Num*100;
 count_H2_ABIC = length(find(Class_ABIC_num==2))/Num*100;
 count_H3_ABIC = length(find(Class_ABIC_num==3))/Num*100;
-count_H1_GIC = length(find(Class_GIC_num==1))/Num*100;
-count_H2_GIC = length(find(Class_GIC_num==2))/Num*100;
-count_H3_GIC = length(find(Class_GIC_num==3))/Num*100;
+
+count_H1_GIC2 = length(find(Class_GIC2_num==1))/Num*100;
+count_H2_GIC2 = length(find(Class_GIC2_num==2))/Num*100;
+count_H3_GIC2 = length(find(Class_GIC2_num==3))/Num*100;
+
+count_H1_GIC4 = length(find(Class_GIC4_num==1))/Num*100;
+count_H2_GIC4 = length(find(Class_GIC4_num==2))/Num*100;
+count_H3_GIC4 = length(find(Class_GIC4_num==3))/Num*100;
+
 count_H1_AIC = length(find(Class_AIC_num==1))/Num*100;
 count_H2_AIC = length(find(Class_AIC_num==2))/Num*100;
 count_H3_AIC = length(find(Class_AIC_num==3))/Num*100;
-y_H1 =[count_H1_AIC,count_H1_ABIC,count_H1_GIC];
-y_H2 =[count_H2_AIC,count_H2_ABIC,count_H2_GIC];
-y_H3 =[count_H3_AIC,count_H3_ABIC,count_H3_GIC];
+
+count_H1_AICc = length(find(Class_AICc_num==1))/Num*100;
+count_H2_AICc = length(find(Class_AICc_num==2))/Num*100;
+count_H3_AICc = length(find(Class_AICc_num==3))/Num*100;
+
+y_H1 =[count_H1_AIC,count_H1_ABIC,count_H1_GIC2,...
+    count_H1_GIC4,count_H1_AICc];
+y_H2 =[count_H2_AIC,count_H2_ABIC,count_H2_GIC2,...
+    count_H2_GIC4,count_H2_AICc];
+y_H3 =[count_H3_AIC,count_H3_ABIC,count_H3_GIC2,...
+    count_H3_GIC4,count_H3_AICc];
 y = [y_H1;y_H2;y_H3];
 % y = y';
 x={'H1','H2','H3'};
 figure()
 bar(y)
 set(gca, 'XTickLabel', x);
-h_leg = legend('AIC','ABIC','GIC (\rho=2)');
+h_leg = legend('AIC','ABIC','GIC (\rho=2)','GIC (\rho=4)','AICc');
 % xlabel('Hy results')
 ylabel('Percentage')
 % set(gca,'FontSize',labeltsize,'FontWeight',fw,'FontName',fn)

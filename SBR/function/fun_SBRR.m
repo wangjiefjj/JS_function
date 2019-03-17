@@ -20,8 +20,8 @@ Gel = 4;                      % Element Gain in dB
 be = -30;                     % Element Backlobe Level in db
 c   = 299792458;              % Speed of Light in m/sec.
 lambda = c/fo;                % Operating wavelength in meters.
-% d_az = lambda/2*13.4;              % 间隔
-d_az = lambda/2*1.08;              % 间隔
+d_az = lambda/2*1;              % 间隔
+% d_az = lambda/2*1.08;              % 间隔
 d_el = lambda/2*1.39;              % 间隔
 % Azimuth angle in degrees 方位角:
 % Az = linspace(-0,179,Nc);

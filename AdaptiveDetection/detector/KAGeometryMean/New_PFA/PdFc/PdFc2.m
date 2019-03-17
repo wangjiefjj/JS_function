@@ -13,7 +13,7 @@ sigma_t =0.1;
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
 N = Na*Np;
-SNRout=10; % 输出SNR
+SNRout=15; % 输出SNR
 cos2=0.9;
 SNRnum=10.^(SNRout/10);
 PFA=1e-4;% PFA=1e-4;
@@ -29,7 +29,11 @@ for i_fc = 1:length(fc)
     i_fc/length(fc)
 %     rouR = fun_rho(rou,N,1,fc(i_fc)); %%真实的杂波协方差
     %%杂波协方差
-    rouR = fun_rho(rou,N,1,fc(i_fc)); %%真实的杂波协方差
+    sigmaf = 0.03; %%杂波谱展宽
+    rc =  exp(-1i*2*pi*nn*fc(i_fc)-2*(nn*pi*sigmaf).^2);
+    rouR = toeplitz(rc);
+    rouR_half=rouR^0.5;
+    irouR=inv(rouR);
     R_KA1 = zeros(size(rouR));
     for i = 1:10000
         t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
@@ -78,9 +82,6 @@ for i_fc = 1:length(fc)
         end
         %%%%% ANMF_LogCC
         Tanmf_LogCC(i) = fun_ANMF(R_LogCC,x0,s);
-        if Tanmf_LogCC(i)>1
-           Tanmf_LogCC(i) = 0;
-        end
         %%%%%% ANMF_P
         Tanmf_P(i) = fun_ANMF(R_P,x0,s);
     %     %%%%%% ANMF_PCC
@@ -110,7 +111,7 @@ for i_fc = 1:length(fc)
     Th_SFP(i_fc) = (TANMF_SFP(floor(MonteCarloPfa*PFA-1))+TANMF_SFP(floor(MonteCarloPfa*PFA)))/2;
 end
 
-% load Th_01.mat
+% load Th_4Second_s0.1_PFA3_p.mat
 %%%%%%%%%%%%%%%%%%%检测概率%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -134,10 +135,12 @@ tic
 for i_t = 1:length(fc)
     waitbar(i_t/length(fc),h,sprintf([num2str(i_t/length(fc)*100),'%%']));
     rouR = fun_rho(rou,N,1,fc(i_t)); %%真实的杂波协方差
+    rouR_half=rouR^0.5;
+    irouR=inv(rouR);
     R_KA1 = zeros(size(rouR));
-    for i = 1:10000
+    for i = 1:1000
         t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量
-        R_KA1 = R_KA1 + rouR.*(t*t')/10000;
+        R_KA1 = R_KA1 + rouR.*(t*t')/1000;
     end
     counter_R=0;
     counter_CC=0;
@@ -186,9 +189,6 @@ for i_t = 1:length(fc)
         end
         %%%% ANMF_LogCC
         T_LogCC = fun_ANMF(R_LogCC,x0,s);
-        if T_LogCC>1
-            T_LogCC = 1;
-        end
         %%%% ANMF_P
         T_P = fun_ANMF(R_P,x0,s);
         %%%%% ANMF_PCC
@@ -234,5 +234,5 @@ h_leg = legend('NMF','ANMF with CC',...
     'ANMF with E','ANMF with ECC','ANMF with LogM','ANMF with LogCC',...
     'ANMF with P','ANMF with PCC','SFP');
 % str = ['PdFd_2_',num2str(L),'Second','_',str_train,'.mat'];
-str = ['PdFc3_',num2str(L),'Second','_s',num2str(sigma_t),'_',str_train,'.mat'];
+str = ['PdFc_',num2str(L),'Second','_s',num2str(sigma_t),'_',str_train,'.mat'];
 save (str); 

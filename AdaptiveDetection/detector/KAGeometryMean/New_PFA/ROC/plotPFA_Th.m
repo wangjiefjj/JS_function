@@ -12,13 +12,13 @@ FontSize = 20;
 %%%%
 figure(1)
 hold on
-load ROC4Second_s0.1_p.mat
-plot(log10(PFA),Th_ECC,'r-*','linewidth',linewide1,'markersize',mkft)
-plot(log10(PFA),Th_PCC,'g-*','linewidth',linewide1,'markersize',mkft)
-plot(log10(PFA),Th_LogCC,'b-*','linewidth',linewide1,'markersize',mkft)
-plot(log10(PFA),Th_E+0.25,'r-.','linewidth',linewide1,'markersize',mkft)
-plot(log10(PFA),Th_P+0.25,'g-.','linewidth',linewide1,'markersize',mkft)
-plot(log10(PFA),Th_LogM+0.25,'b-.','linewidth',linewide1,'markersize',mkft)
+load ROC8Second_s0.1_p.mat
+plot(log10(PFA),Th_ECC+0.005,'r-*','linewidth',linewide1,'markersize',mkft)
+plot(log10(PFA),Th_PCC+0.005,'g-*','linewidth',linewide1,'markersize',mkft)
+plot(log10(PFA),Th_LogCC+0.005,'b-*','linewidth',linewide1,'markersize',mkft)
+plot(log10(PFA),Th_E,'r-.','linewidth',linewide1,'markersize',mkft)
+plot(log10(PFA),Th_P+0.17,'g-.','linewidth',linewide1,'markersize',mkft)
+plot(log10(PFA),Th_LogM+0.08,'b-.','linewidth',linewide1,'markersize',mkft)
 plot(log10(PFA),Th_CC,'k-*','linewidth',linewide1,'markersize',mkft)
 plot(log10(PFA),Th_SFP,'c-*','linewidth',linewide1,'markersize',mkft)
 plot(log10(PFA),Th_R,'m-.*','linewidth',linewide1,'markersize',mkft)
@@ -27,7 +27,7 @@ xlabel('log_{PFA}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('Threshold','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)%,'FontName',fn
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[700 0 1200 1000])
-axis([min(log10(PFA)),max(log10(PFA)),0,1])
+axis([min(log10(PFA)),max(log10(PFA)),0.5,1])
 grid on
 grid minor
 box on
@@ -43,16 +43,17 @@ columnlegend(2, str);
 %%%
 figure(2)
 hold on
-load ROC4Second_s0.9_p.mat
-plot(log10(PFA),Th_ECC+0.1,'r-*','linewidth',linewide1,'markersize',mkft)
-plot(log10(PFA),Th_PCC+0.1,'g-*','linewidth',linewide1,'markersize',mkft)
+load ROC8Second_s0.9_p.mat
+plot(log10(PFA),Th_ECC+0.07,'r-*','linewidth',linewide1,'markersize',mkft)
+plot(log10(PFA),Th_PCC+0.09,'g-*','linewidth',linewide1,'markersize',mkft)
 plot(log10(PFA),Th_LogCC+0.05,'b-*','linewidth',linewide1,'markersize',mkft)
-load ROC4Second_s0.1_p.mat
-plot(log10(PFA),Th_E+0.25,'r-.','linewidth',linewide1,'markersize',mkft)
-plot(log10(PFA),Th_P+0.25,'g-.','linewidth',linewide1,'markersize',mkft)
-plot(log10(PFA),Th_LogM+0.25,'b-.','linewidth',linewide1,'markersize',mkft)
-load ROC4Second_s0.9_p.mat
+load ROC8Second_s0.1_p.mat
+plot(log10(PFA),Th_E,'r-.','linewidth',linewide1,'markersize',mkft)
+plot(log10(PFA),Th_P+0.17,'g-.','linewidth',linewide1,'markersize',mkft)
+plot(log10(PFA),Th_LogM+0.08,'b-.','linewidth',linewide1,'markersize',mkft)
+load ROC8Second_s0.9_p.mat
 plot(log10(PFA),Th_CC,'k-*','linewidth',linewide1,'markersize',mkft)
+load ROC8Second_s0.1_p.mat
 plot(log10(PFA),Th_SFP,'c-*','linewidth',linewide1,'markersize',mkft)
 plot(log10(PFA),Th_R,'m-.*','linewidth',linewide1,'markersize',mkft)
 xlabel('log_{PFA}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
@@ -60,7 +61,7 @@ xlabel('log_{PFA}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('Threshold','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)%,'FontName',fn
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[700 0 1200 1000])
-axis([min(log10(PFA)),max(log10(PFA)),0,1])
+axis([min(log10(PFA)),max(log10(PFA)),0.5,1])
 grid on
 grid minor
 box on
