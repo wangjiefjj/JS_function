@@ -10,7 +10,9 @@ linewide1=3;
 mkft = 10;
 FontSize = 20;
 % load PdFd_4Second_p.mat
-
+strlegend = [{'ANMF with KA-TCE'},{'ANMF with KA-PE'},{'ANMF with KA-LogE'},...
+    {'ANMF with E'},{'ANMF with P'},{'ANMF with LogE'},{'ANMF with CC'},...
+    {'ANMF with SFP'},{'NMF'}];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%复合高斯0.1%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(1)
 hold on
@@ -35,14 +37,11 @@ set(gcf,'Position',[700 0 1200 1000])
 grid on
 grid minor
 box on
-str=[{'ANMF with KA-E'},{'ANMF with KA-PE'},{'ANMF with KA-LogE'},...
-    {'ANMF with E'},{'ANMF with P'},{'ANMF with LogE'},...
-    {'ANMF with CC'},{'ANMF with SFP'},{'ANMF with NMF'}];
-% columnlegend(2, str);
-h_leg = legend( 'ANMF with KA-E','ANMF with KA-PE','ANMF with KA-LogE',...
-    'ANMF with E','ANMF with P','ANMF with LogE','ANMF with CC',...
-    'ANMF with SFP','NMF');
-set(h_leg,'Location','SouthWest')
+columnlegend(1, strlegend);
+% h_leg = legend( 'ANMF with KA-E','ANMF with KA-PE','ANMF with KA-LogE',...
+%     'ANMF with E','ANMF with P','ANMF with LogE','ANMF with CC',...
+%     'ANMF with SFP','NMF');
+% set(h_leg,'Location','SouthWest')
 % set(h_leg,'box','off')
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%复合高斯0.9%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -68,12 +67,9 @@ set(gcf,'Position',[700 0 1200 1000])
 grid on
 grid minor
 box on
-str=[{'ANMF with KA-E'},{'ANMF with KA-PE'},{'ANMF with KA-LogE'},...
-    {'ANMF with E'},{'ANMF with P'},{'ANMF with LogE'},...
-    {'ANMF with CC'},{'ANMF with SFP'},{'ANMF with NMF'}];
-% columnlegend(2, str);
-h_leg = legend( 'ANMF with KA-E','ANMF with KA-PE','ANMF with KA-LogE',...
-    'ANMF with E','ANMF with P','ANMF with LogE','ANMF with CC',...
-    'ANMF with SFP','NMF');
-set(h_leg,'Location','SouthWest')
+columnlegend(1, strlegend);
+% h_leg = legend( 'ANMF with KA-E','ANMF with KA-PE','ANMF with KA-LogE',...
+%     'ANMF with E','ANMF with P','ANMF with LogE','ANMF with CC',...
+%     'ANMF with SFP','NMF');
+% set(h_leg,'Location','SouthWest')
 % set(h_leg,'box','off')

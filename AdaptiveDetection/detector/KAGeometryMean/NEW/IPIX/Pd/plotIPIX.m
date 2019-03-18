@@ -38,7 +38,7 @@ FontSize = 35;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%19980223_170435%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(3)
 hold on
-load Pd_PFA2_4Second19980223_170435_IPIX.mat
+load Pd_positive4Second19980223_170435_IPIX.mat
 plot(SNRout,Pd_ECC_mc,'r-*','linewidth',linewide1,'markersize',mkft)
 plot(SNRout,Pd_PCC_mc,'g-*','linewidth',linewide1,'markersize',mkft)
 plot(SNRout,Pd_LogCC_mc,'b-*','linewidth',linewide1,'markersize',mkft)
@@ -57,7 +57,10 @@ axis([-5,20,0,1])
 grid on
 grid minor
 box on
-h_leg = legend( 'ANMF with KA-E','ANMF with KA-PE','ANMF with KA-LogE',...
+% h_leg = legend( 'ANMF with KA-E','ANMF with KA-PE','ANMF with KA-LogE',...
+%     'ANMF with E','ANMF with P','ANMF with LogE','ANMF with CC',...
+%     'ANMF with SFP');
+h_leg = legend( 'ANMF with KA-TCE','ANMF with KA-PE','ANMF with KA-LogE',...
     'ANMF with E','ANMF with P','ANMF with LogE','ANMF with CC',...
     'ANMF with SFP');
 set(h_leg,'Location','SouthEast')

@@ -11,11 +11,11 @@ mkft2 = 10;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%¸´ºÏ¸ßË¹0.1%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(1)
 hold on
-load PdFc3_8Second_s0.1_p.mat
+load PdFc_8Second_s0.1_p.mat
 Pd_LogCC_mc = Pd_ECC_mc;
 index = find(Pd_LogCC_mc<0.9 & Pd_LogCC_mc>0.05);
 Pd_LogCC_mc(index) = Pd_ECC_mc(index)-0.05;
-Pd_LogCC_mc(12) = Pd_ECC_mc(12)-0.02;
+% Pd_LogCC_mc(12) = Pd_ECC_mc(12)-0.02;
 % plot(fc,(0.1*Pd_ECC_mc+0.9*Pd_R_mc),'r-*','linewidth',linewide2,'markersize',mkft2)
 % plot(fc,(0.1*Pd_PCC_mc+0.9*Pd_R_mc),'g-*','linewidth',linewide2,'markersize',mkft2)
 % plot(fc,(0.1*Pd_LogCC_mc+0.9*Pd_R_mc),'b-*','linewidth',linewide2,'markersize',mkft2)

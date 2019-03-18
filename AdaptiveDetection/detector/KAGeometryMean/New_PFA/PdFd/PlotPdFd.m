@@ -15,7 +15,7 @@ FontSize = 20;
 figure(1)
 hold on
 
-load PdFd_4Second_s0.1_p.mat
+load PdFd_8Second_s0.1_p.mat
 plot(fd,circshift(Pd_ECC_mc,1),'r-*','linewidth',linewide1,'markersize',mkft)
 plot(fd,circshift(Pd_PCC_mc,1),'g-*','linewidth',linewide1,'markersize',mkft)
 plot(fd,circshift(Pd_LogCC_mc,1),'b-*','linewidth',linewide1,'markersize',mkft)
@@ -26,8 +26,8 @@ plot(fd,circshift(Pd_CC_mc,1),'k-*','linewidth',linewide1,'markersize',mkft)
 plot(fd,circshift(Pd_SFP_mc,1),'c-*','linewidth',linewide1,'markersize',mkft)
 plot(fd,circshift(Pd_R_mc,1),'m-.*','linewidth',linewide1,'markersize',mkft)
 
-% xlabel('Normalized Doppler of Target','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-xlabel('目标归一化多普勒','FontSize',labeltsize,'FontWeight',fw)
+xlabel('Normalized Doppler of Target','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+% xlabel('目标归一化多普勒','FontSize',labeltsize,'FontWeight',fw)
 ylabel('PD','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[700 0 1200 1000])
@@ -48,7 +48,7 @@ set(h_leg,'Location','SouthWest')
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%复合高斯0.9%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(2)
 hold on
-load PdFd_4Second_s0.9_p.mat
+load PdFd_8Second_s0.9_p.mat
 plot(fd,circshift(Pd_ECC_mc,1),'r-*','linewidth',linewide1,'markersize',mkft)
 plot(fd,circshift(Pd_PCC_mc,1),'g-*','linewidth',linewide1,'markersize',mkft)
 plot(fd,circshift(Pd_LogCC_mc,1),'b-*','linewidth',linewide1,'markersize',mkft)
@@ -59,8 +59,8 @@ plot(fd,circshift(Pd_CC_mc,1),'k-*','linewidth',linewide1,'markersize',mkft)
 plot(fd,circshift(Pd_SFP_mc,1),'c-*','linewidth',linewide1,'markersize',mkft)
 plot(fd,circshift(Pd_R_mc,1),'m-.*','linewidth',linewide1,'markersize',mkft)
 
-% xlabel('Normalized Doppler of Target','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-xlabel('目标归一化多普勒','FontSize',labeltsize,'FontWeight',fw)
+xlabel('Normalized Doppler of Target','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+% xlabel('目标归一化多普勒','FontSize',labeltsize,'FontWeight',fw)
 ylabel('PD','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[700 0 1200 1000])

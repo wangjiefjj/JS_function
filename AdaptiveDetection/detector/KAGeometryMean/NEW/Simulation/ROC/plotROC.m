@@ -9,6 +9,9 @@ fn='Times New Roman';
 linewide1=3;
 mkft = 10;
 FontSize = 20;
+strlegend = [{'ANMF with KA-TCE'},{'ANMF with KA-PE'},{'ANMF with KA-LogE'},...
+    {'ANMF with E'},{'ANMF with P'},{'ANMF with LogE'},{'ANMF with CC'},...
+    {'ANMF with SFP'},{'NMF'}];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%复合高斯0.1，-5dB%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(1)
 hold on
@@ -41,9 +44,10 @@ axis([min(log10(PFA)),max(log10(PFA)),0,1])
 grid on
 grid minor
 box on
-h_leg = legend( 'ANMF with KA-E','ANMF with KA-PE','ANMF with KA-LogE',...
-    'ANMF with E','ANMF with P','ANMF with LogE','ANMF with CC',...
-    'ANMF with SFP','NMF');
+% h_leg = legend( 'ANMF with KA-E','ANMF with KA-PE','ANMF with KA-LogE',...
+%     'ANMF with E','ANMF with P','ANMF with LogE','ANMF with CC',...
+%     'ANMF with SFP','NMF');
+columnlegend(2, strlegend);
 set(h_leg,'Location','SouthEast')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%复合高斯0.9  -5dB%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(2)
@@ -80,7 +84,8 @@ axis([min(log10(PFA)),max(log10(PFA)),0,1])
 grid on
 grid minor
 box on
-h_leg = legend( 'ANMF with KA-E','ANMF with KA-PE','ANMF with KA-LogE',...
-    'ANMF with E','ANMF with P','ANMF with LogE','ANMF with CC',...
-    'ANMF with SFP','NMF');
-set(h_leg,'Location','SouthEast')
+% h_leg = legend( 'ANMF with KA-E','ANMF with KA-PE','ANMF with KA-LogE',...
+%     'ANMF with E','ANMF with P','ANMF with LogE','ANMF with CC',...
+%     'ANMF with SFP','NMF');
+columnlegend(2, strlegend);
+% set(h_leg,'Location','SouthEast')

@@ -23,15 +23,15 @@ plot(log10(PFA),Th_CC,'k-*','linewidth',linewide1,'markersize',mkft)
 plot(log10(PFA),Th_SFP,'c-*','linewidth',linewide1,'markersize',mkft)
 plot(log10(PFA),Th_R,'m-.*','linewidth',linewide1,'markersize',mkft)
 xlabel('log_{PFA}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-% ylabel('门限','FontSize',labeltsize,'FontWeight',fw)%,'FontName',fn
-ylabel('Threshold','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)%,'FontName',fn
+ylabel('门限','FontSize',labeltsize,'FontWeight',fw)%,'FontName',fn
+% ylabel('Threshold','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)%,'FontName',fn
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[700 0 1200 1000])
 axis([min(log10(PFA)),max(log10(PFA)),0,1])
 grid on
 grid minor
 box on
-str=[{'ANMF with KA-E'},{'ANMF with KA-PE'},{'ANMF with KA-LogE'},...
+str=[{'ANMF with KA-TCE'},{'ANMF with KA-PE'},{'ANMF with KA-LogE'},...
     {'ANMF with E'},{'ANMF with P'},{'ANMF with LogE'},...
     {'ANMF with CC'},{'ANMF with SFP'},{'ANMF with NMF'}];
 columnlegend(2, str);
@@ -56,15 +56,15 @@ plot(log10(PFA),Th_CC,'k-*','linewidth',linewide1,'markersize',mkft)
 plot(log10(PFA),Th_SFP,'c-*','linewidth',linewide1,'markersize',mkft)
 plot(log10(PFA),Th_R,'m-.*','linewidth',linewide1,'markersize',mkft)
 xlabel('log_{PFA}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
-% ylabel('门限','FontSize',labeltsize,'FontWeight',fw)%,'FontName',fn
-ylabel('Threshold','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)%,'FontName',fn
+ylabel('门限','FontSize',labeltsize,'FontWeight',fw)%,'FontName',fn
+% ylabel('Threshold','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)%,'FontName',fn
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[700 0 1200 1000])
 axis([min(log10(PFA)),max(log10(PFA)),0,1])
 grid on
 grid minor
 box on
-str=[{'ANMF with KA-E'},{'ANMF with KA-PE'},{'ANMF with KA-LogE'},...
+str=[{'ANMF with KA-TCE'},{'ANMF with KA-PE'},{'ANMF with KA-LogE'},...
     {'ANMF with E'},{'ANMF with P'},{'ANMF with LogE'},...
     {'ANMF with CC'},{'ANMF with SFP'},{'ANMF with NMF'}];
 columnlegend(2, str);

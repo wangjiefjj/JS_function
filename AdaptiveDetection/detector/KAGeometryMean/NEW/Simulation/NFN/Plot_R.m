@@ -24,13 +24,16 @@ for i = 1:length(y)
 end
 %     caxis([0,0.6])
 % set(gca, 'XTickLabel', x)
-xlabel('Estimators')
+% xlabel('Estimators')
+xlabel('协方差估计量')
 ylabel('NFN')
-set(gca,'FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+% set(gca,'FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+set(gca,'FontSize',labeltsize,'FontWeight',fw)
 set(gcf,'Position',[300 0 1200 1000])
 set(gcf,'color','white');
 axis([0,9,0,1])
-str=[{'KA-E'},{'KA-PE'},{'KA-LogE'},{'E'},{'P'},{'LogE'},{'CC'},{'SFP'}];
+% str=[{'KA-E'},{'KA-PE'},{'KA-LogE'},{'E'},{'P'},{'LogE'},{'CC'},{'SFP'}];
+str=[{'KA-TCE'},{'KA-PE'},{'KA-LogE'},{'E'},{'PE'},{'LogE'},{'CC'},{'SFP'}];
 columnlegend(2, str);
 grid on
 box on
@@ -59,13 +62,16 @@ end
 %     caxis([0,0.6])
 % x = {'1','2','3','4','5','6','7','8'};
 % set(gca, 'XTickLabel', x)
-xlabel('Estimators')
+% xlabel('Estimators')
+xlabel('协方差估计量')
 ylabel('NFN')
-set(gca,'FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+% set(gca,'FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
+set(gca,'FontSize',labeltsize,'FontWeight',fw)
 set(gcf,'Position',[300 0 1200 1000])
 set(gcf,'color','white');
 axis([0,9,0,1])
-str=[{'KA-E'},{'KA-PE'},{'KA-LogE'},{'E'},{'P'},{'LogE'},{'CC'},{'SFP'}];
+% str=[{'KA-E'},{'KA-PE'},{'KA-LogE'},{'E'},{'P'},{'LogE'},{'CC'},{'SFP'}];
+str=[{'KA-TCE'},{'KA-PE'},{'KA-LogE'},{'E'},{'PE'},{'LogE'},{'CC'},{'SFP'}];
 h_leg = columnlegend(2, str);
 % set(h_leg,'Location','SouthEast')
 % legend(b(1:3),'KA-E','KA-PE','KA-LogE');

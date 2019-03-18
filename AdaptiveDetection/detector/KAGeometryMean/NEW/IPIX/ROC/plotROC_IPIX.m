@@ -9,6 +9,9 @@ fn='Times New Roman';
 linewide1=3;
 mkft = 10;
 FontSize = 20;
+strlegend = [{'ANMF with KA-TCE'},{'ANMF with KA-PE'},{'ANMF with KA-LogE'},...
+    {'ANMF with E'},{'ANMF with P'},{'ANMF with LogE'},{'ANMF with CC'},...
+    {'ANMF with SFP'}];
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%-5dB%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % figure(1)
 % hold on
@@ -62,7 +65,7 @@ FontSize = 20;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%-5dB%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(1)
 hold on
-load ROC_IPIX_PFA_4Second.mat
+load ROC_IPIX4Second.mat
 plot(log10(PFA),Pd_ECC_Mlti_mc(:,1),'r-*','linewidth',linewide1,'markersize',mkft)
 plot(log10(PFA),Pd_PCC_Mlti_mc(:,1),'g-*','linewidth',linewide1,'markersize',mkft)
 plot(log10(PFA),Pd_LogCC_Mlti_mc(:,1),'b-*','linewidth',linewide1,'markersize',mkft)
@@ -104,7 +107,8 @@ box on
 xlabel('Log_{PFA}','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 ylabel('PD','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 axis([min(log10(PFA)),max(log10(PFA)),0,1])
-h_leg = legend( 'ANMF with KA-E','ANMF with KA-PE','ANMF with KA-LogE',...
-    'ANMF with E','ANMF with P','ANMF with LogE','ANMF with CC',...
-    'ANMF with SFP','NMF');
-set(h_leg,'Location','SouthEast')
+columnlegend(1, strlegend);
+% h_leg = legend( 'ANMF with KA-E','ANMF with KA-PE','ANMF with KA-LogE',...
+%     'ANMF with E','ANMF with P','ANMF with LogE','ANMF with CC',...
+%     'ANMF with SFP');
+% set(h_leg,'Location','SouthEast')

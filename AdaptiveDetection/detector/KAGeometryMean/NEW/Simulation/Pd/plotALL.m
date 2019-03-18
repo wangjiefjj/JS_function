@@ -12,13 +12,15 @@ mkft2 = 10;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%复合高斯0.1%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(1)
 hold on
-load Pd2_4Second_s0.1_p.mat
+load Pd_4Second_s0.1_p.mat
 plot(SNRout,Pd_ECC_mc,'r-*','linewidth',linewide2,'markersize',mkft2)
 plot(SNRout,Pd_PCC_mc,'g-*','linewidth',linewide2,'markersize',mkft2)
 plot(SNRout,Pd_LogCC_mc,'b-*','linewidth',linewide2,'markersize',mkft2)
+load PdGe3_4Second_p.mat
 plot(SNRout,Pd_E_mc,'r-.','linewidth',linewide2,'markersize',mkft2)
 plot(SNRout,Pd_P_mc,'g-.','linewidth',linewide2,'markersize',mkft2)
 plot(SNRout,Pd_LogM_mc,'b-.','linewidth',linewide2,'markersize',mkft2)
+load Pd_4Second_s0.1_p.mat
 plot(SNRout,Pd_CC_mc,'k-*','linewidth',linewide2,'markersize',mkft2)
 plot(SNRout,Pd_SFP_mc,'c-*','linewidth',linewide2,'markersize',mkft2)
 plot(SNRout,Pd_R_mc,'m-.*','linewidth',linewide2,'markersize',mkft2)
@@ -31,20 +33,25 @@ axis([-5,20,0,1])
 grid on
 grid minor
 box on
-h_leg = legend( 'ANMF with KA-E','ANMF with KA-PE','ANMF with KA-LogE',...
+% h_leg = legend( 'ANMF with KA-E','ANMF with KA-PE','ANMF with KA-LogE',...
+%     'ANMF with E','ANMF with P','ANMF with LogE','ANMF with CC',...
+%     'ANMF with SFP','NMF');
+h_leg = legend( 'ANMF with KA-TCE','ANMF with KA-PE','ANMF with KA-LogE',...
     'ANMF with E','ANMF with P','ANMF with LogE','ANMF with CC',...
     'ANMF with SFP','NMF');
 set(h_leg,'Location','SouthEast')
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%复合高斯0.9%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(2)
 hold on
-load Pd2_4Second_s0.9_p.mat
+load Pd_4Second_s0.9_p.mat
 plot(SNRout,Pd_ECC_mc,'r-*','linewidth',linewide2,'markersize',mkft2)
 plot(SNRout,Pd_PCC_mc,'g-*','linewidth',linewide2,'markersize',mkft2)
 plot(SNRout,Pd_LogCC_mc,'b-*','linewidth',linewide2,'markersize',mkft2)
+load PdGe3_4Second_p.mat
 plot(SNRout,Pd_E_mc,'r-.','linewidth',linewide2,'markersize',mkft2)
 plot(SNRout,Pd_P_mc,'g-.','linewidth',linewide2,'markersize',mkft2)
 plot(SNRout,Pd_LogM_mc,'b-.','linewidth',linewide2,'markersize',mkft2)
+load Pd_4Second_s0.9_p.mat
 plot(SNRout,Pd_CC_mc,'k-*','linewidth',linewide2,'markersize',mkft2)
 plot(SNRout,Pd_SFP_mc,'c-*','linewidth',linewide2,'markersize',mkft2)
 plot(SNRout,Pd_R_mc,'m-.*','linewidth',linewide2,'markersize',mkft2)
@@ -57,7 +64,10 @@ axis([-5,20,0,1])
 grid on
 grid minor
 box on
-h_leg = legend( 'ANMF with KA-E','ANMF with KA-PE','ANMF with KA-LogE',...
+% h_leg = legend( 'ANMF with KA-E','ANMF with KA-PE','ANMF with KA-LogE',...
+%     'ANMF with E','ANMF with P','ANMF with LogE','ANMF with CC',...
+%     'ANMF with SFP','NMF');
+h_leg = legend( 'ANMF with KA-TCE','ANMF with KA-PE','ANMF with KA-LogE',...
     'ANMF with E','ANMF with P','ANMF with LogE','ANMF with CC',...
     'ANMF with SFP','NMF');
 set(h_leg,'Location','SouthEast')
