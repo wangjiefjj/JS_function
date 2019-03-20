@@ -8,7 +8,7 @@ if col>row
 end
 [M,L] = size(sig);
 [X,Y]=meshgrid(1:L,linspace(-0.5,0.5,M));
-MTD = abs(fftshift(fft(sig,[],1),1));
+MTD = abs(fftshift(fft(sig,[],1)));
 figure()
 mesh(X,Y,MTD);
 % R_KA = zeros(N,N);

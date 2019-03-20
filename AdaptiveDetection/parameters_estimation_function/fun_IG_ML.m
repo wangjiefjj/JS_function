@@ -5,7 +5,7 @@ function [ lambda,mu ] = fun_IG_ML(r)
 % lambda:形状参数,lambda
 % mu：尺度参数,mu
 Ns = length(r);
-beta_t = 1.:0.001:5; %%%IPIX
+beta_t = 0.1:0.01:5; %%%IPIX
 r2 = abs(r).^2;
 L_beta_min = 1e10;
 for i = 1:length(beta_t)
