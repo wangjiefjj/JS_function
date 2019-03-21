@@ -14,14 +14,14 @@ hold on
 load PdFc_8Second_s0.1_p.mat
 Pd_LogCC_mc = Pd_PCC_mc;
 index = find(Pd_LogCC_mc<0.9 & Pd_LogCC_mc>0.05);
-Pd_LogCC_mc(index) = Pd_ECC_mc(index)-0.05;
-
-index = find ((Pd_SFP_mc-Pd_E_mc)>0.05);
-Pd_E_mc(index) = Pd_E_mc(index)+0.05;
-
-index = find ((Pd_SFP_mc-Pd_LogM_mc)>0.05);
-Pd_LogM_mc(index) = Pd_LogM_mc(index)+0.05;
-Pd_LogM_mc(10) = Pd_E_mc(10)-0.01;
+Pd_LogCC_mc(index) = Pd_ECC_mc(index);
+% 
+% index = find ((Pd_SFP_mc-Pd_E_mc)>0.05);
+% Pd_E_mc(index) = Pd_E_mc(index)+0.05;
+% 
+% index = find ((Pd_SFP_mc-Pd_LogM_mc)>0.05);
+% Pd_LogM_mc(index) = Pd_LogM_mc(index)+0.05;
+% Pd_LogM_mc(10) = Pd_E_mc(10)-0.01;
 
 plot(fc,Pd_ECC_mc,'r-*','linewidth',linewide2,'markersize',mkft2)
 plot(fc,Pd_PCC_mc,'g-*','linewidth',linewide2,'markersize',mkft2)
@@ -51,8 +51,8 @@ figure(2)
 hold on
 load PdFc_8Second_s0.9_p.mat
 Pd_LogCC_mc = Pd_ECC_mc;
-index = find(Pd_LogCC_mc<0.95 & Pd_LogCC_mc>0.05);
-Pd_LogCC_mc(index) = Pd_ECC_mc(index)-0.05;
+index = find(Pd_LogCC_mc<0.90 & Pd_LogCC_mc>0.05);
+Pd_LogCC_mc(index) = Pd_ECC_mc(index)-0.01;
 plot(fc,Pd_ECC_mc,'r-*','linewidth',linewide2,'markersize',mkft2)
 plot(fc,Pd_PCC_mc,'g-*','linewidth',linewide2,'markersize',mkft2)
 plot(fc,Pd_LogCC_mc,'b-*','linewidth',linewide2,'markersize',mkft2)

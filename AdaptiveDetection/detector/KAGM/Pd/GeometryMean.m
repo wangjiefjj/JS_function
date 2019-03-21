@@ -9,7 +9,7 @@ mu = 1;
 tau_m = mu/(lambda-1);
 opt_train = 1; %%%IG的选项，1为每个距离单元IG纹理都不同
 rou = 0.90;  %%协方差矩阵生成的迟滞因子
-sigma_t =0.9;
+sigma_t =0.1;
 %%假设参数设置
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
@@ -49,12 +49,12 @@ parfor i = 1:MonteCarloPfa
     t = normrnd(1,sigma_t,N,1);%%0~0.5%%失配向量    
     R_KACC = (R).*(t*t');
     R_CC = fun_CC(Train,fun_SCMN(Train),R_KACC);
-    R_E = fun_RPowerEMean(Train,1,3);
+    R_E = fun_RPowerEMean(Train,1,10);
     R_ECC = fun_PowerCC(Train,R_KA,1,10);
-    R_LogM = fun_RLogEMean(Train,3);
+    R_LogM = fun_RLogEMean(Train,10);
     R_LogCC = fun_LogCC_new(Train,R_KA,10);
-    R_P = fun_RPowerEMean(Train,-1,3);
-    R_PCC = fun_PowerCC(Train,R_KA,-1,9);
+    R_P = fun_RPowerEMean(Train,-1,10);
+    R_PCC = fun_PowerCC(Train,R_KA,-1,10);
     R_SFP = fun_SFP(Train,1);
 %     %%检测器%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     Tanmf_R(i) = fun_ANMF(R,x0,s);

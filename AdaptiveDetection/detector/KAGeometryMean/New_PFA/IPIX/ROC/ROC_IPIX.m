@@ -8,10 +8,11 @@ str_IPIX_t = str_IPIX(1:16);
 load(matFile)
 %lambda  %2.4072（19980223_170435）%1.1967(19980204_224024)
 %mu      %1.3600（19980223_170435）%1.3180(19980204_224024)
-lambda =  2.4072;   
-mu = 1.3600;       
+lambda =  1.5383;   
+mu = 1.7745;      
+Range = 25;        
 % %%%%参数设置
-n = 0.5; %几倍的样本
+n = 1; %几倍的样本
 %%%%假设参数设置
 Na = 2;     % 阵元数
 Np = 4;     % 脉冲数
@@ -33,6 +34,7 @@ theta_sig = 0.2;
 nn = 0:N-1;
 s = exp(-1i*2*pi*nn*theta_sig)'/sqrt(N); %%%%%% 系统导向矢量
 h = waitbar(0,'Please wait...');
+
 for i_Pfa = 1:L_Pfa
     waitbar((i_Pfa/L_Pfa),h,sprintf(['检测门限计算: ',num2str(i_Pfa/L_Pfa*100),'%%']));
     Tanmf_R = zeros(MonteCarloPfa(i_Pfa),1);
@@ -44,10 +46,11 @@ for i_Pfa = 1:L_Pfa
     Tanmf_P = zeros(MonteCarloPfa(i_Pfa),1);
     Tanmf_PCC = zeros(MonteCarloPfa(i_Pfa),1);
     Tanmf_SFP = zeros(MonteCarloPfa(i_Pfa),1);
+    offset = 60000-MonteCarloPfa(i_Pfa)-N+1;
     parfor i = 1:MonteCarloPfa(i_Pfa)
 %     waitbar(i/MonteCarloPfa,h,sprintf([num2str(i/MonteCarloPfa*100),'%%']));
         %%%%%%%%%%%训练数据产生%%%%%%%%%%%%%0%
-        index_t1 = ceil(rand()*(M-10000))+2000;
+        index_t1 = i+offset;
         R_KA1 = zeros(N,N);
         R_KA2 = zeros(N,N);
         for ii = 1:before-N+1
@@ -131,6 +134,7 @@ alpha=sqrt(SNRnum*mu/(lambda-1));
 h = waitbar(0,'Please wait...');
 tic
 L_SNRout = length(SNRout);
+offset = 60000-MonteCarloPd-N+1;
 for i_Pfa = 1:L_Pfa %%虚警
    for m=1:L_SNRout %%信噪比
        waitbar(((i_Pfa-1)*L_SNRout+m)/(L_SNRout*L_Pfa),h,sprintf(['检测概率计算: ', num2str(((i_Pfa-1)*L_SNRout+m)/(L_SNRout*L_Pfa)*100),'%%']));

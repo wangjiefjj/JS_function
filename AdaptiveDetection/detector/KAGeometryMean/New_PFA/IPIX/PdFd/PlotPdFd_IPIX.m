@@ -9,10 +9,18 @@ fn='Times New Roman';
 linewide1=3;
 mkft = 10;
 FontSize = 20;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%¸´ºÏ¸ßË¹0.1%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(1)
 hold on
-load PdFd_PFA_4Second19980223_170435_IPIX.mat
+load PdFd2_PFA_8Second19980223_170435_IPIX.mat
+Pd_ECC_mc(Pd_ECC_mc>1)=1;
+Pd_PCC_mc(Pd_PCC_mc>1)=1;
+Pd_LogCC_mc(Pd_LogCC_mc>1)=1;
+Pd_E_mc(Pd_E_mc>1)=1;
+Pd_P_mc(Pd_P_mc>1)=1;
+Pd_LogM_mc(Pd_LogM_mc>1)=1;
+Pd_CC_mc(Pd_CC_mc>1)=1;
+Pd_SFP_mc(Pd_SFP_mc>1)=1;
+
 plot(fd,Pd_ECC_mc,'r-*','linewidth',linewide1,'markersize',mkft)
 plot(fd,Pd_PCC_mc,'g-*','linewidth',linewide1,'markersize',mkft)
 plot(fd,Pd_LogCC_mc,'b-*','linewidth',linewide1,'markersize',mkft)
@@ -26,7 +34,7 @@ xlabel('Normalized Doppler of Target','FontSize',labeltsize,'FontWeight',fw,'Fon
 ylabel('PD','FontSize',labeltsize,'FontWeight',fw,'FontName',fn)
 set(gca,'FontSize',labeltsize)
 set(gcf,'Position',[700 0 1200 1000])
-% axis([-5,20,0,1])
+% axis([-0.5,0.5,0,1])
 grid on
 grid minor
 box on

@@ -62,12 +62,12 @@ for i_fd = 1:length(fd)
         x0 = Zhh(index:index+N-1,Range) ; % 接收信号仅包括杂波和噪声
     % % % %     协方差估计
         R_CC = fun_CC(Train,fun_SCMN(Train),R_KA2);
-        R_E = fun_RPowerEMean(Train,1,3);
+        R_E = fun_RPowerEMean(Train,1,10);
         R_ECC = fun_PowerCC(Train,R_KA1,1,10);
-        R_LogM = fun_RLogEMean(Train,3);
+        R_LogM = fun_RLogEMean(Train,10);
         R_LogCC = fun_LogCC_new(Train,R_KA1,10);
-        R_P = fun_RPowerEMean(Train,-1,3);
-        R_PCC = fun_PowerCC(Train,R_KA1,-1,9);
+        R_P = fun_RPowerEMean(Train,-1,10);
+        R_PCC = fun_PowerCC(Train,R_KA1,-1,10);
         R_SFP = fun_SFP(Train,1);
     %     %%检测器%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %%%% ANMF_CC
@@ -156,12 +156,12 @@ for i_fd=1:length(fd)
         %%%检测信号
         x0=alpha*s+x0;%+pp;    %%%%%%%  重要  %%%%%%%%%%%%%
         R_CC = fun_CC(Train,fun_SCMN(Train),R_KA2);
-        R_E = fun_RPowerEMean(Train,1,3);
+        R_E = fun_RPowerEMean(Train,1,10);
         R_ECC = fun_PowerCC(Train,R_KA1,1,10);
-        R_LogM = fun_RLogEMean(Train,3);
+        R_LogM = fun_RLogEMean(Train,10);
         R_LogCC = fun_LogCC_new(Train,R_KA1,10);
-        R_P = fun_RPowerEMean(Train,-1,3);
-        R_PCC = fun_PowerCC(Train,R_KA1,-1,9);
+        R_P = fun_RPowerEMean(Train,-1,10);
+        R_PCC = fun_PowerCC(Train,R_KA1,-1,10);
         R_SFP = fun_SFP(Train,1);
 
 
@@ -222,7 +222,7 @@ ylabel('Pd','FontSize',20)
 % set(gca,'FontSize',20)
 % set(h_leg,'Location','SouthEast')
 grid on
-str = ['PdFd_PFA_',num2str(L),'Second',str_IPIX_t,'IPIX','.mat'];
+str = ['PdFd2_PFA_',num2str(L),'Second',str_IPIX_t,'IPIX','.mat'];
 save (str); 
 
 
